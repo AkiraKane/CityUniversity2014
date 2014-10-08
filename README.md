@@ -1,4 +1,4 @@
-CityUniversity2014
+City University 2014 - MSc Data Science
 ==================
 
 Name: Dan Dixey
