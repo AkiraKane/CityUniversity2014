@@ -27,7 +27,7 @@ if __name__ == "__main__":
         exit(-1)
     # Spark Job Name
     sc = SparkContext(appName="PythonWordCount")
-    # Import Files
+    # Import Files from Argument
     lines = sc.textFile(sys.argv[1], 1)
             
     # Read Stop Word Files
