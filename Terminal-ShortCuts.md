@@ -11,10 +11,10 @@ cd /usr/share/spark-1.1.0/
 ipython notebook
 
 # Connectecting to Swindon Server
-ssh swindon.city.ac.uk -l ackf415@city.ac.uk
-ssh swindon.city.ac.uk -l ackf415
-ssh ackf415@swindon.city.ac.uk
+ssh swindon.city.ac.uk -l 1232113@city.ac.uk
+ssh swindon.city.ac.uk -l 123123
+ssh 123123@swindon.city.ac.uk
 
 #If your are in a City lab, or have logged into swindon.city.ac.uk, the next
 # step is to type this command:
-ssh lewes.nsqdc.city.ac.uk -l bigdatastud
+ssh lewes.nsqdc.city.ac.uk -l bigdatastudent
