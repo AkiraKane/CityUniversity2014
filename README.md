@@ -3,9 +3,7 @@ City University 2014 - MSc Data Science
 
 Name: Dan Dixey
 
-Email: dan.dixey@gmail.com; contact@meridiansolutions.co.uk; daniel.dixey@city.ac.uk
-
-Website: www.meridiansolutions.co.uk
+Email: dan.dixey@gmail.com; daniel.dixey@city.ac.uk
 
 Overview
 ==================
