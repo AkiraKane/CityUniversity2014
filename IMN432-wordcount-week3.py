@@ -1,85 +1,78 @@
 #
-# INM 432 Big Data solutions for lab 2
+# INM 432 Big Data solutions for lab 3
+# (C) 2014 Daniel Dixey
 #
 
 import sys
 import re
 from operator import add
-from time import sleep
-
 from pyspark import SparkContext
 
-# Task 1, this function converts to lower case and removes trailing 's'
-# not perfect, but a 1st step towards getting words as singular
-def remPlural( word ):
+# Not perfect the best Function: - 1st Trial towards getting words as singular - Tillman
+def removePlural(word):
     word = word.lower()
     if word.endswith('s'):
         return word[:-1]
     else:
         return word
 
-# list of function words
-stopwords = ['in','on','of','out','by','from','to','over','under','the','a','when', \
-             'where','what','who','whom','you','thou','go','must','i','me','my','myself']
+# Remove the Directory and File Type from the File Variable
+def FileExtract(x):
+    File =  x[x.rfind('/')+1:]   
+    return File[:-4]
 
-# The main function
+# The Main Function
 if __name__ == "__main__":
     # Make sure we have all arguments we need.
     if len(sys.argv) != 3:
-        print >> sys.stderr, "Usage: Lab Sheet 3: <directory> <stopwords_file>"
+        # Usage: spark-submit wordcount.py /path_to_text_files /path_to_stopwords/stopwords_en.txt
+        print >> sys.stderr, "Python File Usage: Lab Sheet 3: <directory> <stopwords_file>"
         exit(-1)
-    
-    # Connect to Spark
-    sc = SparkContext(appName="Big Data Lab 3") # give this job a name
 
-    # Task 2A. Loads all files in the given directory
-    textFiles = sc.wholeTextFiles(sys.argv[1]) # read text files as RDD with (file,textContent) pairs.
-    # Task 3A: Import English stopwords textfiles
+    # Connect to Spark: Create the Job of this Name on the Server
+    sc = SparkContext(appName="Big Data Lab 3") 
+
+    # Loads all files in the given directory into one RDD
+    # Read text files as RDD as (file,textContent) pairs.
+    textFiles = sc.wholeTextFiles(sys.argv[1]) 
+    # Import English stopwords textfiles
     stop_words = sc.textFile(sys.argv[2])
-    #output = stop_words.collect() # for testing
-    #print output
-    
-    # Task 2B. Split text into words, and create (filename,word pairs). flatMap break up the lists
+    #output = stop_words.collect() # For Testing Purposes
+        
+    # Splitting of textfiles into Words.
+    # To create (filename,word pairs) using the flatMap to break up the lists.
     words = textFiles.flatMap(lambda (f,x): [(f, w) for w in re.split('\W+',x)])
-    # Task 3B: Tokenise Words from Textfile
+    # Tokenise Words from the Stop words text file
     stop_words = stop_words.flatMap(lambda x: re.split('\,', x))
-    stop_words = stop_words.collect() # for testing
-    # print stop_words
+        
+    # Filter out the Stop Words from the RDD
+    word = words.filter(lambda x: x[1] not in stop_words) 
     
-    # this help during development by keeping the data small, and can be useful for text style classification
-    words = words.filter(lambda x: x[1] not in stop_words) 
-    # output = words.collect() # for testing    
+    # Transform Tockenised words to lower case and singular using remPlural
+    # Create ((f,w),1) and reduceByKey to count words per file.
+    wordsT = words.map(lambda (f,x): ((FileExtract(f),removePlural(x)),1))
+    wordsT = wordsT.reduceByKey(add)
     
-    # Task 1. Transform words to lower case and singular using remPlural
-    # Task 2C. Create ((f,w),1) and reduceByKey to count words per file.
-    words1 = words.map(lambda (f,x): ((f,remPlural(x)),1))
-    words1 = words1.reduceByKey(add)
-    #words1 = words1.filter(lambda (f,x): x>100)
-    #output = words1.collect() # for testing
+    # Reorganise the tuples as (f, [(w,c)]).
+    words2 = wordsT.map(lambda (fw,c): (fw[0],[(fw[1],c)])) # The [] brackets create lists
+    words2 = words2.reduceByKey(add)
     
-    #Task 2C. Reorganise the tuples as (f, [(w,c)]).
-    words12 = words1.map(lambda (fw,c): (fw[0],[(fw[1],c)])) # The [] brackets create lists
-    # ... that can be concatenated by add:
-    words12 = words12.reduceByKey(add)
-    #output = words12.collect()
-    
-    # Task 3C: Maximum Term Frequency
-    wordsMax = words1.map(lambda (fw,c): (fw[0],c)) # The [] brackets create lists
-    wordsMax = wordsMax.reduceByKey(max)
-    #output = wordsMax.collect()
-    
-    # Task 3D: Create a New  RDD with words as key and count the occurances of words per file using map()
-    WordMap = words1.map(lambda (fw,c): (fw[1],[fw[0],c]))
-    # Reduce by to get the lists of term frequencies per file
-    WordMap = WordMap.reduceByKey(add)
-    #output = WordMap.collect()
+    # Maximum Term Frequency by File
+    FileMaxFreq = wordsT.map(lambda (fw,c): (fw[0],c)) # The [] brackets create lists
+    FileMaxFreq = FileMaxFreq.reduceByKey(max)
+        
+    # Create a New  RDD with words as keys and count the occurances of words per file using map()
+    WordsperFile = wordsT.map(lambda (fw,c): (fw[1], (fw[0],c)))
     
     # Task 3E: With the output of 4 use map to create tuples of this form:
     # (word, nd, [(file, count), (file,count),...........,(file,count)])
+    idf_calc_prep = WordsperFile.map(lambda (f,x): (f,[x]))
+    idf_calc_prep = idf_calc_prep.reduceByKey(add)
+    # nD is number of files containing word
+    idf_calc_prep = idf_calc_prep.map(lambda x: (x[0], len(x[1]), x[1]))
+    output=idf_calc_prep.collect()
     
-    #for k in output: # look at the output
-    #    print k
+    for k in output: # look at the output
+        print k
 
-    # Delays Output for 5 Seconds
-    #sleep(5)
     sc.stop() # Disconnect from Spark
