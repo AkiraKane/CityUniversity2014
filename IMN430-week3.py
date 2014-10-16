@@ -8,6 +8,8 @@ Created on Mon Oct 13 11:59:34 2014
 # Introduction
 import numpy as np
 import pandas as pd
+# Import Plotting Library
+import matplotlib.pyplot as plt
 
 df = pd.DataFrame(np.random.randn(5, 3), index=['a', 'c', 'e', 'f', 'h'],
                   columns=['one', 'two', 'three'])
@@ -38,10 +40,9 @@ Passenger_Data.describe()
 #     and visualise in a scatterplot
 
 # Fill NA with 0 
-Passenger_Data.Age.fillna(0)
-Passenger_Data.Fare.fillna(0)
-# Import Plotting Library
-import matplotlib.pyplot as plt
+Passenger_Data.Age = Passenger_Data.Age.fillna(0)
+Passenger_Data.Fare = Passenger_Data.Fare.fillna(0)
+
 plt.scatter(Passenger_Data.Age, Passenger_Data.Fare)
 plt.title('Age vs. Ticket Prices')
 plt.xlabel("Passenger's Age")
@@ -52,24 +53,127 @@ plt.show()
 #     each column, and visualise in a scatterplot
 
 # Reload data to get the missing values
-Passenger_Data = pd.read_csv("http://staff.city.ac.uk/~sbbk529/Teaching/Resources/INM430/titanicSurvival_m.csv")
+Passenger_Data1 = pd.read_csv("http://staff.city.ac.uk/~sbbk529/Teaching/Resources/INM430/titanicSurvival_m.csv")
 # Fill NA with the means of each column
-Passenger_Data.Age.fillna(Passenger_Data.Age.mean())
-Passenger_Data.Fare.fillna(Passenger_Data.Fare.mean())
+Passenger_Data1.Age = Passenger_Data1.Age.fillna(Passenger_Data1.Age.mean())
+Passenger_Data1.Fare = Passenger_Data1.Fare.fillna(Passenger_Data1.Fare.mean())
 # Create plot of Data with new Values included
-plt.scatter(Passenger_Data.Age, Passenger_Data.Fare)
+plt.scatter(Passenger_Data1.Age, Passenger_Data1.Fare)
 plt.title('Age vs. Ticket Prices')
 plt.xlabel("Passenger's Age")
 plt.ylabel("Ticket Price")
+plt.show()
+
+# Dual Plot
+plt.scatter(Passenger_Data1.Age, Passenger_Data1.Fare)
+plt.scatter(Passenger_Data.Age, Passenger_Data.Fare)
 plt.show()
 
 # Reflect on the differences you see in these plots.
 # DD: Rescaling required to notice the difference on the plot. ie. Remove Outliers
 # DD: 177 of 891 values for Age are missing - approx 19.8% of the data for Age is missing.
 # DD: 46 of 891 values for Fare are missing - approx 5.2 % missing data for Fare is missing.
+# DD: Outliers distort the graphiimport matplotlib.pyplot as plt.
 
 
 #############################
 # DIY Exercises - 2 : Outliers
 #############################
 
+# Here we look at how we can identify outliers in a dataset and observe how 
+# things change with outlier removal.
+
+# 1 - Load the data on properties of cars into a pd dataframe
+Car_Data = pd.read_csv('http://staff.city.ac.uk/~sbbk529/Teaching/Resources/INM430/accord_sedan.csv')
+
+# 2 - Visualise the columns: "price" and "mileage"
+plt.scatter(Car_Data.price, Car_Data.mileage)
+plt.title('Value of Car vs. Mileage')
+plt.xlabel("Value")
+plt.ylabel("Mileage")
+plt.show()
+
+# 3 - Identify the 2D outliers using the visualisation
+# DD: Negative correlation with a main cluster quite high in density 
+# DD: Majority of outliers greater than 16600
+
+# 4 - Add two new columns to the dataframe called isOutlierPrice, isOutlierAge.
+#     For the Price column, calculate the mean and standard deviation. Find any
+#     rows that are more than 2 times standard deviations away from the mean 
+#     and mark them with a 1 in the isOutlierPrice column. Do the same for Age column
+Car_Data['isOutlierPrice'] = (Car_Data.price > (Car_Data.price.mean() + 2*Car_Data.price.std())) | (Car_Data.price < (Car_Data.price.mean() - 2*Car_Data.price.std()))
+Car_Data['isOutlierMileage'] = (Car_Data.mileage > (Car_Data.mileage.mean() + 2*Car_Data.mileage.std())) | (Car_Data.mileage < (Car_Data.mileage.mean() - 2*Car_Data.mileage.std()))
+Car_Data['isOutlierPriceOrMilage'] = (Car_Data.isOutlierPrice==True) | (Car_Data.isOutlierMileage==True)
+
+# Plotting Mileage Outliers
+plt.scatter(Car_Data.price[(Car_Data.isOutlierMileage==True)], Car_Data.mileage[(Car_Data.isOutlierMileage==True)], c='green', label='Outlier Mileage', s=100)
+plt.scatter(Car_Data.price[(Car_Data.isOutlierMileage==False)], Car_Data.mileage[(Car_Data.isOutlierMileage==False)], c='blue', label='Non-Outlier Mileage', s=100)
+plt.title('Value of Car vs. Mileage')
+plt.xlabel("Value")
+plt.ylabel("Mileage")
+plt.legend(loc='upper right', shadow=True)
+plt.show()
+
+# Plotting Price Outliers
+plt.scatter(Car_Data.price[(Car_Data.isOutlierPrice==True)], Car_Data.mileage[(Car_Data.isOutlierPrice==True)], c='green', label='Outlier Price', s=100)
+plt.scatter(Car_Data.price[(Car_Data.isOutlierPrice==False)], Car_Data.mileage[(Car_Data.isOutlierPrice==False)], c='blue', label='Non-Outlier Price', s=100)
+plt.title('Value of Car vs. Mileage')
+plt.xlabel("Value")
+plt.ylabel("Mileage")
+plt.legend(loc='upper right', shadow=True)
+plt.show()
+
+# Plotting Price Outliers and Milage Outliers
+plt.scatter(Car_Data.price[(Car_Data.isOutlierPriceOrMilage==True)], Car_Data.mileage[(Car_Data.isOutlierPriceOrMilage==True)], c='green', label='Outlier', s=100)
+plt.scatter(Car_Data.price[(Car_Data.isOutlierPriceOrMilage==False)], Car_Data.mileage[(Car_Data.isOutlierPriceOrMilage==False)], c='blue', label='Non-Outlier', s=100)
+plt.title('Value of Car vs. Mileage')
+plt.xlabel("Value")
+plt.ylabel("Mileage")
+plt.legend(loc='upper right', shadow=True)
+plt.show()
+
+# 5 - Visualise these values with a different color in the plot. Observe 
+#     whether they are the same as you would mark them.
+
+# DD: More or less
+
+ 
+# 6 - (Optional -- identify 2D outliers) Compute a 2D Mahalanobis distance for 
+ # each row (you can use a scipy function). For this, you need to find the 2D 
+ # mean vector and find the 2D Mahalanobis distance of each point to this mean 
+ # vector. Finally, color all the points according to their mahalanobis score. 
+ # Here is a matplotlib example that uses coloring and choose an appropriate 
+ # color map here, for instance, Greens is a good choice. And compare your 
+ # observations in step-3 to the resulting scatterplot.
+
+# Not working yet :S
+from scipy.spatial.distance import cdist
+Car_Data['MahalanobisScore'] = np.nan
+Car_Data['MahalanobisScore'] = cdist(Car_Data[['price','mileage']], Car_Data[['price','mileage']], 'mahalanobis', VI=None)
+
+#############################
+# DIY Exercises - 3 : Data Transformations
+#############################
+
+# Here we test a couple of data distributions and observe how they change the data.
+
+# 1 - Download the csv data file from WHO on Tuberculosis (from Week01). Information on the data can be found on WHO's web page.
+Tuberculosis = pd.read_csv('http://staff.city.ac.uk/~sbbk529/Teaching/Resources/INM430/TB_burden_countries_2014-09-29.csv')
+
+# 2- You may need to replace missing values before you start.
+pd.isnull(Tuberculosis).sum() # Lots of missing Data
+Tuberculosis.dtypes=='float64' # See Number values that could be replaced
+Tuberculosis.describe()
+Tuberculosis.skew()
+Tuberculosis.icol(slice(7,18)).hist() 
+Tuberculosis.icol(slice(20,35)).hist()
+
+Tuberculosis = Tuberculosis.fillna(median,axis=1)
+
+# 3 - Choose a number of columns with different shapes, for instance, "e_prev_100k_hi" is left skewed and visualise on an histogram
+
+# 4 - Apply a log transformation on the data. Numpy has a log function. and visualise. Observe the changes
+
+# 5 - Choose the numerical columns and map all the columns to [0,1] interval
+
+# 6 - Now you can compare the means of each column.
