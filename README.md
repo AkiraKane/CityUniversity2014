@@ -26,3 +26,5 @@ Useful Links
 ==================
 
 http://manishamde.github.io/blog/2013/03/07/pandas-and-python-top-10/#create
+
+http://nbviewer.ipython.org/github/gjreda/gregreda.com/blob/master/content/notebooks/intro-to-pandas.ipynb
