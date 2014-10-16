@@ -7,6 +7,7 @@ import sys
 import re
 from operator import add
 from pyspark import SparkContext
+import pandas as pd
 
 # Not perfect the best Function: - 1st Trial towards getting words as singular - Tillman
 def removePlural(word):
@@ -71,8 +72,9 @@ if __name__ == "__main__":
     # nD is number of files containing word
     idf_calc_prep = idf_calc_prep.map(lambda x: (x[0], len(x[1]), x[1]))
     output=idf_calc_prep.collect()
-    
-    for k in output: # look at the output
-        print k
+
+    # Output as a CSV File
+    Output = pd.DataFrame(output)
+    Output.to_csv('Output.csv', sep=',', index=False)
 
     sc.stop() # Disconnect from Spark
