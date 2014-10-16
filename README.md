@@ -21,3 +21,8 @@ The tags on the files indicate which course they are relevant to.
 INM432 - Big Data (PRD1 A 2014/15)
 
 INM430 - Introduction to Data Science (PRD1 A 2014/15)
+
+Useful Links
+==================
+
+http://manishamde.github.io/blog/2013/03/07/pandas-and-python-top-10/#create
