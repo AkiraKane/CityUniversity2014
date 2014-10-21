@@ -92,12 +92,12 @@ if __name__ == "__main__":
     # Using the File Name ID if Spam: 1 if Spam - 0 if Otherwise
     SpamHam = fileWord.map(lambda (f,wc): (isSpam(f),wc))
     
-    # Convert file a word Vector in preparation for the Naive Bayes Modelling
+    # Convert RDD to a file and word Vector in preparation for the Naive Bayes Modelling
     Data = SpamHam.map(lambda (f,wc): filewordVectorGen(f,wc,vocabularyList))
-    output = Data.collect()
+    #output = Data.collect()
     
     # Train a naive Bayes model
-    #model = NaiveBayes.train(words3, 1)
+    #model = NaiveBayes.train(Data, 1.0)
     
     # Maximum Term Frequency by File
     FileMaxFreq = wordsT.map(lambda (fw,c): (fw[0],c)) # The [] brackets create lists
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     df = df.map(lambda x: (x[0], len(x[1]), x[1]))
     
     # Output as a CSV File for Easy Reading!
-    Output = pd.DataFrame(output)
-    Output.to_csv('Output.csv', sep=',', index=False)
+    #Output = pd.DataFrame(output)
+    #Output.to_csv('Output.csv', sep=',', index=False)
     
     sc.stop() # Disconnect from Spark
