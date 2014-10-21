@@ -35,7 +35,7 @@ def isSpam(x):
         return 0
         
 # convert a [(word,count), ...] list to word vector using the given vocabulary, file f is just passed through
-def f_wfVector(f, wcl, voc ):
+def filewordVectorGen(f, wcl, voc ):
     vec = [0] * len(voc) # initialise vector of vocabulary size
     for wc in wcl :
         if wc[0] not in voc: # ignore words that are not in our vocabulary
@@ -89,12 +89,11 @@ if __name__ == "__main__":
     fileWord = wordsT.map(lambda (fw,c): (fw[0],[(fw[1],c)])) # The [] brackets create lists
     fileWord = fileWord.reduceByKey(add)
     
-    # Spam or Ham Test
-    # 1 if Spam - 0 if Ham
+    # Using the File Name ID if Spam: 1 if Spam - 0 if Otherwise
     SpamHam = fileWord.map(lambda (f,wc): (isSpam(f),wc))
     
     # Convert file a word Vector in preparation for the Naive Bayes Modelling
-    Data = SpamHam.map(lambda (f,wc): f_wfVector(f,wc,vocabularyList))
+    Data = SpamHam.map(lambda (f,wc): filewordVectorGen(f,wc,vocabularyList))
     output = Data.collect()
     
     # Train a naive Bayes model
