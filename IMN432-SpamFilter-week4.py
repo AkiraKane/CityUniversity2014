@@ -2,14 +2,15 @@
 # INM 432 Big Data solutions for lab 4
 # (C) 2014 Daniel Dixey
 #
-
 # Import Libraries
 import sys
 import re
 from operator import add
+# Import the Python Spark API
 from pyspark import SparkContext
+# Import Pandas - To save library into a Dataframe for Easier Review Post Completetion of Script
 import pandas as pd
-# Import Machine Learning Library
+# Import Machine Learning Library Modules
 from pyspark.mllib.regression import LabeledPoint
 from pyspark.mllib.classification import NaiveBayes
 
@@ -25,39 +26,59 @@ def removePlural(word):
 def FileExtract(x):
     File =  x[x.rfind('/')+1:]   
     return File[:-4]
-    
+
+# Identification of Spam
 def isSpam(x):
     if x.startswith('spmsg'):
         return 1
     else:
         return 0
+        
+# convert a [(word,count), ...] list to word vector using the given vocabulary, file f is just passed through
+def f_wfVector(f, wcl, voc ):
+    vec = [0] * len(voc) # initialise vector of vocabulary size
+    for wc in wcl :
+        if wc[0] not in voc: # ignore words that are not in our vocabulary
+            continue
+        i = voc.index(wc[0]) # get word index
+        vec[i] = vec[i] + wc[1] # add count to index
+    return (f,vec)
 
 # The Main Function
 if __name__ == "__main__":
     # Make sure we have all arguments we need.
     if len(sys.argv) != 3:
         # Usage: spark-submit wordcount.py /path_to_text_files /path_to_stopwords/stopwords_en.txt
-        print >> sys.stderr, "Python File Usage: Lab Sheet 3: <directory> <stopwords_file>"
+        print >> sys.stderr, "Python File Usage: Lab Sheet 4: <directory> <stopwords_file>"
         exit(-1)
 
     # Connect to Spark: Create the Job of this Name on the Server
-    sc = SparkContext(appName="Big Data Lab 3") 
+    sc = SparkContext("local[4]",appName="Big Data Lab 4") 
 
-    # Loads all files in the given directory into one RDD
     # Read text files as RDD as (file,textContent) pairs.
     textFiles = sc.wholeTextFiles(sys.argv[1]) 
-    # Import English stopwords textfiles
+    # Import English stopwords textfile
     stop_words = sc.textFile(sys.argv[2])
-    #output = stop_words.collect() # For Testing Purposes
-        
-    # Splitting of textfiles into Words.
-    # To create (filename,word pairs) using the flatMap to break up the lists.
+
+    # Create (filename,word pairs) using the flatMap to break up the lists.
     words = textFiles.flatMap(lambda (f,x): [(f, w) for w in re.split('\W+',x)])
     # Tokenise Words from the Stop words text file
     stop_words = stop_words.flatMap(lambda x: re.split('\,', x))
-        
+    
+    #  Build the Vocabulary List
+    wordFile = words.map(lambda (x,y): (y,x))
+    uniqueWords = wordFile.reduceByKey(lambda x,y: x)
+    uniqueWords = uniqueWords.collect()
+    # Create a Vocabulary List    
+    vocabularyList = []    
+    for (w,f) in uniqueWords:
+        vocabularyList = vocabularyList + [w]
+    
+    print 'Size of Vocab'
+    print len(vocabularyList) # 13143
+    
     # Filter out the Stop Words from the RDD
-    word = words.filter(lambda x: x[1] not in stop_words) 
+    word = words.filter(lambda x: x[1] not in stop_words)
         
     # Transform Tockenised words to lower case and singular using remPlural
     # Create ((f,w),1) and reduceByKey to count words per file.
@@ -65,36 +86,35 @@ if __name__ == "__main__":
     wordsT = wordsT.reduceByKey(add)
     
     # Reorganise the tuples as (f, [(w,c)]).
-    words2 = wordsT.map(lambda (fw,c): (fw[0],[(fw[1],c)])) # The [] brackets create lists
-    words2 = words2.reduceByKey(add)
-    output = words2.collect()
+    fileWord = wordsT.map(lambda (fw,c): (fw[0],[(fw[1],c)])) # The [] brackets create lists
+    fileWord = fileWord.reduceByKey(add)
     
     # Spam or Ham Test
     # 1 if Spam - 0 if Ham
-    words3 = words2.map(lambda (f,wc): (isSpam(f),wc))
-    #output = words3.collect()
+    SpamHam = fileWord.map(lambda (f,wc): (isSpam(f),wc))
+    
+    # Convert file a word Vector in preparation for the Naive Bayes Modelling
+    Data = SpamHam.map(lambda (f,wc): f_wfVector(f,wc,vocabularyList))
+    output = Data.collect()
     
     # Train a naive Bayes model
-    model = NaiveBayes.train(words3, 1)
+    #model = NaiveBayes.train(words3, 1)
     
     # Maximum Term Frequency by File
-    #FileMaxFreq = wordsT.map(lambda (fw,c): (fw[0],c)) # The [] brackets create lists
-    #FileMaxFreq = FileMaxFreq.reduceByKey(max)
+    FileMaxFreq = wordsT.map(lambda (fw,c): (fw[0],c)) # The [] brackets create lists
+    FileMaxFreq = FileMaxFreq.reduceByKey(max)
         
-    # Create a New  RDD with words as keys and count the occurances of words per file using map()
-    #WordsperFile = wordsT.map(lambda (fw,c): (fw[1], (fw[0],c)))
+    # A New  RDD with words as keys and count the occurances of words per file using map()
+    WordsperFile = wordsT.map(lambda (fw,c): (fw[1], (fw[0],c)))
     
-    # Task 3E: With the output of 4 use map to create tuples of this form:
     # (word, nd, [(file, count), (file,count),...........,(file,count)])
-    #idf_calc_prep = WordsperFile.map(lambda (f,x): (f,[x]))
-    #idf_calc_prep = idf_calc_prep.reduceByKey(add)
+    df = WordsperFile.map(lambda (f,x): (f,[x]))
+    df = df.reduceByKey(add)
     # nD is number of files containing word
-    #idf_calc_prep = idf_calc_prep.map(lambda x: (x[0], len(x[1]), x[1]))
-    #output=idf_calc_prep.collect()
+    df = df.map(lambda x: (x[0], len(x[1]), x[1]))
     
-    # Output as a CSV File
-    #Output = pd.DataFrame(output)
-    #Output.to_csv('Output.csv', sep=',', index=False)
+    # Output as a CSV File for Easy Reading!
+    Output = pd.DataFrame(output)
+    Output.to_csv('Output.csv', sep=',', index=False)
     
-
     sc.stop() # Disconnect from Spark
