@@ -34,7 +34,7 @@ def isSpam(x):
     else:
         return 0
         
-# convert a [(word,count), ...] list to word vector using the given vocabulary, file f is just passed through
+# Convert a [(word,count), ...] list to word vector using the given vocabulary, file f is just passed through
 def filewordVectorGen(f, wcl, voc ):
     vec = [0] * len(voc) # initialise vector of vocabulary size
     for wc in wcl :
@@ -44,26 +44,33 @@ def filewordVectorGen(f, wcl, voc ):
         vec[i] = vec[i] + wc[1] # add count to index
     return (f,vec)
 
+# Import Stop Words Function
+def Stop_Words_Map_Reduce(x):
+    # Import English stopwords textfile
+    stop_words = sc.textFile(x)
+    # Tokenise Words from the Stop words text file
+    stop_words = stop_words.flatMap(lambda x: re.split('\,', x))
+    return stop_words
+    
 # The Main Function
 if __name__ == "__main__":
     # Make sure we have all arguments we need.
     if len(sys.argv) != 3:
         # Usage: spark-submit wordcount.py /path_to_text_files /path_to_stopwords/stopwords_en.txt
-        print >> sys.stderr, "Python File Usage: Lab Sheet 4: <directory> <stopwords_file>"
+        print >> sys.stderr, "Python File Usage: Lab Sheet 4: <Training Set Directory> <Stopwords_File> <Test Set Directory>"
         exit(-1)
 
     # Connect to Spark: Create the Job of this Name on the Server
-    sc = SparkContext("local[4]",appName="Big Data Lab 4") 
-
+    sc = SparkContext("local[6]",appName="Big Data Lab 4") 
+    
+    # Stop Words RDD Generation
+    stop_words = Stop_Words_Map_Reduce(sys.argv[2])
+    
     # Read text files as RDD as (file,textContent) pairs.
     textFiles = sc.wholeTextFiles(sys.argv[1]) 
-    # Import English stopwords textfile
-    stop_words = sc.textFile(sys.argv[2])
 
     # Create (filename,word pairs) using the flatMap to break up the lists.
     words = textFiles.flatMap(lambda (f,x): [(f, w) for w in re.split('\W+',x)])
-    # Tokenise Words from the Stop words text file
-    stop_words = stop_words.flatMap(lambda x: re.split('\,', x))
     
     #  Build the Vocabulary List
     wordFile = words.map(lambda (x,y): (y,x))
@@ -74,9 +81,6 @@ if __name__ == "__main__":
     for (w,f) in uniqueWords:
         vocabularyList = vocabularyList + [w]
     
-    print 'Size of Vocab'
-    print len(vocabularyList) # 13143
-    
     # Filter out the Stop Words from the RDD
     word = words.filter(lambda x: x[1] not in stop_words)
         
@@ -84,7 +88,7 @@ if __name__ == "__main__":
     # Create ((f,w),1) and reduceByKey to count words per file.
     wordsT = words.map(lambda (f,x): ((FileExtract(f),removePlural(x)),1))
     wordsT = wordsT.reduceByKey(add)
-    
+        
     # Reorganise the tuples as (f, [(w,c)]).
     fileWord = wordsT.map(lambda (fw,c): (fw[0],[(fw[1],c)])) # The [] brackets create lists
     fileWord = fileWord.reduceByKey(add)
@@ -93,11 +97,14 @@ if __name__ == "__main__":
     SpamHam = fileWord.map(lambda (f,wc): (isSpam(f),wc))
     
     # Convert RDD to a file and word Vector in preparation for the Naive Bayes Modelling
-    Data = SpamHam.map(lambda (f,wc): filewordVectorGen(f,wc,vocabularyList))
-    #output = Data.collect()
+    TrainingSet = SpamHam.map(lambda (f,wc): filewordVectorGen(f,wc,vocabularyList))
+    
+    # Labelled Point Setup
+    labelledPoints = TrainingSet.map(lambda (x,l): LabeledPoint(x,l))
+    #output = labelledPoints.collect() 
     
     # Train a naive Bayes model
-    #model = NaiveBayes.train(Data, 1.0)
+    model = NaiveBayes.train(labelledPoints, 1.0)
     
     # Maximum Term Frequency by File
     FileMaxFreq = wordsT.map(lambda (fw,c): (fw[0],c)) # The [] brackets create lists
