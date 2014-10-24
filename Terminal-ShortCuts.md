@@ -16,4 +16,8 @@ ssh linux.example.com -l user_id
 # Connecting to the Uni Data Centre
 ssh lewes.example.com -l user_id
 
+# Start IPython Notebook in the Spark Java Virtual Machine
+IPYTHON_OPTS="notebook" ./bin/pyspark
 
+# Start IPython in the Spark Java Virtual Machine
+IPYTHON=1 ./bin/pyspark
