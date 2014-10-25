@@ -10,8 +10,8 @@ from operator import add
 # Import the Python Spark API
 from pyspark import SparkContext
 # Import Pandas - To save library into a Dataframe for Easier Review Post Completetion of Script
-#import pandas as pd
-#import numpy as np
+import pandas as pd
+import numpy as np
 # Import Machine Learning Library Modules
 from pyspark.mllib.regression import LabeledPoint
 from pyspark.mllib.classification import NaiveBayes
@@ -126,17 +126,18 @@ if __name__ == "__main__":
     testSet = t_SpamHam.map(lambda (f,wc): filewordVectorGen(f,wc,trainingSet_Vocab))
     
     # Labelled Point Setup - TS = Training Set, t = Test Set
-    TS_labelledPoints = TrainingSet.map(lambda (x,l): LabeledPoint(x,l))
-    t_labelledPoints = testSet.map(lambda (x,l): LabeledPoint(x,l))
-       
+    TS_labelledPoints = TrainingSet.map(lambda (x,l): LabeledPoint(x,l))   
+    
     # Train a naive Bayes model
     model = NaiveBayes.train(TS_labelledPoints, 1.0)
-
-    # Make prediction.
-    #prediction = model.predict(myarray)
     
+    # Prediction using the Trained Model
+    evalModel = testSet.map(lambda (f,vec): (f, model.predict(np.array(vec))))            
+    output = evalModel.collect()    
+    ### http://spark.apache.org/docs/latest/api/python/pyspark.mllib.classification.NaiveBayesModel-class.html
+       
     # Output as a CSV File for Easy Reading!
-    #Output = pd.DataFrame(output2)
-    #Output.to_csv('Output.csv', sep=',', index=False)
+    Output = pd.DataFrame(output)
+    Output.to_csv('Output.csv', sep=',', index=False)
     
     sc.stop() # Disconnect from Spark
