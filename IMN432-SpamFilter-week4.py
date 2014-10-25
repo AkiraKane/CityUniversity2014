@@ -17,7 +17,7 @@ from pyspark.mllib.regression import LabeledPoint
 from pyspark.mllib.classification import NaiveBayes
 
 #  A function to Build the Vocabulary List
-def buildVocab(x):
+def buildVocab(x): 
     #  Transform the Data
     wordFile = x.map(lambda (x,y): (y,x))
     uniqueWords = wordFile.reduceByKey(lambda x,y: x)
