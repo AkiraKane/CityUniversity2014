@@ -1,6 +1,7 @@
 #
 # INM 432 Big Data solutions for lab 4
 # (C) 2014 Daniel Dixey
+### http://spark.apache.org/docs/latest/api/python/pyspark.mllib.classification.NaiveBayesModel-class.html
 #
 
 # Import Libraries
@@ -10,14 +11,13 @@ from operator import add
 # Import the Python Spark API
 from pyspark import SparkContext
 # Import Pandas - To save library into a Dataframe for Easier Review Post Completetion of Script
-import pandas as pd
 import numpy as np
-# Import Machine Learning Library Modules
+# Import specific Machine Learning Library Modules
 from pyspark.mllib.regression import LabeledPoint
 from pyspark.mllib.classification import NaiveBayes
 
 #  A function to Build the Vocabulary List
-def buildVocab(x): 
+def buildVocab(x):
     #  Transform the Data
     wordFile = x.map(lambda (x,y): (y,x))
     uniqueWords = wordFile.reduceByKey(lambda x,y: x)
@@ -89,7 +89,6 @@ def createRDD(x,stopWords):
     FileMaxFreq = FileMaxFreq.reduceByKey(max)
     # A New  RDD with words as keys and count the occurances of words per file using map()
     WordsperFile = wordsT.map(lambda (fw,c): (fw[1], (fw[0],c)))
-    
     # (word, nd, [(file, count), (file,count),...........,(file,count)])
     df = WordsperFile.map(lambda (f,x): (f,[x]))
     df = df.reduceByKey(add)
@@ -132,12 +131,11 @@ if __name__ == "__main__":
     model = NaiveBayes.train(TS_labelledPoints, 1.0)
     
     # Prediction using the Trained Model
-    evalModel = testSet.map(lambda (f,vec): (f, model.predict(np.array(vec))))            
-    output = evalModel.collect()    
-    ### http://spark.apache.org/docs/latest/api/python/pyspark.mllib.classification.NaiveBayesModel-class.html
-       
-    # Output as a CSV File for Easy Reading!
-    Output = pd.DataFrame(output)
-    Output.to_csv('Output.csv', sep=',', index=False)
+    evalModel = testSet.map(lambda (f,vec): (float(f), model.predict(np.array(vec))))            
     
+    # Compute training error
+    trainErr = evalModel.filter(lambda (v, p): v != p).count() / float(t_SpamHam.count())    
+    print('Training Error = %.5f' % (trainErr*100))
+    print('Accuracy = %.5f' % ((1-trainErr)*100))
+
     sc.stop() # Disconnect from Spark
