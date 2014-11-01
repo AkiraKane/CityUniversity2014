@@ -1,0 +1,876 @@
+Processed fold 1, RDD contains 289 elements
+Processed fold 2, RDD contains 289 elements
+Processed fold 3, RDD contains 289 elements
+Processed fold 4, RDD contains 289 elements
+Processed fold 5, RDD contains 290 elements
+Processed fold 6, RDD contains 289 elements
+Processed fold 7, RDD contains 289 elements
+Processed fold 8, RDD contains 289 elements
+Processed fold 9, RDD contains 289 elements
+Processed fold 10, RDD contains 291 elements
+------------------------
+Test RDD is RDD[0]
+Merging training RDDs rdds[:0] to rdds[1:]
+Merged training set contains 2604 elements
+Learned Classification Tree Model:
+DecisionTreeModel classifier
+  If (feature 638 <= 0.0)
+   If (feature 255 <= 0.0)
+    If (feature 648 <= 0.0)
+     If (feature 395 <= 0.0)
+      If (feature 698 <= 0.0)
+       Predict: 0.0
+      Else (feature 698 > 0.0)
+       Predict: 0.0
+     Else (feature 395 > 0.0)
+      If (feature 250 <= 1.0)
+       Predict: 0.0
+      Else (feature 250 > 1.0)
+       Predict: 0.0
+    Else (feature 648 > 0.0)
+     If (feature 610 <= 1.0)
+      If (feature 338 <= 1.0)
+       Predict: 0.0
+      Else (feature 338 > 1.0)
+       Predict: 0.0
+     Else (feature 610 > 1.0)
+      If (feature 853 <= 0.0)
+       Predict: 0.0
+      Else (feature 853 > 0.0)
+       Predict: 1.0
+   Else (feature 255 > 0.0)
+    If (feature 452 <= 0.0)
+     If (feature 998 <= 0.0)
+      If (feature 250 <= 0.0)
+       Predict: 0.0
+      Else (feature 250 > 0.0)
+       Predict: 1.0
+     Else (feature 998 > 0.0)
+      If (feature 138 <= 0.0)
+       Predict: 0.0
+      Else (feature 138 > 0.0)
+       Predict: 0.0
+    Else (feature 452 > 0.0)
+     Predict: 0.0
+  Else (feature 638 > 0.0)
+   If (feature 704 <= 1.0)
+    If (feature 584 <= 0.0)
+     If (feature 916 <= 0.0)
+      If (feature 99 <= 1.0)
+       Predict: 0.0
+      Else (feature 99 > 1.0)
+       Predict: 0.0
+     Else (feature 916 > 0.0)
+      If (feature 728 <= 0.0)
+       Predict: 0.0
+      Else (feature 728 > 0.0)
+       Predict: 0.0
+    Else (feature 584 > 0.0)
+     If (feature 476 <= 1.0)
+      If (feature 594 <= 0.0)
+       Predict: 0.0
+      Else (feature 594 > 0.0)
+       Predict: 0.0
+     Else (feature 476 > 1.0)
+      If (feature 28 <= 0.0)
+       Predict: 0.0
+      Else (feature 28 > 0.0)
+       Predict: 1.0
+   Else (feature 704 > 1.0)
+    If (feature 233 <= 0.0)
+     If (feature 503 <= 1.0)
+      If (feature 754 <= 1.0)
+       Predict: 0.0
+      Else (feature 754 > 1.0)
+       Predict: 1.0
+     Else (feature 503 > 1.0)
+      Predict: 1.0
+    Else (feature 233 > 0.0)
+     If (feature 73 <= 0.0)
+      Predict: 1.0
+     Else (feature 73 > 0.0)
+      Predict: 0.0
+
+------------------------
+Test RDD is RDD[1]
+Merging training RDDs rdds[:1] to rdds[2:]
+Merged training set contains 2604 elements
+Learned Classification Tree Model:
+DecisionTreeModel classifier
+  If (feature 255 <= 0.0)
+   If (feature 638 <= 0.0)
+    If (feature 698 <= 0.0)
+     If (feature 648 <= 0.0)
+      If (feature 395 <= 0.0)
+       Predict: 0.0
+      Else (feature 395 > 0.0)
+       Predict: 0.0
+     Else (feature 648 > 0.0)
+      If (feature 922 <= 1.0)
+       Predict: 0.0
+      Else (feature 922 > 1.0)
+       Predict: 1.0
+    Else (feature 698 > 0.0)
+     If (feature 940 <= 0.0)
+      If (feature 36 <= 1.0)
+       Predict: 0.0
+      Else (feature 36 > 1.0)
+       Predict: 1.0
+     Else (feature 940 > 0.0)
+      If (feature 535 <= 0.0)
+       Predict: 0.0
+      Else (feature 535 > 0.0)
+       Predict: 1.0
+   Else (feature 638 > 0.0)
+    If (feature 17 <= 1.0)
+     If (feature 103 <= 1.0)
+      If (feature 216 <= 1.0)
+       Predict: 0.0
+      Else (feature 216 > 1.0)
+       Predict: 0.0
+     Else (feature 103 > 1.0)
+      If (feature 37 <= 0.0)
+       Predict: 0.0
+      Else (feature 37 > 0.0)
+       Predict: 1.0
+    Else (feature 17 > 1.0)
+     If (feature 33 <= 0.0)
+      Predict: 0.0
+     Else (feature 33 > 0.0)
+      Predict: 1.0
+  Else (feature 255 > 0.0)
+   If (feature 998 <= 0.0)
+    If (feature 109 <= 0.0)
+     If (feature 250 <= 1.0)
+      If (feature 165 <= 0.0)
+       Predict: 0.0
+      Else (feature 165 > 0.0)
+       Predict: 0.0
+     Else (feature 250 > 1.0)
+      If (feature 91 <= 0.0)
+       Predict: 1.0
+      Else (feature 91 > 0.0)
+       Predict: 0.0
+    Else (feature 109 > 0.0)
+     If (feature 850 <= 0.0)
+      If (feature 887 <= 0.0)
+       Predict: 1.0
+      Else (feature 887 > 0.0)
+       Predict: 0.0
+     Else (feature 850 > 0.0)
+      If (feature 610 <= 1.0)
+       Predict: 0.0
+      Else (feature 610 > 1.0)
+       Predict: 1.0
+   Else (feature 998 > 0.0)
+    If (feature 296 <= 1.0)
+     If (feature 868 <= 0.0)
+      If (feature 566 <= 1.0)
+       Predict: 0.0
+      Else (feature 566 > 1.0)
+       Predict: 0.0
+     Else (feature 868 > 0.0)
+      If (feature 103 <= 0.0)
+       Predict: 0.0
+      Else (feature 103 > 0.0)
+       Predict: 0.0
+    Else (feature 296 > 1.0)
+     If (feature 281 <= 0.0)
+      Predict: 1.0
+     Else (feature 281 > 0.0)
+      Predict: 0.0
+
+------------------------
+Test RDD is RDD[2]
+Merging training RDDs rdds[:2] to rdds[3:]
+Merged training set contains 2604 elements
+Learned Classification Tree Model:
+DecisionTreeModel classifier
+  If (feature 638 <= 0.0)
+   If (feature 998 <= 0.0)
+    If (feature 90 <= 0.0)
+     If (feature 691 <= 0.0)
+      If (feature 515 <= 0.0)
+       Predict: 0.0
+      Else (feature 515 > 0.0)
+       Predict: 0.0
+     Else (feature 691 > 0.0)
+      If (feature 151 <= 0.0)
+       Predict: 1.0
+      Else (feature 151 > 0.0)
+       Predict: 0.0
+    Else (feature 90 > 0.0)
+     If (feature 746 <= 0.0)
+      If (feature 558 <= 0.0)
+       Predict: 1.0
+      Else (feature 558 > 0.0)
+       Predict: 0.0
+     Else (feature 746 > 0.0)
+      If (feature 159 <= 1.0)
+       Predict: 0.0
+      Else (feature 159 > 1.0)
+       Predict: 0.0
+   Else (feature 998 > 0.0)
+    If (feature 812 <= 1.0)
+     If (feature 190 <= 1.0)
+      If (feature 665 <= 1.0)
+       Predict: 0.0
+      Else (feature 665 > 1.0)
+       Predict: 0.0
+     Else (feature 190 > 1.0)
+      If (feature 282 <= 0.0)
+       Predict: 1.0
+      Else (feature 282 > 0.0)
+       Predict: 0.0
+    Else (feature 812 > 1.0)
+     If (feature 18 <= 0.0)
+      Predict: 0.0
+     Else (feature 18 > 0.0)
+      Predict: 1.0
+  Else (feature 638 > 0.0)
+   If (feature 584 <= 0.0)
+    If (feature 35 <= 1.0)
+     If (feature 255 <= 0.0)
+      If (feature 523 <= 0.0)
+       Predict: 0.0
+      Else (feature 523 > 0.0)
+       Predict: 0.0
+     Else (feature 255 > 0.0)
+      If (feature 639 <= 1.0)
+       Predict: 0.0
+      Else (feature 639 > 1.0)
+       Predict: 1.0
+    Else (feature 35 > 1.0)
+     If (feature 99 <= 1.0)
+      Predict: 0.0
+     Else (feature 99 > 1.0)
+      Predict: 1.0
+   Else (feature 584 > 0.0)
+    If (feature 788 <= 1.0)
+     If (feature 675 <= 1.0)
+      If (feature 828 <= 1.0)
+       Predict: 0.0
+      Else (feature 828 > 1.0)
+       Predict: 1.0
+     Else (feature 675 > 1.0)
+      If (feature 613 <= 0.0)
+       Predict: 1.0
+      Else (feature 613 > 0.0)
+       Predict: 0.0
+    Else (feature 788 > 1.0)
+     If (feature 13 <= 1.0)
+      Predict: 1.0
+     Else (feature 13 > 1.0)
+      Predict: 0.0
+
+------------------------
+Test RDD is RDD[3]
+Merging training RDDs rdds[:3] to rdds[4:]
+Merged training set contains 2604 elements
+Learned Classification Tree Model:
+DecisionTreeModel classifier
+  If (feature 638 <= 0.0)
+   If (feature 90 <= 0.0)
+    If (feature 691 <= 0.0)
+     If (feature 515 <= 0.0)
+      If (feature 62 <= 0.0)
+       Predict: 0.0
+      Else (feature 62 > 0.0)
+       Predict: 0.0
+     Else (feature 515 > 0.0)
+      If (feature 994 <= 0.0)
+       Predict: 0.0
+      Else (feature 994 > 0.0)
+       Predict: 0.0
+    Else (feature 691 > 0.0)
+     If (feature 573 <= 0.0)
+      If (feature 182 <= 0.0)
+       Predict: 1.0
+      Else (feature 182 > 0.0)
+       Predict: 0.0
+     Else (feature 573 > 0.0)
+      If (feature 185 <= 0.0)
+       Predict: 0.0
+      Else (feature 185 > 0.0)
+       Predict: 1.0
+   Else (feature 90 > 0.0)
+    If (feature 998 <= 0.0)
+     If (feature 144 <= 0.0)
+      If (feature 762 <= 0.0)
+       Predict: 0.0
+      Else (feature 762 > 0.0)
+       Predict: 1.0
+     Else (feature 144 > 0.0)
+      If (feature 274 <= 1.0)
+       Predict: 0.0
+      Else (feature 274 > 1.0)
+       Predict: 1.0
+    Else (feature 998 > 0.0)
+     If (feature 436 <= 1.0)
+      If (feature 448 <= 0.0)
+       Predict: 0.0
+      Else (feature 448 > 0.0)
+       Predict: 0.0
+     Else (feature 436 > 1.0)
+      If (feature 114 <= 0.0)
+       Predict: 1.0
+      Else (feature 114 > 0.0)
+       Predict: 0.0
+  Else (feature 638 > 0.0)
+   If (feature 381 <= 1.0)
+    If (feature 766 <= 1.0)
+     If (feature 584 <= 1.0)
+      If (feature 840 <= 0.0)
+       Predict: 0.0
+      Else (feature 840 > 0.0)
+       Predict: 0.0
+     Else (feature 584 > 1.0)
+      If (feature 11 <= 0.0)
+       Predict: 0.0
+      Else (feature 11 > 0.0)
+       Predict: 1.0
+    Else (feature 766 > 1.0)
+     If (feature 332 <= 0.0)
+      Predict: 0.0
+     Else (feature 332 > 0.0)
+      Predict: 1.0
+   Else (feature 381 > 1.0)
+    If (feature 658 <= 1.0)
+     If (feature 929 <= 1.0)
+      If (feature 17 <= 1.0)
+       Predict: 0.0
+      Else (feature 17 > 1.0)
+       Predict: 1.0
+     Else (feature 929 > 1.0)
+      Predict: 1.0
+    Else (feature 658 > 1.0)
+     If (feature 9 <= 0.0)
+      Predict: 1.0
+     Else (feature 9 > 0.0)
+      Predict: 0.0
+
+------------------------
+Test RDD is RDD[4]
+Merging training RDDs rdds[:4] to rdds[5:]
+Merged training set contains 2603 elements
+Learned Classification Tree Model:
+DecisionTreeModel classifier
+  If (feature 255 <= 0.0)
+   If (feature 638 <= 0.0)
+    If (feature 90 <= 0.0)
+     If (feature 515 <= 0.0)
+      If (feature 691 <= 0.0)
+       Predict: 0.0
+      Else (feature 691 > 0.0)
+       Predict: 0.0
+     Else (feature 515 > 0.0)
+      If (feature 400 <= 0.0)
+       Predict: 0.0
+      Else (feature 400 > 0.0)
+       Predict: 0.0
+    Else (feature 90 > 0.0)
+     If (feature 107 <= 0.0)
+      If (feature 73 <= 0.0)
+       Predict: 0.0
+      Else (feature 73 > 0.0)
+       Predict: 0.0
+     Else (feature 107 > 0.0)
+      If (feature 337 <= 1.0)
+       Predict: 0.0
+      Else (feature 337 > 1.0)
+       Predict: 1.0
+   Else (feature 638 > 0.0)
+    If (feature 17 <= 1.0)
+     If (feature 714 <= 0.0)
+      If (feature 766 <= 1.0)
+       Predict: 0.0
+      Else (feature 766 > 1.0)
+       Predict: 0.0
+     Else (feature 714 > 0.0)
+      If (feature 323 <= 1.0)
+       Predict: 0.0
+      Else (feature 323 > 1.0)
+       Predict: 1.0
+    Else (feature 17 > 1.0)
+     If (feature 33 <= 0.0)
+      Predict: 0.0
+     Else (feature 33 > 0.0)
+      Predict: 1.0
+  Else (feature 255 > 0.0)
+   If (feature 998 <= 0.0)
+    If (feature 250 <= 0.0)
+     If (feature 349 <= 0.0)
+      If (feature 431 <= 0.0)
+       Predict: 0.0
+      Else (feature 431 > 0.0)
+       Predict: 1.0
+     Else (feature 349 > 0.0)
+      If (feature 26 <= 1.0)
+       Predict: 0.0
+      Else (feature 26 > 1.0)
+       Predict: 1.0
+    Else (feature 250 > 0.0)
+     If (feature 616 <= 0.0)
+      If (feature 573 <= 0.0)
+       Predict: 1.0
+      Else (feature 573 > 0.0)
+       Predict: 0.0
+     Else (feature 616 > 0.0)
+      If (feature 436 <= 1.0)
+       Predict: 0.0
+      Else (feature 436 > 1.0)
+       Predict: 1.0
+   Else (feature 998 > 0.0)
+    If (feature 296 <= 1.0)
+     If (feature 868 <= 0.0)
+      If (feature 598 <= 1.0)
+       Predict: 0.0
+      Else (feature 598 > 1.0)
+       Predict: 0.0
+     Else (feature 868 > 0.0)
+      If (feature 103 <= 0.0)
+       Predict: 0.0
+      Else (feature 103 > 0.0)
+       Predict: 0.0
+    Else (feature 296 > 1.0)
+     If (feature 281 <= 0.0)
+      Predict: 1.0
+     Else (feature 281 > 0.0)
+      Predict: 0.0
+
+------------------------
+Test RDD is RDD[5]
+Merging training RDDs rdds[:5] to rdds[6:]
+Merged training set contains 2604 elements
+Learned Classification Tree Model:
+DecisionTreeModel classifier
+  If (feature 638 <= 0.0)
+   If (feature 395 <= 0.0)
+    If (feature 90 <= 0.0)
+     If (feature 515 <= 0.0)
+      If (feature 691 <= 0.0)
+       Predict: 0.0
+      Else (feature 691 > 0.0)
+       Predict: 0.0
+     Else (feature 515 > 0.0)
+      If (feature 998 <= 0.0)
+       Predict: 1.0
+      Else (feature 998 > 0.0)
+       Predict: 0.0
+    Else (feature 90 > 0.0)
+     If (feature 144 <= 0.0)
+      If (feature 681 <= 0.0)
+       Predict: 1.0
+      Else (feature 681 > 0.0)
+       Predict: 0.0
+     Else (feature 144 > 0.0)
+      If (feature 560 <= 0.0)
+       Predict: 0.0
+      Else (feature 560 > 0.0)
+       Predict: 0.0
+   Else (feature 395 > 0.0)
+    If (feature 337 <= 1.0)
+     If (feature 109 <= 0.0)
+      If (feature 898 <= 1.0)
+       Predict: 0.0
+      Else (feature 898 > 1.0)
+       Predict: 0.0
+     Else (feature 109 > 0.0)
+      If (feature 478 <= 0.0)
+       Predict: 0.0
+      Else (feature 478 > 0.0)
+       Predict: 1.0
+    Else (feature 337 > 1.0)
+     If (feature 207 <= 0.0)
+      Predict: 1.0
+     Else (feature 207 > 0.0)
+      Predict: 0.0
+  Else (feature 638 > 0.0)
+   If (feature 584 <= 0.0)
+    If (feature 614 <= 0.0)
+     If (feature 916 <= 0.0)
+      If (feature 896 <= 0.0)
+       Predict: 0.0
+      Else (feature 896 > 0.0)
+       Predict: 0.0
+     Else (feature 916 > 0.0)
+      If (feature 728 <= 0.0)
+       Predict: 0.0
+      Else (feature 728 > 0.0)
+       Predict: 1.0
+    Else (feature 614 > 0.0)
+     If (feature 322 <= 0.0)
+      If (feature 338 <= 0.0)
+       Predict: 0.0
+      Else (feature 338 > 0.0)
+       Predict: 0.0
+     Else (feature 322 > 0.0)
+      If (feature 29 <= 0.0)
+       Predict: 0.0
+      Else (feature 29 > 0.0)
+       Predict: 1.0
+   Else (feature 584 > 0.0)
+    If (feature 788 <= 1.0)
+     If (feature 675 <= 1.0)
+      If (feature 828 <= 1.0)
+       Predict: 0.0
+      Else (feature 828 > 1.0)
+       Predict: 1.0
+     Else (feature 675 > 1.0)
+      If (feature 681 <= 0.0)
+       Predict: 1.0
+      Else (feature 681 > 0.0)
+       Predict: 0.0
+    Else (feature 788 > 1.0)
+     If (feature 46 <= 1.0)
+      Predict: 1.0
+     Else (feature 46 > 1.0)
+      Predict: 0.0
+
+------------------------
+Test RDD is RDD[6]
+Merging training RDDs rdds[:6] to rdds[7:]
+Merged training set contains 2604 elements
+Learned Classification Tree Model:
+DecisionTreeModel classifier
+  If (feature 638 <= 0.0)
+   If (feature 395 <= 0.0)
+    If (feature 940 <= 0.0)
+     If (feature 465 <= 0.0)
+      If (feature 90 <= 0.0)
+       Predict: 0.0
+      Else (feature 90 > 0.0)
+       Predict: 0.0
+     Else (feature 465 > 0.0)
+      If (feature 998 <= 0.0)
+       Predict: 1.0
+      Else (feature 998 > 0.0)
+       Predict: 0.0
+    Else (feature 940 > 0.0)
+     If (feature 683 <= 0.0)
+      If (feature 635 <= 0.0)
+       Predict: 1.0
+      Else (feature 635 > 0.0)
+       Predict: 0.0
+     Else (feature 683 > 0.0)
+      If (feature 517 <= 1.0)
+       Predict: 0.0
+      Else (feature 517 > 1.0)
+       Predict: 1.0
+   Else (feature 395 > 0.0)
+    If (feature 510 <= 1.0)
+     If (feature 250 <= 1.0)
+      If (feature 584 <= 1.0)
+       Predict: 0.0
+      Else (feature 584 > 1.0)
+       Predict: 0.0
+     Else (feature 250 > 1.0)
+      If (feature 52 <= 0.0)
+       Predict: 1.0
+      Else (feature 52 > 0.0)
+       Predict: 0.0
+    Else (feature 510 > 1.0)
+     If (feature 83 <= 0.0)
+      Predict: 0.0
+     Else (feature 83 > 0.0)
+      Predict: 1.0
+  Else (feature 638 > 0.0)
+   If (feature 788 <= 1.0)
+    If (feature 704 <= 1.0)
+     If (feature 323 <= 1.0)
+      If (feature 766 <= 0.0)
+       Predict: 0.0
+      Else (feature 766 > 0.0)
+       Predict: 0.0
+     Else (feature 323 > 1.0)
+      If (feature 714 <= 0.0)
+       Predict: 0.0
+      Else (feature 714 > 0.0)
+       Predict: 0.0
+    Else (feature 704 > 1.0)
+     If (feature 490 <= 0.0)
+      If (feature 233 <= 0.0)
+       Predict: 0.0
+      Else (feature 233 > 0.0)
+       Predict: 1.0
+     Else (feature 490 > 0.0)
+      If (feature 5 <= 1.0)
+       Predict: 1.0
+      Else (feature 5 > 1.0)
+       Predict: 0.0
+   Else (feature 788 > 1.0)
+    If (feature 252 <= 0.0)
+     If (feature 18 <= 0.0)
+      If (feature 693 <= 1.0)
+       Predict: 0.0
+      Else (feature 693 > 1.0)
+       Predict: 1.0
+     Else (feature 18 > 0.0)
+      Predict: 1.0
+    Else (feature 252 > 0.0)
+     If (feature 800 <= 1.0)
+      Predict: 1.0
+     Else (feature 800 > 1.0)
+      Predict: 0.0
+
+------------------------
+Test RDD is RDD[7]
+Merging training RDDs rdds[:7] to rdds[8:]
+Merged training set contains 2604 elements
+Learned Classification Tree Model:
+DecisionTreeModel classifier
+  If (feature 255 <= 0.0)
+   If (feature 638 <= 0.0)
+    If (feature 698 <= 0.0)
+     If (feature 395 <= 0.0)
+      If (feature 648 <= 0.0)
+       Predict: 0.0
+      Else (feature 648 > 0.0)
+       Predict: 0.0
+     Else (feature 395 > 0.0)
+      If (feature 922 <= 1.0)
+       Predict: 0.0
+      Else (feature 922 > 1.0)
+       Predict: 1.0
+    Else (feature 698 > 0.0)
+     If (feature 535 <= 0.0)
+      If (feature 723 <= 1.0)
+       Predict: 0.0
+      Else (feature 723 > 1.0)
+       Predict: 0.0
+     Else (feature 535 > 0.0)
+      If (feature 465 <= 0.0)
+       Predict: 0.0
+      Else (feature 465 > 0.0)
+       Predict: 1.0
+   Else (feature 638 > 0.0)
+    If (feature 704 <= 1.0)
+     If (feature 347 <= 1.0)
+      If (feature 584 <= 0.0)
+       Predict: 0.0
+      Else (feature 584 > 0.0)
+       Predict: 0.0
+     Else (feature 347 > 1.0)
+      If (feature 987 <= 0.0)
+       Predict: 0.0
+      Else (feature 987 > 0.0)
+       Predict: 1.0
+    Else (feature 704 > 1.0)
+     If (feature 233 <= 0.0)
+      If (feature 506 <= 0.0)
+       Predict: 0.0
+      Else (feature 506 > 0.0)
+       Predict: 1.0
+     Else (feature 233 > 0.0)
+      If (feature 38 <= 0.0)
+       Predict: 1.0
+      Else (feature 38 > 0.0)
+       Predict: 0.0
+  Else (feature 255 > 0.0)
+   If (feature 998 <= 0.0)
+    If (feature 250 <= 1.0)
+     If (feature 109 <= 0.0)
+      If (feature 165 <= 0.0)
+       Predict: 0.0
+      Else (feature 165 > 0.0)
+       Predict: 0.0
+     Else (feature 109 > 0.0)
+      If (feature 966 <= 0.0)
+       Predict: 1.0
+      Else (feature 966 > 0.0)
+       Predict: 0.0
+    Else (feature 250 > 1.0)
+     If (feature 619 <= 0.0)
+      Predict: 1.0
+     Else (feature 619 > 0.0)
+      If (feature 2 <= 0.0)
+       Predict: 0.0
+      Else (feature 2 > 0.0)
+       Predict: 1.0
+   Else (feature 998 > 0.0)
+    If (feature 940 <= 0.0)
+     If (feature 203 <= 1.0)
+      Predict: 0.0
+     Else (feature 203 > 1.0)
+      If (feature 41 <= 0.0)
+       Predict: 1.0
+      Else (feature 41 > 0.0)
+       Predict: 0.0
+    Else (feature 940 > 0.0)
+     If (feature 574 <= 0.0)
+      Predict: 1.0
+     Else (feature 574 > 0.0)
+      Predict: 0.0
+
+------------------------
+Test RDD is RDD[8]
+Merging training RDDs rdds[:8] to rdds[9:]
+Merged training set contains 2604 elements
+Learned Classification Tree Model:
+DecisionTreeModel classifier
+  If (feature 255 <= 0.0)
+   If (feature 638 <= 0.0)
+    If (feature 395 <= 0.0)
+     If (feature 698 <= 0.0)
+      If (feature 648 <= 0.0)
+       Predict: 0.0
+      Else (feature 648 > 0.0)
+       Predict: 0.0
+     Else (feature 698 > 0.0)
+      If (feature 940 <= 0.0)
+       Predict: 0.0
+      Else (feature 940 > 0.0)
+       Predict: 0.0
+    Else (feature 395 > 0.0)
+     If (feature 984 <= 1.0)
+      If (feature 338 <= 1.0)
+       Predict: 0.0
+      Else (feature 338 > 1.0)
+       Predict: 0.0
+     Else (feature 984 > 1.0)
+      If (feature 3 <= 0.0)
+       Predict: 0.0
+      Else (feature 3 > 0.0)
+       Predict: 1.0
+   Else (feature 638 > 0.0)
+    If (feature 704 <= 1.0)
+     If (feature 766 <= 0.0)
+      If (feature 714 <= 0.0)
+       Predict: 0.0
+      Else (feature 714 > 0.0)
+       Predict: 0.0
+     Else (feature 766 > 0.0)
+      If (feature 156 <= 1.0)
+       Predict: 0.0
+      Else (feature 156 > 1.0)
+       Predict: 1.0
+    Else (feature 704 > 1.0)
+     If (feature 233 <= 0.0)
+      If (feature 138 <= 1.0)
+       Predict: 0.0
+      Else (feature 138 > 1.0)
+       Predict: 1.0
+     Else (feature 233 > 0.0)
+      If (feature 38 <= 0.0)
+       Predict: 1.0
+      Else (feature 38 > 0.0)
+       Predict: 0.0
+  Else (feature 255 > 0.0)
+   If (feature 998 <= 0.0)
+    If (feature 109 <= 0.0)
+     If (feature 472 <= 0.0)
+      If (feature 713 <= 0.0)
+       Predict: 0.0
+      Else (feature 713 > 0.0)
+       Predict: 0.0
+     Else (feature 472 > 0.0)
+      If (feature 584 <= 0.0)
+       Predict: 0.0
+      Else (feature 584 > 0.0)
+       Predict: 1.0
+    Else (feature 109 > 0.0)
+     If (feature 966 <= 0.0)
+      If (feature 860 <= 0.0)
+       Predict: 1.0
+      Else (feature 860 > 0.0)
+       Predict: 0.0
+     Else (feature 966 > 0.0)
+      Predict: 0.0
+   Else (feature 998 > 0.0)
+    If (feature 940 <= 0.0)
+     If (feature 480 <= 1.0)
+      If (feature 49 <= 1.0)
+       Predict: 0.0
+      Else (feature 49 > 1.0)
+       Predict: 0.0
+     Else (feature 480 > 1.0)
+      Predict: 1.0
+    Else (feature 940 > 0.0)
+     If (feature 574 <= 0.0)
+      If (feature 21 <= 1.0)
+       Predict: 1.0
+      Else (feature 21 > 1.0)
+       Predict: 0.0
+     Else (feature 574 > 0.0)
+      Predict: 0.0
+
+------------------------
+Test RDD is RDD[9]
+Merging training RDDs rdds[:9] to rdds[10:]
+Merged training set contains 2602 elements
+Learned Classification Tree Model:
+DecisionTreeModel classifier
+  If (feature 35 <= 1.0)
+   If (feature 638 <= 0.0)
+    If (feature 395 <= 0.0)
+     If (feature 90 <= 0.0)
+      If (feature 691 <= 0.0)
+       Predict: 0.0
+      Else (feature 691 > 0.0)
+       Predict: 0.0
+     Else (feature 90 > 0.0)
+      If (feature 144 <= 0.0)
+       Predict: 0.0
+      Else (feature 144 > 0.0)
+       Predict: 0.0
+    Else (feature 395 > 0.0)
+     If (feature 472 <= 0.0)
+      If (feature 812 <= 1.0)
+       Predict: 0.0
+      Else (feature 812 > 1.0)
+       Predict: 0.0
+     Else (feature 472 > 0.0)
+      If (feature 92 <= 0.0)
+       Predict: 0.0
+      Else (feature 92 > 0.0)
+       Predict: 1.0
+   Else (feature 638 > 0.0)
+    If (feature 584 <= 0.0)
+     If (feature 704 <= 1.0)
+      If (feature 29 <= 1.0)
+       Predict: 0.0
+      Else (feature 29 > 1.0)
+       Predict: 0.0
+     Else (feature 704 > 1.0)
+      If (feature 267 <= 0.0)
+       Predict: 0.0
+      Else (feature 267 > 0.0)
+       Predict: 1.0
+    Else (feature 584 > 0.0)
+     If (feature 788 <= 1.0)
+      If (feature 675 <= 1.0)
+       Predict: 0.0
+      Else (feature 675 > 1.0)
+       Predict: 1.0
+     Else (feature 788 > 1.0)
+      Predict: 1.0
+  Else (feature 35 > 1.0)
+   If (feature 472 <= 0.0)
+    If (feature 585 <= 0.0)
+     If (feature 207 <= 0.0)
+      Predict: 0.0
+     Else (feature 207 > 0.0)
+      Predict: 1.0
+    Else (feature 585 > 0.0)
+     If (feature 22 <= 0.0)
+      Predict: 1.0
+     Else (feature 22 > 0.0)
+      Predict: 0.0
+   Else (feature 472 > 0.0)
+    If (feature 370 <= 0.0)
+     Predict: 1.0
+    Else (feature 370 > 0.0)
+     If (feature 9 <= 0.0)
+      Predict: 0.0
+     Else (feature 9 > 0.0)
+      Predict: 1.0
+
+******************************************************
+Average Accuracy of Naive Bayes: 95.784379
+Average Recall of Naive Bayes: 82.147109
+Average Precision of Naive Bayes: 91.901897
+Average Specificity of Naive Bayes: 98.506910
+Average Accuracy of Naive Bayes: 85.916144
+Average Error of Naive Bayes: 14.083856
+Total Run Time: 81.0258190632
+******************************************************
