@@ -3,15 +3,17 @@
 # Credit to Nikolay Manchev for the Tidy version
 # (C) 2014 Daniel Dixey
 #
-from collections import defaultdict
+
+# Import addtional Modules into Spark
 import numpy as np
 import re
 from operator import add
 from pyspark import SparkContext
-from pyspark.mllib.regression import LabeledPoint
+from pyspark.mllib.regression import LabeledPoint, LinearRegressionWithSGD
 from pyspark.mllib.classification import NaiveBayes
 from time import time
 from pyspark.mllib.tree import DecisionTree
+from collections import defaultdict
 
 # A simple attempt to from plural words
 def rem_plural(word):
@@ -86,7 +88,7 @@ if __name__ == "__main__":
         rdds.insert(i, rdd)
         
     # Run cross validation
-    resultsTable = np.zeros(shape=(len(rdds),6))
+    resultsTable = np.zeros(shape=(len(rdds),7))
     for i in range(0, len(rdds)):
         print '------------------------'
         print 'Test RDD is RDD[%i]' % i
@@ -100,17 +102,18 @@ if __name__ == "__main__":
         # Build vocabulary and frequency vector
         freq_vect = train_rdds.map(lambda(f,x): f_wfVector(f,x))
         # Create an RDD of LabeledPoint objects
-        lpRDD = freq_vect.map(lambda (f,x): LabeledPoint(f,x))
+        lpRDD = freq_vect.map(lambda (f,x): LabeledPoint(f,x)).cache()
         
-        ##############################
+        ################################
         # Naive Bayes - Machine Learning
-        ##############################
+        ################################
         
         # train the NaiveBayes and save the model as a variable nbModel
         nbModel = NaiveBayes.train(lpRDD, 1.0)
     
         # Generate a Test vector
         predict_vect = test_rdd.map(lambda(f,x): f_wfVector(f,x))
+        predict_vect_lb = predict_vect.map(lambda (f,x): LabeledPoint(f,x)).cache()
         
         # Map and Reduce to get Predictions and Results
         resultsTest = predict_vect.map(lambda (l,v):  ((l,nbModel.predict(v)),1)).reduceByKey(add)        
@@ -131,33 +134,50 @@ if __name__ == "__main__":
         ###########################################
         # Decision Tree Analysis - Machine Learning
         ###########################################
-        Decision_Tree = DecisionTree.trainClassifier(lpRDD, numClasses=2, categoricalFeaturesInfo={},impurity='gini', maxDepth=5, maxBins=15)
-                                     
-        predictedLabels = Decision_Tree.predict(lpRDD.map(lambda lp : lp.features))
-        trueLabels = lpRDD.map(lambda lp : lp.label)
-        resultsTrain = trueLabels.zip(predictedLabels)
-        resultMap = resultsTrain.countByValue()
+        Decision_Tree = DecisionTree.trainClassifier(lpRDD, numClasses=2, categoricalFeaturesInfo={},impurity='gini', maxDepth=5, maxBins=10)
         
         # Evaluate model on training instances and compute training error
-        predictions = Decision_Tree.predict(lpRDD.map(lambda x: x.features))
-        labelsAndPredictions = lpRDD.map(lambda lp: lp.label).zip(predictions)
-        resultsTable[i,4] = labelsAndPredictions.filter(lambda (v, p): v == p).count() / float(lpRDD.count())
+        predictions = Decision_Tree.predict(predict_vect_lb.map(lambda x: x.features))
+        labelsAndPredictions = predict_vect_lb.map(lambda lp: lp.label).zip(predictions)
+        resultsTable[i,4] = labelsAndPredictions.filter(lambda (v, p): v == p).count() / float(predict_vect_lb.count())
         resultsTable[i,5] = 1 - resultsTable[i,4]
         
         # Print Decision Tree
         print('Learned Classification Tree Model:')
         print(Decision_Tree)
         
-    finish_time = time()
+        ########################################
+        # Logistic Regression - Machine Learning
+        ########################################
         
-    print '******************************************************'
-    print 'Average Accuracy of Naive Bayes: %f' % (np.average(resultsTable[:,0])*100)
-    print 'Average Recall of Naive Bayes: %f' % (np.average(resultsTable[:,1])*100)
-    print 'Average Precision of Naive Bayes: %f' % (np.average(resultsTable[:,2])*100)
-    print 'Average Specificity of Naive Bayes: %f' % (np.average(resultsTable[:,3])*100)
-    print 'Average Accuracy of Naive Bayes: %f' % (np.average(resultsTable[:,4])*100)
-    print 'Average Error of Naive Bayes: %f' % (np.average(resultsTable[:,5])*100)
+        # Build the model
+        Logistic_Regression = LinearRegressionWithSGD.train(lpRDD, iterations=2)
+                
+        # Evaluate the model on training data
+        valuesAndPreds = predict_vect_lb.map(lambda p: (p.label, Logistic_Regression.predict(p.features)))
+        resultsTable[i,6] = valuesAndPreds.map(lambda (v, p): (v - p)**2).reduce(lambda x, y: x + y) / valuesAndPreds.count()
+        
+    finish_time = time()
     
+    # Display Results
+    print '  '
+    print '******************************************************'
+    print '*****************   Naive Bayes  *********************'
+    print 'Average Accuracy of Naive Bayes Analysis: %f' % (np.average(resultsTable[:,0])*100)
+    print 'Average Recall of Naive Bayes Analysis: %f' % (np.average(resultsTable[:,1])*100)
+    print 'Average Precision of Naive Bayes Analysis: %f' % (np.average(resultsTable[:,2])*100)
+    print 'Average Specificity of Naive Bayes Analysis: %f' % (np.average(resultsTable[:,3])*100)
+    print '******************************************************'
+    print '  '
+    print '***************   Decision Tree   ********************'
+    print 'Average Accuracy of Decision Tree Analysis: %f' % (np.average(resultsTable[:,4])*100)
+    print 'Average Error of Decision Tree Analysis: %f' % (np.average(resultsTable[:,5])*100)
+    print '******************************************************'
+    print '  '
+    print '***************   Logistic Regression  ***************'
+    print 'Average MSE of Logistic Regression Analysis: %f' % (np.average(resultsTable[:,6])*100)
+    print '******************************************************'
+    print '  '
     print 'Total Run Time:', (finish_time - start_time)
     print '******************************************************'
     
