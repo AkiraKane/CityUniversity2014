@@ -28,15 +28,15 @@ DecisionTreeModel classifier
       Else (feature 250 > 1.0)
        Predict: 0.0
     Else (feature 648 > 0.0)
-     If (feature 610 <= 1.0)
-      If (feature 338 <= 1.0)
+     If (feature 436 <= 1.0)
+      If (feature 142 <= 0.0)
        Predict: 0.0
-      Else (feature 338 > 1.0)
+      Else (feature 142 > 0.0)
        Predict: 0.0
-     Else (feature 610 > 1.0)
-      If (feature 853 <= 0.0)
+     Else (feature 436 > 1.0)
+      If (feature 337 <= 0.0)
        Predict: 0.0
-      Else (feature 853 > 0.0)
+      Else (feature 337 > 0.0)
        Predict: 1.0
    Else (feature 255 > 0.0)
     If (feature 452 <= 0.0)
@@ -79,9 +79,9 @@ DecisionTreeModel classifier
    Else (feature 704 > 1.0)
     If (feature 233 <= 0.0)
      If (feature 503 <= 1.0)
-      If (feature 754 <= 1.0)
+      If (feature 798 <= 1.0)
        Predict: 0.0
-      Else (feature 754 > 1.0)
+      Else (feature 798 > 1.0)
        Predict: 1.0
      Else (feature 503 > 1.0)
       Predict: 1.0
@@ -111,32 +111,35 @@ DecisionTreeModel classifier
       Else (feature 922 > 1.0)
        Predict: 1.0
     Else (feature 698 > 0.0)
-     If (feature 940 <= 0.0)
-      If (feature 36 <= 1.0)
+     If (feature 14 <= 1.0)
+      If (feature 902 <= 1.0)
        Predict: 0.0
-      Else (feature 36 > 1.0)
-       Predict: 1.0
-     Else (feature 940 > 0.0)
-      If (feature 535 <= 0.0)
+      Else (feature 902 > 1.0)
        Predict: 0.0
-      Else (feature 535 > 0.0)
+     Else (feature 14 > 1.0)
+      If (feature 3 <= 0.0)
        Predict: 1.0
+      Else (feature 3 > 0.0)
+       Predict: 0.0
    Else (feature 638 > 0.0)
-    If (feature 17 <= 1.0)
-     If (feature 103 <= 1.0)
-      If (feature 216 <= 1.0)
+    If (feature 311 <= 1.0)
+     If (feature 347 <= 1.0)
+      If (feature 704 <= 1.0)
        Predict: 0.0
-      Else (feature 216 > 1.0)
+      Else (feature 704 > 1.0)
        Predict: 0.0
-     Else (feature 103 > 1.0)
-      If (feature 37 <= 0.0)
+     Else (feature 347 > 1.0)
+      If (feature 849 <= 0.0)
        Predict: 0.0
-      Else (feature 37 > 0.0)
+      Else (feature 849 > 0.0)
        Predict: 1.0
-    Else (feature 17 > 1.0)
-     If (feature 33 <= 0.0)
-      Predict: 0.0
-     Else (feature 33 > 0.0)
+    Else (feature 311 > 1.0)
+     If (feature 903 <= 0.0)
+      If (feature 76 <= 0.0)
+       Predict: 0.0
+      Else (feature 76 > 0.0)
+       Predict: 1.0
+     Else (feature 903 > 0.0)
       Predict: 1.0
   Else (feature 255 > 0.0)
    If (feature 998 <= 0.0)
@@ -158,16 +161,16 @@ DecisionTreeModel classifier
       Else (feature 887 > 0.0)
        Predict: 0.0
      Else (feature 850 > 0.0)
-      If (feature 610 <= 1.0)
+      If (feature 634 <= 1.0)
        Predict: 0.0
-      Else (feature 610 > 1.0)
+      Else (feature 634 > 1.0)
        Predict: 1.0
    Else (feature 998 > 0.0)
     If (feature 296 <= 1.0)
      If (feature 868 <= 0.0)
-      If (feature 566 <= 1.0)
+      If (feature 116 <= 1.0)
        Predict: 0.0
-      Else (feature 566 > 1.0)
+      Else (feature 116 > 1.0)
        Predict: 0.0
      Else (feature 868 > 0.0)
       If (feature 103 <= 0.0)
@@ -206,9 +209,9 @@ DecisionTreeModel classifier
       Else (feature 558 > 0.0)
        Predict: 0.0
      Else (feature 746 > 0.0)
-      If (feature 159 <= 1.0)
+      If (feature 708 <= 0.0)
        Predict: 0.0
-      Else (feature 159 > 1.0)
+      Else (feature 708 > 0.0)
        Predict: 0.0
    Else (feature 998 > 0.0)
     If (feature 812 <= 1.0)
@@ -229,28 +232,31 @@ DecisionTreeModel classifier
       Predict: 1.0
   Else (feature 638 > 0.0)
    If (feature 584 <= 0.0)
-    If (feature 35 <= 1.0)
-     If (feature 255 <= 0.0)
-      If (feature 523 <= 0.0)
+    If (feature 255 <= 0.0)
+     If (feature 723 <= 0.0)
+      If (feature 212 <= 0.0)
        Predict: 0.0
-      Else (feature 523 > 0.0)
+      Else (feature 212 > 0.0)
        Predict: 0.0
-     Else (feature 255 > 0.0)
+     Else (feature 723 > 0.0)
+      If (feature 20 <= 0.0)
+       Predict: 0.0
+      Else (feature 20 > 0.0)
+       Predict: 0.0
+    Else (feature 255 > 0.0)
+     If (feature 13 <= 1.0)
       If (feature 639 <= 1.0)
        Predict: 0.0
       Else (feature 639 > 1.0)
        Predict: 1.0
-    Else (feature 35 > 1.0)
-     If (feature 99 <= 1.0)
-      Predict: 0.0
-     Else (feature 99 > 1.0)
+     Else (feature 13 > 1.0)
       Predict: 1.0
    Else (feature 584 > 0.0)
     If (feature 788 <= 1.0)
      If (feature 675 <= 1.0)
-      If (feature 828 <= 1.0)
+      If (feature 599 <= 1.0)
        Predict: 0.0
-      Else (feature 828 > 1.0)
+      Else (feature 599 > 1.0)
        Predict: 1.0
      Else (feature 675 > 1.0)
       If (feature 613 <= 0.0)
@@ -301,10 +307,10 @@ DecisionTreeModel classifier
       Else (feature 762 > 0.0)
        Predict: 1.0
      Else (feature 144 > 0.0)
-      If (feature 274 <= 1.0)
+      If (feature 239 <= 0.0)
        Predict: 0.0
-      Else (feature 274 > 1.0)
-       Predict: 1.0
+      Else (feature 239 > 0.0)
+       Predict: 0.0
     Else (feature 998 > 0.0)
      If (feature 436 <= 1.0)
       If (feature 448 <= 0.0)
@@ -317,36 +323,42 @@ DecisionTreeModel classifier
       Else (feature 114 > 0.0)
        Predict: 0.0
   Else (feature 638 > 0.0)
-   If (feature 381 <= 1.0)
-    If (feature 766 <= 1.0)
-     If (feature 584 <= 1.0)
-      If (feature 840 <= 0.0)
+   If (feature 704 <= 1.0)
+    If (feature 584 <= 0.0)
+     If (feature 766 <= 0.0)
+      If (feature 35 <= 0.0)
        Predict: 0.0
-      Else (feature 840 > 0.0)
+      Else (feature 35 > 0.0)
        Predict: 0.0
-     Else (feature 584 > 1.0)
-      If (feature 11 <= 0.0)
+     Else (feature 766 > 0.0)
+      If (feature 27 <= 0.0)
        Predict: 0.0
-      Else (feature 11 > 0.0)
+      Else (feature 27 > 0.0)
+       Predict: 0.0
+    Else (feature 584 > 0.0)
+     If (feature 675 <= 1.0)
+      If (feature 691 <= 0.0)
+       Predict: 0.0
+      Else (feature 691 > 0.0)
+       Predict: 0.0
+     Else (feature 675 > 1.0)
+      If (feature 580 <= 0.0)
+       Predict: 0.0
+      Else (feature 580 > 0.0)
        Predict: 1.0
-    Else (feature 766 > 1.0)
-     If (feature 332 <= 0.0)
+   Else (feature 704 > 1.0)
+    If (feature 233 <= 0.0)
+     If (feature 490 <= 0.0)
       Predict: 0.0
-     Else (feature 332 > 0.0)
-      Predict: 1.0
-   Else (feature 381 > 1.0)
-    If (feature 658 <= 1.0)
-     If (feature 929 <= 1.0)
-      If (feature 17 <= 1.0)
-       Predict: 0.0
-      Else (feature 17 > 1.0)
+     Else (feature 490 > 0.0)
+      If (feature 37 <= 0.0)
        Predict: 1.0
-     Else (feature 929 > 1.0)
+      Else (feature 37 > 0.0)
+       Predict: 0.0
+    Else (feature 233 > 0.0)
+     If (feature 73 <= 0.0)
       Predict: 1.0
-    Else (feature 658 > 1.0)
-     If (feature 9 <= 0.0)
-      Predict: 1.0
-     Else (feature 9 > 0.0)
+     Else (feature 73 > 0.0)
       Predict: 0.0
 
 ------------------------
@@ -375,27 +387,33 @@ DecisionTreeModel classifier
       Else (feature 73 > 0.0)
        Predict: 0.0
      Else (feature 107 > 0.0)
-      If (feature 337 <= 1.0)
+      If (feature 8 <= 0.0)
        Predict: 0.0
-      Else (feature 337 > 1.0)
-       Predict: 1.0
+      Else (feature 8 > 0.0)
+       Predict: 0.0
    Else (feature 638 > 0.0)
-    If (feature 17 <= 1.0)
-     If (feature 714 <= 0.0)
-      If (feature 766 <= 1.0)
+    If (feature 704 <= 1.0)
+     If (feature 584 <= 0.0)
+      If (feature 535 <= 0.0)
        Predict: 0.0
-      Else (feature 766 > 1.0)
+      Else (feature 535 > 0.0)
        Predict: 0.0
-     Else (feature 714 > 0.0)
-      If (feature 323 <= 1.0)
+     Else (feature 584 > 0.0)
+      If (feature 594 <= 0.0)
        Predict: 0.0
-      Else (feature 323 > 1.0)
+      Else (feature 594 > 0.0)
+       Predict: 0.0
+    Else (feature 704 > 1.0)
+     If (feature 233 <= 0.0)
+      If (feature 138 <= 1.0)
+       Predict: 0.0
+      Else (feature 138 > 1.0)
        Predict: 1.0
-    Else (feature 17 > 1.0)
-     If (feature 33 <= 0.0)
-      Predict: 0.0
-     Else (feature 33 > 0.0)
-      Predict: 1.0
+     Else (feature 233 > 0.0)
+      If (feature 38 <= 0.0)
+       Predict: 1.0
+      Else (feature 38 > 0.0)
+       Predict: 0.0
   Else (feature 255 > 0.0)
    If (feature 998 <= 0.0)
     If (feature 250 <= 0.0)
@@ -405,9 +423,9 @@ DecisionTreeModel classifier
       Else (feature 431 > 0.0)
        Predict: 1.0
      Else (feature 349 > 0.0)
-      If (feature 26 <= 1.0)
+      If (feature 190 <= 1.0)
        Predict: 0.0
-      Else (feature 26 > 1.0)
+      Else (feature 190 > 1.0)
        Predict: 1.0
     Else (feature 250 > 0.0)
      If (feature 616 <= 0.0)
@@ -416,26 +434,20 @@ DecisionTreeModel classifier
       Else (feature 573 > 0.0)
        Predict: 0.0
      Else (feature 616 > 0.0)
-      If (feature 436 <= 1.0)
+      If (feature 838 <= 1.0)
        Predict: 0.0
-      Else (feature 436 > 1.0)
+      Else (feature 838 > 1.0)
        Predict: 1.0
    Else (feature 998 > 0.0)
-    If (feature 296 <= 1.0)
-     If (feature 868 <= 0.0)
-      If (feature 598 <= 1.0)
+    If (feature 94 <= 0.0)
+     Predict: 0.0
+    Else (feature 94 > 0.0)
+     If (feature 148 <= 0.0)
+      If (feature 512 <= 0.0)
+       Predict: 1.0
+      Else (feature 512 > 0.0)
        Predict: 0.0
-      Else (feature 598 > 1.0)
-       Predict: 0.0
-     Else (feature 868 > 0.0)
-      If (feature 103 <= 0.0)
-       Predict: 0.0
-      Else (feature 103 > 0.0)
-       Predict: 0.0
-    Else (feature 296 > 1.0)
-     If (feature 281 <= 0.0)
-      Predict: 1.0
-     Else (feature 281 > 0.0)
+     Else (feature 148 > 0.0)
       Predict: 0.0
 
 ------------------------
@@ -469,22 +481,25 @@ DecisionTreeModel classifier
       Else (feature 560 > 0.0)
        Predict: 0.0
    Else (feature 395 > 0.0)
-    If (feature 337 <= 1.0)
-     If (feature 109 <= 0.0)
+    If (feature 111 <= 1.0)
+     If (feature 472 <= 0.0)
       If (feature 898 <= 1.0)
        Predict: 0.0
       Else (feature 898 > 1.0)
        Predict: 0.0
-     Else (feature 109 > 0.0)
-      If (feature 478 <= 0.0)
+     Else (feature 472 > 0.0)
+      If (feature 31 <= 0.0)
        Predict: 0.0
-      Else (feature 478 > 0.0)
+      Else (feature 31 > 0.0)
+       Predict: 0.0
+    Else (feature 111 > 1.0)
+     If (feature 390 <= 1.0)
+      If (feature 723 <= 0.0)
+       Predict: 0.0
+      Else (feature 723 > 0.0)
        Predict: 1.0
-    Else (feature 337 > 1.0)
-     If (feature 207 <= 0.0)
+     Else (feature 390 > 1.0)
       Predict: 1.0
-     Else (feature 207 > 0.0)
-      Predict: 0.0
   Else (feature 638 > 0.0)
    If (feature 584 <= 0.0)
     If (feature 614 <= 0.0)
@@ -510,22 +525,28 @@ DecisionTreeModel classifier
       Else (feature 29 > 0.0)
        Predict: 1.0
    Else (feature 584 > 0.0)
-    If (feature 788 <= 1.0)
-     If (feature 675 <= 1.0)
-      If (feature 828 <= 1.0)
+    If (feature 474 <= 0.0)
+     If (feature 47 <= 0.0)
+      If (feature 640 <= 0.0)
        Predict: 0.0
-      Else (feature 828 > 1.0)
-       Predict: 1.0
-     Else (feature 675 > 1.0)
-      If (feature 681 <= 0.0)
-       Predict: 1.0
-      Else (feature 681 > 0.0)
+      Else (feature 640 > 0.0)
        Predict: 0.0
-    Else (feature 788 > 1.0)
-     If (feature 46 <= 1.0)
-      Predict: 1.0
-     Else (feature 46 > 1.0)
-      Predict: 0.0
+     Else (feature 47 > 0.0)
+      If (feature 303 <= 0.0)
+       Predict: 1.0
+      Else (feature 303 > 0.0)
+       Predict: 0.0
+    Else (feature 474 > 0.0)
+     If (feature 681 <= 0.0)
+      If (feature 917 <= 0.0)
+       Predict: 0.0
+      Else (feature 917 > 0.0)
+       Predict: 1.0
+     Else (feature 681 > 0.0)
+      If (feature 604 <= 0.0)
+       Predict: 0.0
+      Else (feature 604 > 0.0)
+       Predict: 1.0
 
 ------------------------
 Test RDD is RDD[6]
@@ -553,65 +574,77 @@ DecisionTreeModel classifier
       Else (feature 635 > 0.0)
        Predict: 0.0
      Else (feature 683 > 0.0)
-      If (feature 517 <= 1.0)
+      If (feature 553 <= 0.0)
        Predict: 0.0
-      Else (feature 517 > 1.0)
-       Predict: 1.0
+      Else (feature 553 > 0.0)
+       Predict: 0.0
    Else (feature 395 > 0.0)
-    If (feature 510 <= 1.0)
+    If (feature 111 <= 1.0)
      If (feature 250 <= 1.0)
-      If (feature 584 <= 1.0)
+      If (feature 546 <= 1.0)
        Predict: 0.0
-      Else (feature 584 > 1.0)
+      Else (feature 546 > 1.0)
        Predict: 0.0
      Else (feature 250 > 1.0)
-      If (feature 52 <= 0.0)
-       Predict: 1.0
-      Else (feature 52 > 0.0)
+      If (feature 625 <= 0.0)
        Predict: 0.0
-    Else (feature 510 > 1.0)
-     If (feature 83 <= 0.0)
-      Predict: 0.0
-     Else (feature 83 > 0.0)
+      Else (feature 625 > 0.0)
+       Predict: 1.0
+    Else (feature 111 > 1.0)
+     If (feature 211 <= 1.0)
+      If (feature 298 <= 0.0)
+       Predict: 1.0
+      Else (feature 298 > 0.0)
+       Predict: 0.0
+     Else (feature 211 > 1.0)
       Predict: 1.0
   Else (feature 638 > 0.0)
-   If (feature 788 <= 1.0)
-    If (feature 704 <= 1.0)
-     If (feature 323 <= 1.0)
-      If (feature 766 <= 0.0)
+   If (feature 614 <= 0.0)
+    If (feature 584 <= 0.0)
+     If (feature 916 <= 0.0)
+      If (feature 896 <= 0.0)
        Predict: 0.0
-      Else (feature 766 > 0.0)
+      Else (feature 896 > 0.0)
        Predict: 0.0
-     Else (feature 323 > 1.0)
-      If (feature 714 <= 0.0)
+     Else (feature 916 > 0.0)
+      If (feature 728 <= 0.0)
        Predict: 0.0
-      Else (feature 714 > 0.0)
-       Predict: 0.0
-    Else (feature 704 > 1.0)
-     If (feature 490 <= 0.0)
-      If (feature 233 <= 0.0)
-       Predict: 0.0
-      Else (feature 233 > 0.0)
+      Else (feature 728 > 0.0)
        Predict: 1.0
-     Else (feature 490 > 0.0)
-      If (feature 5 <= 1.0)
-       Predict: 1.0
-      Else (feature 5 > 1.0)
+    Else (feature 584 > 0.0)
+     If (feature 903 <= 0.0)
+      If (feature 797 <= 0.0)
        Predict: 0.0
-   Else (feature 788 > 1.0)
-    If (feature 252 <= 0.0)
-     If (feature 18 <= 0.0)
-      If (feature 693 <= 1.0)
+      Else (feature 797 > 0.0)
        Predict: 0.0
-      Else (feature 693 > 1.0)
+     Else (feature 903 > 0.0)
+      If (feature 373 <= 0.0)
        Predict: 1.0
-     Else (feature 18 > 0.0)
-      Predict: 1.0
-    Else (feature 252 > 0.0)
-     If (feature 800 <= 1.0)
-      Predict: 1.0
-     Else (feature 800 > 1.0)
-      Predict: 0.0
+      Else (feature 373 > 0.0)
+       Predict: 0.0
+   Else (feature 614 > 0.0)
+    If (feature 322 <= 0.0)
+     If (feature 111 <= 1.0)
+      If (feature 920 <= 0.0)
+       Predict: 0.0
+      Else (feature 920 > 0.0)
+       Predict: 0.0
+     Else (feature 111 > 1.0)
+      If (feature 584 <= 0.0)
+       Predict: 0.0
+      Else (feature 584 > 0.0)
+       Predict: 1.0
+    Else (feature 322 > 0.0)
+     If (feature 29 <= 0.0)
+      If (feature 189 <= 0.0)
+       Predict: 0.0
+      Else (feature 189 > 0.0)
+       Predict: 1.0
+     Else (feature 29 > 0.0)
+      If (feature 9 <= 0.0)
+       Predict: 1.0
+      Else (feature 9 > 0.0)
+       Predict: 0.0
 
 ------------------------
 Test RDD is RDD[7]
@@ -644,28 +677,25 @@ DecisionTreeModel classifier
       Else (feature 465 > 0.0)
        Predict: 1.0
    Else (feature 638 > 0.0)
-    If (feature 704 <= 1.0)
-     If (feature 347 <= 1.0)
-      If (feature 584 <= 0.0)
+    If (feature 584 <= 1.0)
+     If (feature 94 <= 1.0)
+      If (feature 702 <= 0.0)
        Predict: 0.0
-      Else (feature 584 > 0.0)
+      Else (feature 702 > 0.0)
        Predict: 0.0
-     Else (feature 347 > 1.0)
-      If (feature 987 <= 0.0)
+     Else (feature 94 > 1.0)
+      If (feature 311 <= 0.0)
        Predict: 0.0
-      Else (feature 987 > 0.0)
+      Else (feature 311 > 0.0)
        Predict: 1.0
-    Else (feature 704 > 1.0)
-     If (feature 233 <= 0.0)
-      If (feature 506 <= 0.0)
+    Else (feature 584 > 1.0)
+     If (feature 954 <= 0.0)
+      If (feature 82 <= 0.0)
        Predict: 0.0
-      Else (feature 506 > 0.0)
+      Else (feature 82 > 0.0)
        Predict: 1.0
-     Else (feature 233 > 0.0)
-      If (feature 38 <= 0.0)
-       Predict: 1.0
-      Else (feature 38 > 0.0)
-       Predict: 0.0
+     Else (feature 954 > 0.0)
+      Predict: 0.0
   Else (feature 255 > 0.0)
    If (feature 998 <= 0.0)
     If (feature 250 <= 1.0)
@@ -689,12 +719,15 @@ DecisionTreeModel classifier
        Predict: 1.0
    Else (feature 998 > 0.0)
     If (feature 940 <= 0.0)
-     If (feature 203 <= 1.0)
-      Predict: 0.0
-     Else (feature 203 > 1.0)
-      If (feature 41 <= 0.0)
+     If (feature 798 <= 1.0)
+      If (feature 138 <= 1.0)
+       Predict: 0.0
+      Else (feature 138 > 1.0)
+       Predict: 0.0
+     Else (feature 798 > 1.0)
+      If (feature 2 <= 0.0)
        Predict: 1.0
-      Else (feature 41 > 0.0)
+      Else (feature 2 > 0.0)
        Predict: 0.0
     Else (feature 940 > 0.0)
      If (feature 574 <= 0.0)
@@ -722,15 +755,15 @@ DecisionTreeModel classifier
       Else (feature 940 > 0.0)
        Predict: 0.0
     Else (feature 395 > 0.0)
-     If (feature 984 <= 1.0)
-      If (feature 338 <= 1.0)
+     If (feature 699 <= 1.0)
+      If (feature 79 <= 0.0)
        Predict: 0.0
-      Else (feature 338 > 1.0)
+      Else (feature 79 > 0.0)
        Predict: 0.0
-     Else (feature 984 > 1.0)
-      If (feature 3 <= 0.0)
+     Else (feature 699 > 1.0)
+      If (feature 158 <= 0.0)
        Predict: 0.0
-      Else (feature 3 > 0.0)
+      Else (feature 158 > 0.0)
        Predict: 1.0
    Else (feature 638 > 0.0)
     If (feature 704 <= 1.0)
@@ -740,9 +773,9 @@ DecisionTreeModel classifier
       Else (feature 714 > 0.0)
        Predict: 0.0
      Else (feature 766 > 0.0)
-      If (feature 156 <= 1.0)
+      If (feature 353 <= 1.0)
        Predict: 0.0
-      Else (feature 156 > 1.0)
+      Else (feature 353 > 1.0)
        Predict: 1.0
     Else (feature 704 > 1.0)
      If (feature 233 <= 0.0)
@@ -778,18 +811,18 @@ DecisionTreeModel classifier
       Predict: 0.0
    Else (feature 998 > 0.0)
     If (feature 940 <= 0.0)
-     If (feature 480 <= 1.0)
-      If (feature 49 <= 1.0)
+     If (feature 57 <= 0.0)
+      Predict: 0.0
+     Else (feature 57 > 0.0)
+      If (feature 109 <= 0.0)
        Predict: 0.0
-      Else (feature 49 > 1.0)
-       Predict: 0.0
-     Else (feature 480 > 1.0)
-      Predict: 1.0
+      Else (feature 109 > 0.0)
+       Predict: 1.0
     Else (feature 940 > 0.0)
      If (feature 574 <= 0.0)
-      If (feature 21 <= 1.0)
+      If (feature 25 <= 0.0)
        Predict: 1.0
-      Else (feature 21 > 1.0)
+      Else (feature 25 > 0.0)
        Predict: 0.0
      Else (feature 574 > 0.0)
       Predict: 0.0
@@ -800,77 +833,109 @@ Merging training RDDs rdds[:9] to rdds[10:]
 Merged training set contains 2602 elements
 Learned Classification Tree Model:
 DecisionTreeModel classifier
-  If (feature 35 <= 1.0)
+  If (feature 255 <= 0.0)
    If (feature 638 <= 0.0)
-    If (feature 395 <= 0.0)
-     If (feature 90 <= 0.0)
-      If (feature 691 <= 0.0)
+    If (feature 698 <= 0.0)
+     If (feature 465 <= 0.0)
+      If (feature 395 <= 0.0)
        Predict: 0.0
-      Else (feature 691 > 0.0)
+      Else (feature 395 > 0.0)
        Predict: 0.0
-     Else (feature 90 > 0.0)
-      If (feature 144 <= 0.0)
+     Else (feature 465 > 0.0)
+      If (feature 551 <= 0.0)
        Predict: 0.0
-      Else (feature 144 > 0.0)
+      Else (feature 551 > 0.0)
        Predict: 0.0
-    Else (feature 395 > 0.0)
-     If (feature 472 <= 0.0)
-      If (feature 812 <= 1.0)
+    Else (feature 698 > 0.0)
+     If (feature 723 <= 1.0)
+      If (feature 535 <= 0.0)
        Predict: 0.0
-      Else (feature 812 > 1.0)
+      Else (feature 535 > 0.0)
        Predict: 0.0
-     Else (feature 472 > 0.0)
-      If (feature 92 <= 0.0)
+     Else (feature 723 > 1.0)
+      If (feature 328 <= 0.0)
        Predict: 0.0
-      Else (feature 92 > 0.0)
+      Else (feature 328 > 0.0)
        Predict: 1.0
    Else (feature 638 > 0.0)
-    If (feature 584 <= 0.0)
-     If (feature 704 <= 1.0)
-      If (feature 29 <= 1.0)
-       Predict: 0.0
-      Else (feature 29 > 1.0)
-       Predict: 0.0
-     Else (feature 704 > 1.0)
-      If (feature 267 <= 0.0)
-       Predict: 0.0
-      Else (feature 267 > 0.0)
-       Predict: 1.0
-    Else (feature 584 > 0.0)
+    If (feature 381 <= 1.0)
      If (feature 788 <= 1.0)
-      If (feature 675 <= 1.0)
+      If (feature 557 <= 0.0)
        Predict: 0.0
-      Else (feature 675 > 1.0)
-       Predict: 1.0
+      Else (feature 557 > 0.0)
+       Predict: 0.0
      Else (feature 788 > 1.0)
+      If (feature 584 <= 0.0)
+       Predict: 0.0
+      Else (feature 584 > 0.0)
+       Predict: 1.0
+    Else (feature 381 > 1.0)
+     If (feature 358 <= 0.0)
+      If (feature 573 <= 0.0)
+       Predict: 0.0
+      Else (feature 573 > 0.0)
+       Predict: 1.0
+     Else (feature 358 > 0.0)
       Predict: 1.0
-  Else (feature 35 > 1.0)
-   If (feature 472 <= 0.0)
-    If (feature 585 <= 0.0)
-     If (feature 207 <= 0.0)
+  Else (feature 255 > 0.0)
+   If (feature 873 <= 0.0)
+    If (feature 218 <= 0.0)
+     If (feature 667 <= 0.0)
+      If (feature 123 <= 0.0)
+       Predict: 0.0
+      Else (feature 123 > 0.0)
+       Predict: 0.0
+     Else (feature 667 > 0.0)
+      If (feature 452 <= 0.0)
+       Predict: 1.0
+      Else (feature 452 > 0.0)
+       Predict: 0.0
+    Else (feature 218 > 0.0)
+     If (feature 232 <= 0.0)
+      If (feature 513 <= 0.0)
+       Predict: 1.0
+      Else (feature 513 > 0.0)
+       Predict: 0.0
+     Else (feature 232 > 0.0)
+      If (feature 5 <= 1.0)
+       Predict: 0.0
+      Else (feature 5 > 1.0)
+       Predict: 1.0
+   Else (feature 873 > 0.0)
+    If (feature 390 <= 1.0)
+     If (feature 517 <= 1.0)
       Predict: 0.0
-     Else (feature 207 > 0.0)
-      Predict: 1.0
-    Else (feature 585 > 0.0)
-     If (feature 22 <= 0.0)
-      Predict: 1.0
-     Else (feature 22 > 0.0)
+     Else (feature 517 > 1.0)
+      If (feature 2 <= 0.0)
+       Predict: 1.0
+      Else (feature 2 > 0.0)
+       Predict: 0.0
+    Else (feature 390 > 1.0)
+     If (feature 238 <= 0.0)
+      If (feature 7 <= 0.0)
+       Predict: 1.0
+      Else (feature 7 > 0.0)
+       Predict: 0.0
+     Else (feature 238 > 0.0)
       Predict: 0.0
-   Else (feature 472 > 0.0)
-    If (feature 370 <= 0.0)
-     Predict: 1.0
-    Else (feature 370 > 0.0)
-     If (feature 9 <= 0.0)
-      Predict: 0.0
-     Else (feature 9 > 0.0)
-      Predict: 1.0
 
+  
 ******************************************************
-Average Accuracy of Naive Bayes: 95.784379
-Average Recall of Naive Bayes: 82.147109
-Average Precision of Naive Bayes: 91.901897
-Average Specificity of Naive Bayes: 98.506910
-Average Accuracy of Naive Bayes: 85.916144
-Average Error of Naive Bayes: 14.083856
-Total Run Time: 81.0258190632
+*****************   Naive Bayes  *********************
+Average Accuracy of Naive Bayes Analysis: 95.784379
+Average Recall of Naive Bayes Analysis: 82.147109
+Average Precision of Naive Bayes Analysis: 91.901897
+Average Specificity of Naive Bayes Analysis: 98.506910
+******************************************************
+  
+***************   Decision Tree   ********************
+Average Accuracy of Decision Tree Analysis: 82.820982
+Average Error of Decision Tree Analysis: 17.179018
+******************************************************
+  
+***************   Logistic Regression  ***************
+Average MSE of Logistic Regression Analysis: 116631368.213758
+******************************************************
+  
+Total Run Time: 49.2765500546
 ******************************************************
