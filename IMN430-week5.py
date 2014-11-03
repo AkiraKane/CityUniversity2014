@@ -36,7 +36,7 @@ numpyArray = numpyArray[:,1::]
 
 # Import PCA functionality from sklearn module
 from sklearn.decomposition import PCA
-pca = PCA(census = pd.read_csv(n_components=2)
+pca = PCA(n_components=2)
 PCA_Vectors = pca.fit_transform(numpyArray)
 
 # Import Plotting Library
@@ -83,10 +83,45 @@ for col in Subset_10_DF:
 
 # DIY Exercises - 2 : Multidimensional scaling
 
+
 # Load the data from here and select the numerical columns that can be used in 
 # MDS calculations and copy them into a numpy matrix. Alternatively, you can select 
 # the columns in Excel and load afterwards. Remember to load the borough names 
 # as labels (we'll need them later).
 
 London_Data = pd.read_csv('http://staff.city.ac.uk/~sbbk529/Teaching/Resources/INM430/Week05/london-borough-profiles.csv', skiprows=1)
-Numpy_Array = (London_Data[['Number of active businesses, 2012','Two-year business survival rates 2012']]).as_matrix()
+Numpy_Array = (London_Data[['Two-year business survival rates 2012']]).as_matrix()
+#   MDS needs a distance matrix to operate. You can generate a pairwise distance 
+# matrix using scikit-learn's Euclidean Dist function or use scipy functions 
+# as we discussed earlier.
+
+Mean = np.repeat(Numpy_Array.mean(), len(Numpy_Array)).reshape(len(Numpy_Array), 1)
+Numpy_Array_Distances = np.concatenate((Numpy_Array, Mean), axis=1)
+from scipy.spatial.distance import squareform,pdist                                                              
+Numpy_Array_Distances = squareform(pdist(Numpy_Array_Distances,'sqeuclidean'))
+#Use scikit-learn's MDS function to perform MDS on the data and project the 
+# points to a lower-dimensional space. For inspiration, here is an example 
+# where MDS is applied.
+from sklearn import manifold
+mds = manifold.MDS(n_components=2, max_iter=3000, eps=1e-9, random_state=seed,
+                   dissimilarity="precomputed", n_jobs=1)
+npos = mds.fit_transform(Numpy_Array_Distances)
+
+npos *= np.sqrt((Numpy_Array_Distances ** 2).sum()) / np.sqrt((npos ** 2).sum())
+
+# Rotate the data
+clf = PCA(n_components=2)
+Numpy_Array_Distances = clf.fit_transform(Numpy_Array_Distances)
+
+npos = clf.fit_transform(npos)
+
+#Visualise the data on a 2D scatterplot and annotate the points using the borough 
+# names using the annotate function in matplotlib.
+plt.scatter(npos[:, 0], npos[:, 1], s=20, c='b')
+j=0
+for i in London_Data['Area/INDICATOR']:
+    plt.annotate(str(i), npos[j,:], xytext=(npos[j,0]+0.5, npos[j,1]+0.5)).set_fontsize(10)
+    j += 1
+#Comment on any observations you make, change the columns you feed into the 
+# MDS, observe changes. Find similar and distinct boroughs and speculate on 
+# the reasons of these patterns.
