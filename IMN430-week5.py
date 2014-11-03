@@ -4,13 +4,17 @@ Created on Mon Oct 27 16:21:21 2014
 
 @author: dan
 """
-
+##################################################
 # IMN 430 
 # Introduction to Data Science
 # Week 5
 #
+##################################################
 
+
+##################################################
 # DIY Exercises - 1 : Dimension reduction with PCA
+##################################################
 
 # For practical reasons, you can get the data into a pandas array and get it to 
 # a numpy array as discussed last week. If you put the data as it is to PCA 
@@ -81,8 +85,9 @@ for col in Subset_10_DF:
     print 'Column: %s   - Relevancy in PCA Variable: %f.3' % (col, PCA_Subset[i])
     i=i+1
 
+##############################################
 # DIY Exercises - 2 : Multidimensional scaling
-
+##############################################
 
 # Load the data from here and select the numerical columns that can be used in 
 # MDS calculations and copy them into a numpy matrix. Alternatively, you can select 
