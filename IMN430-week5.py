@@ -108,7 +108,7 @@ Numpy_Array_Distances = squareform(pdist(Numpy_Array_Distances,'sqeuclidean'))
 # points to a lower-dimensional space. For inspiration, here is an example 
 # where MDS is applied.
 from sklearn import manifold
-mds = manifold.MDS(n_components=2, max_iter=3000, eps=1e-9, random_state=seed,
+mds = manifold.MDS(n_components=2, max_iter=3000, eps=1e-9,
                    dissimilarity="precomputed", n_jobs=1)
 npos = mds.fit_transform(Numpy_Array_Distances)
 
@@ -125,7 +125,7 @@ npos = clf.fit_transform(npos)
 plt.scatter(npos[:, 0], npos[:, 1], s=20, c='b')
 j=0
 for i in London_Data['Area/INDICATOR']:
-    plt.annotate(str(i), npos[j,:], xytext=(npos[j,0]+0.9, npos[j,1]+0.9)).set_fontsize(10)
+    plt.annotate(str(i), npos[j,:], xytext=(npos[j,0]+0.5, npos[j,1]+0.5)).set_fontsize(10)
     j += 1
 #Comment on any observations you make, change the columns you feed into the 
 # MDS, observe changes. Find similar and distinct boroughs and speculate on 
