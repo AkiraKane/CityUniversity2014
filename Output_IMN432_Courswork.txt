@@ -1,0 +1,57 @@
+################################################
+############ Traversing Directories ############
+
+Directory = /home/dan/Desktop/IMN432-CW01/text-part/
+Total Size is 723620672 bytes
+Number of Files = 1431
+Total Number of Folders = 2371
+################################################
+
+################################################
+###### Process Files > Word Freq to Pickle #####
+
+############ Processing Completed ##############
+################################################
+
+################################################
+####### Word Freq to IDF and TF.IDF RDDs #######
+
+############ Processing Completed ##############
+################################################
+
+################################################
+############## Process XML Files ###############
+
+################################################
+############ Traversing Directories ############
+
+Directory = /home/dan/Desktop/IMN432-CW01/meta/
+Total Size is 9822142 bytes
+Number of Files = 743
+Total Number of Folders = 743
+################################################
+
+Top 10 Subjects
+(Subject,Number of Files)
+
+(u'PR', 96)
+(u'PS', 94)
+(u'PH', 9)
+(u'BJ', 9)
+(u'Adventure stories', 8)
+(u'E456', 8)
+(u'Love stories', 8)
+(u'PZ', 72)
+(u'BX', 7)
+(u'G', 7)
+
+############ Processing Completed ##############
+################################################
+
+################################################
+##### Display Overall Time and Statistics ######
+Average Time to Process Files:  0.318048 Seconds
+Time to [IDF, TF.IDF, Hashing]: 0.094209 Seconds
+Time to Process XML Files:     7.071834 Seconds
+Total Run Time:                467.807763 Seconds
+################################################
