@@ -309,7 +309,9 @@ if __name__ == "__main__":
     numFiles = len(allFiles)
     # Create Spark Job Name
     config = SparkConf().setMaster("local[*]")
+    config.set("spark.executor.memory","6g")
     sc = SparkContext(conf=config, appName="ACKF415-Coursework-1")
+
     # Create a File Details List
     fileEbook = []
     ######################################################
@@ -322,7 +324,7 @@ if __name__ == "__main__":
     if len(pickleWordF) < 1:
         print 'Creating Work Freq Pickles and RDDs \n'
         # Loop Through Each of the Files to Extract the Required Parts    
-        for i in np.arange(0,3): # Change to specify the number of Files to Process
+        for i in np.arange(0,numFiles): # Change to specify the number of Files to Process
         ######################################################        
             # Process the Files and return the Individual Document Frequency
             term_freq = processFile(allFiles[i], i, fileEbook)    
