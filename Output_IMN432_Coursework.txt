@@ -1,20 +1,40 @@
 ################################################
+############ Coursework1 - ackf415 #############
+############# IMN430 - 26/11/2014 ##############
+################################################
+
+################################################
 ############ Traversing Directories ############
 
 Directory = /home/dan/Desktop/IMN432-CW01/text-part/
-Total Size is 723620672 bytes
-Number of Files = 1431
+Total Size is 225828247 bytes
+Number of Files = 745
 Total Number of Folders = 2371
 ################################################
 
 ################################################
 ###### Process Files > Word Freq to Pickle #####
 
+################################################
+############ Traversing Directories ############
+
+Directory = /home/dan/Desktop/IMN432-CW01/Word_Freq/
+Total Size is 5960 bytes
+Number of Files = 1490
+Total Number of Folders = 745
+################################################
+
 ############ Processing Completed ##############
 ################################################
 
 ################################################
-####### Word Freq to IDF and TF.IDF RDDs #######
+############## Word Freq to IDF RDD ############
+
+############ Processing Completed ##############
+################################################
+
+################################################
+################ IDF to TF.IDF #################
 
 ############ Processing Completed ##############
 ################################################
@@ -25,33 +45,379 @@ Total Number of Folders = 2371
 ################################################
 ############ Traversing Directories ############
 
-Directory = /home/dan/Desktop/IMN432-CW01/meta/
-Total Size is 9822142 bytes
-Number of Files = 743
-Total Number of Folders = 743
+Directory = /home/dan/Desktop/IMN432-CW01/processXML/
+Total Size is 80 bytes
+Number of Files = 20
+Total Number of Folders = 10
 ################################################
 
-Top 10 Subjects
-(Subject,Number of Files)
+Using Pre-Pickled Files
 
-(u'PR', 96)
-(u'PS', 94)
-(u'PH', 9)
-(u'BJ', 9)
-(u'Adventure stories', 8)
-(u'E456', 8)
-(u'Love stories', 8)
-(u'PZ', 72)
-(u'BX', 7)
-(u'G', 7)
+############ Processing Completed ##############
+################################################
+
+################################################
+######### Testing and Building Models ##########
+
+Dealing with Subject #1
+Subject: 0 - Model: Naive Bayes
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+Subject: 0 - Model: Decision Tree Analysis
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+Subject: 0 - Model: Logistic Regression
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+
+Dealing with Subject #2
+Subject: 1 - Model: Naive Bayes
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+Subject: 1 - Model: Decision Tree Analysis
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+Subject: 1 - Model: Logistic Regression
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+
+Dealing with Subject #3
+Subject: 2 - Model: Naive Bayes
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+Subject: 2 - Model: Decision Tree Analysis
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+Subject: 2 - Model: Logistic Regression
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+
+Dealing with Subject #4
+Subject: 3 - Model: Naive Bayes
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+Subject: 3 - Model: Decision Tree Analysis
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+Subject: 3 - Model: Logistic Regression
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+
+Dealing with Subject #5
+Subject: 4 - Model: Naive Bayes
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+Subject: 4 - Model: Decision Tree Analysis
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+Subject: 4 - Model: Logistic Regression
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+
+Dealing with Subject #6
+Subject: 5 - Model: Naive Bayes
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+Subject: 5 - Model: Decision Tree Analysis
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+Subject: 5 - Model: Logistic Regression
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+
+Dealing with Subject #7
+Subject: 6 - Model: Naive Bayes
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+Subject: 6 - Model: Decision Tree Analysis
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+Subject: 6 - Model: Logistic Regression
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+
+Dealing with Subject #8
+Subject: 7 - Model: Naive Bayes
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+Subject: 7 - Model: Decision Tree Analysis
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+Subject: 7 - Model: Logistic Regression
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+
+Dealing with Subject #9
+Subject: 8 - Model: Naive Bayes
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+Subject: 8 - Model: Decision Tree Analysis
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+Subject: 8 - Model: Logistic Regression
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+
+Dealing with Subject #10
+Subject: 9 - Model: Naive Bayes
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+Subject: 9 - Model: Decision Tree Analysis
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
+Subject: 9 - Model: Logistic Regression
+Cross Validation Fold: 1 Complete
+Cross Validation Fold: 2 Complete
+Cross Validation Fold: 3 Complete
+Cross Validation Fold: 4 Complete
+Cross Validation Fold: 5 Complete
+Cross Validation Fold: 6 Complete
+Cross Validation Fold: 7 Complete
+Cross Validation Fold: 8 Complete
+Cross Validation Fold: 9 Complete
+Cross Validation Fold: 10 Complete
 
 ############ Processing Completed ##############
 ################################################
 
 ################################################
 ##### Display Overall Time and Statistics ######
-Average Time to Process Files:  0.318048 Seconds
-Time to [IDF, TF.IDF, Hashing]: 0.094209 Seconds
-Time to Process XML Files:     7.071834 Seconds
-Total Run Time:                467.807763 Seconds
+Time to Process Word Freq Pickles: 0.238 Seconds
+Time to Process IDF Pickle:     0.000 Seconds
+Time to Process TF.IDF Pickle:  0.000 Seconds
+Time to Process XML Files:      0.003 Seconds
+Time to Test and Build Models:  12.128 Seconds
+Total Run Time:                 15.240 Seconds
 ################################################
