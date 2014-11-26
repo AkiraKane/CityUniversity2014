@@ -361,6 +361,8 @@ if __name__ == "__main__":
         for i in np.arange(0, N): # Change to specify the number of Files to Process      
             # Process the Files and return the Individual Document Frequency
             text = processFile(allFiles[i], i, fileEbook)
+    else:
+        print 'Using Pre-Pickled Files\n'
     # End Timer for this phase
     WordFreq_Time = time() - WordFreq_Time
     print('############ Processing Completed ##############')
@@ -373,14 +375,18 @@ if __name__ == "__main__":
     # Ascertain if Section has already been completed
     if len(getDirectory(directory[3])) < 1:
         allFolders = getDirectory(directory[2])
+        # Load in Word Frequency Pickles into one RDD
         IDF = sc.union([sc.pickleFile(i) for i in allFolders])
+        # Rearrange RDD into correct the correct format
         IDF = IDF.flatMap(lambda (x,y): [(pair[0], [[x, str(pair[1])]]) for pair in y]) \
                  .reduceByKey(add) \
                  .map(lambda (x,y): (x,len(y),float(N),y)) \
                  .map(lambda (x,y,z,a): (x,np.log2(z/y),a)) \
                  .repartition(8)
-             
+        # Save IDF RDD as a Pickle File 
         IDF.saveAsPickleFile(directory[4],50)
+    else:
+        print 'Using Pre-Pickled Files\n'
     # End Timer for this phase  
     IDF_Time = time() - IDF_Time
     print('############ Processing Completed ##############')
@@ -393,14 +399,18 @@ if __name__ == "__main__":
     # Ascertain if Section has already been completed
     if len(getDirectory(directory[1])) < 1:
         allFolders = getDirectory(directory[5])
+        # Load in IDF Pickles into one RDD
         IDF = sc.union([sc.pickleFile(i) for i in allFolders])
+        # Rearrange RDD into correct the correct format
         TF_IDF = IDF.map(lambda (x,y,z): (x,[[pair[0],y*ast.literal_eval(pair[1])] for pair in z])) \
                     .flatMap(lambda (x,y): [(pairs[0],[[x,str(pairs[1])]]) for pairs in y]) \
                     .reduceByKey(add) \
                     .map(lambda (x,y): (x,[[pairs[0], ast.literal_eval(pairs[1])] for pairs in y])) \
                     .repartition(8)
-    
+        # Save TF.IDF RDD as a Pickle File
         TF_IDF.saveAsPickleFile(directory[6], 50)
+    else:
+        print 'Using Pre-Pickled Files\n'
     # End Timer for this phase
     TFIDF_Time = time() - TFIDF_Time
     print('############ Processing Completed ##############')
@@ -475,6 +485,7 @@ if __name__ == "__main__":
     
     print('################################################')
     print('##### Display Overall Time and Statistics ######')
+    print('################################################')
     print('Time to Process Word Freq Pickles: %.3f Seconds') % (WordFreq_Time)
     if len(fileEbook) > 0:
         print('Average Time to Process Files:  %.3f Seconds') % (np.mean(np.array([i[4] for i in fileEbook])))
