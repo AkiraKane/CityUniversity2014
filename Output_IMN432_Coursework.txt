@@ -24,17 +24,23 @@ Number of Files = 1490
 Total Number of Folders = 745
 ################################################
 
+Using Pre-Pickled Files
+
 ############ Processing Completed ##############
 ################################################
 
 ################################################
 ############## Word Freq to IDF RDD ############
 
+Using Pre-Pickled Files
+
 ############ Processing Completed ##############
 ################################################
 
 ################################################
 ################ IDF to TF.IDF #################
+
+Using Pre-Pickled Files
 
 ############ Processing Completed ##############
 ################################################
@@ -414,10 +420,10 @@ Cross Validation Fold: 10 Complete
 
 ################################################
 ##### Display Overall Time and Statistics ######
-Time to Process Word Freq Pickles: 0.238 Seconds
+Time to Process Word Freq Pickles: 0.314 Seconds
 Time to Process IDF Pickle:     0.000 Seconds
 Time to Process TF.IDF Pickle:  0.000 Seconds
 Time to Process XML Files:      0.003 Seconds
-Time to Test and Build Models:  12.128 Seconds
-Total Run Time:                 15.240 Seconds
+Time to Test and Build Models:  10.940 Seconds
+Total Run Time:                 14.021 Seconds
 ################################################
