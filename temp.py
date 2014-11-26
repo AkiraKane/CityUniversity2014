@@ -1,15 +1,18 @@
 ##########################################################
-#
 # INM 432 - Big Data - Coursework 1
 # (C) 2014 Daniel Dixey
-#
+# 26/11/2014
 ##########################################################
 
 ##########################################################
 ################# Import Libraries #######################
-# Import Spark API
+# Import various elememts of the Pyspark Module
 from pyspark import SparkContext 
 from pyspark.conf import SparkConf
+from pyspark.storagelevel import StorageLevel
+from pyspark.mllib.regression import LabeledPoint, LinearRegressionWithSGD
+from pyspark.mllib.classification import NaiveBayes
+from pyspark.mllib.tree import DecisionTree
 # Import OS for Traversing Directories
 import os
 # Import Numpy for Mathematical Functions
@@ -20,17 +23,23 @@ from time import time
 from operator import add
 # Import Regular Expression
 import re
-# Import Shutil For Deleting Directories and Files
-import shutil
 # Import String Module
 import string
 # Import Mindom Module
 from xml.dom import minidom
+# Import ast Helpers Module
+import ast
+# Import the Random Module
+import random
 ##########################################################
 
 ################ Coursework Question 1A ##################
 ########### START - Traversing Directories ###############
-# Traverse Directories Recursively
+# Extract the File Name - to use as the Folder name when saving Pickles
+def FileExtract(x):
+    File =  x[x.rfind('/')+1:]   
+    return File[:-4]
+# Traverse Directories Recursively to create a list of files
 def getFileList(directory):
     fileList = []
     fileSize = 0
@@ -40,8 +49,10 @@ def getFileList(directory):
         folderCount += len(dirs)
         for file in files:
             f = os.path.join(root,file)
-            fileSize = fileSize + os.path.getsize(f)
-            fileList.append(f)
+            # Filter out Files greater than 1 mb and duplicate books
+            if (os.path.getsize(f) < 1048576) & ('-' not in FileExtract(f)):
+                fileSize = fileSize + os.path.getsize(f)
+                fileList.append(f)
     # Print to Check Data has been located correctly
     print('################################################')
     print('############ Traversing Directories ############\n')
@@ -51,6 +62,13 @@ def getFileList(directory):
     print('Total Number of Folders = %i') % (folderCount)
     print('################################################\n')
     return fileList
+# Find the list of Directories not files - need for loading Pickles
+def getDirectory(x):
+    directories = []
+    for dirPath, dirNames, fileNames in os.walk(x, topdown=False):
+        if len(dirPath) > len(x):
+            directories.append(dirPath)
+    return directories
 ############# END- Traversing Directories ################
 ##########################################################
 
@@ -96,8 +114,7 @@ def findEBookNo(x):
     elif 'etext' in x:
         return etextNo(x)
     elif 'eook' in x:
-        return eookNo(x)
-        
+        return eookNo(x)     
 # Ebook Variations   
 def ebookNo(x): 
     x = re.search(re.escape('ebook')+"(.*)"+re.escape(']'),x).group(1)
@@ -107,7 +124,6 @@ def ebookNo(x):
     m = rg.search(x)
     if m:
         return m.group(1)
-
 # EText Variations
 def etextNo(x):
     x = re.search(re.escape('etext')+"(.*)",x).group(1)
@@ -117,7 +133,6 @@ def etextNo(x):
     m = rg.search(x)
     if m:
         return m.group(1)
-
 # ebook Variation
 def eookNo(x):
     re1='.*?'; re2='\\d+'; re3='.*?'; re4='\\d+'; re5='.*?'; re6='(\\d+)'
@@ -138,7 +153,6 @@ def processFile(x, i, fileEbook):
     text = sc.textFile(x) \
             .zipWithIndex() \
             .map(lambda (x,y): (x.lower(),y))
-
     # Find Number of Lines in Text
     text_len = text.count()       
     # Find the Last Line of Header          
@@ -167,56 +181,45 @@ def processFile(x, i, fileEbook):
     filename = FileExtract(allFiles[i])            
     # Subset of Text
     text = text.filter(lambda (x,y): y > headerLine) \
-                .filter(lambda (x,y): y<(footerLine))         
+                .filter(lambda (x,y): y < footerLine)         
     # Extract the list of Word Frequency pairs per file (as an RDD)
     text = text.flatMap(lambda (x,y): (re.split('\W+',x))) \
                 .map(lambda x: (str(x),1)) \
-                .filter(lambda x: (len(x) > 0)) \
+                .filter(lambda x: (len(x[0]) < 15)) \
+                .filter(lambda x: (len(x[0]) > 1)) \
                 .reduceByKey(add)
-    # Number of unique workds in RDD
-    no_words = text.keys().count()    
-    # Calculate Term Frequencies
-    term_freq = text.map(lambda (x,y): (x,[filename,float(y/no_words)]))
+    # Maximum Term Frequency by File           
+    MaxFreq = text.map(lambda (x): (filename,x[1])) \
+                    .reduceByKey(max) \
+                    .map(lambda (x,y): y) \
+                    .collect()
+    MaxFreq = MaxFreq[0]
+    # Find the Term Frequency Files
+    text.map(lambda (x): (str(Ebook[0]), [x[0],x[1],float(MaxFreq)])) \
+                    .map(lambda (x,y): (x, [y[0], float(y[1]/y[2])])) \
+                    .map(lambda (x,y): (x,[[y[0],y[1]]])) \
+                    .repartition(8) \
+                    .reduceByKey(add) \
+                    .saveAsPickleFile('/home/dan/Desktop/IMN432-CW01/Word_Freq/' + str(filename))
+    # Save as a Pickle File - THIS IS HOW I WOULD SAVE THE WORD FREQUENCY PAIRS
     # Stop Clock
     fin = time()                        
     # Log File Details - For Analysis
     fileEbook += [[filename, Ebook[0], headerLine, footerLine, fin - start]]
-    # Delete Text Object - Attempt to Save Space
-    del(text)    
-    return term_freq
+    # Return Text for Processing
+    return 'Complete'
 ########## END - Removing Header & Footer ##############
 ########################################################
 
 ################## Question 1F #########################
 ######## START - Calculate the TF.IDF values ###########
-# Process Files IDF, TF.IDF and Hashed Vector
-def processFiles(term_freq_union):
-    # Calculate IDF Values
-    idf = term_freq_union.map(lambda (x,fc): (x,[fc])) \
-                            .reduceByKey(add) \
-                            .map(lambda (x,y): (x,len(y),y)) \
-                            .map(lambda (x,y,z): (x,float(np.log(numFiles/y)),z))
-    # Save IDF as Pickle Files
-    #idf.saveAsPickleFile('/home/dan/Desktop/IMN432-CW01/IDF/' + 'IDF')
-    # Calculate TF.IDF Values
-    tf_idf = idf.map(lambda (x,y,z): ([[fc[0],float(fc[1]*y),x] for fc in z])) \
-                .flatMap(lambda x: x) \
-                .map(lambda x: (x[0],([x[2]]))) \
-                .reduceByKey(add)
-    #tf_idf.saveAsPickleFile('/home/dan/Desktop/IMN432-CW01/TF_IDF/' + 'TF_IDF')
-    # Create a 10000 dimensional vector per document using the hashing trick
-    fileHash = tf_idf.map(lambda (x,y): (x,hashedVec(y)))
-    # Save Hash Vectors - (File [Hash])
-    #fileHash.saveAsPickleFile('/home/dan/Desktop/IMN432-CW01/hashVectors/' + 'hashVectors')
-    # Return RDDs for further Processing
-    return idf, tf_idf, fileHash
 # Creating a Hashed Vector
-def hashedVec(words, N=10000):
-    vec = [0]*N
-    for word in words:
-        h = hash(str(word))
-        vec[h % N] += 1
-    return (vec)
+def hashVector(fileName, wordCount, vsize):
+    vec = [0] * vsize # initialise vector of vocabulary size
+    for wc in wordCount:
+        i = hash(wc[0]) % vsize # get word index
+        vec[i] = vec[i] + wc[1] # add count to index
+    return (fileName, vec)
 ######### END - Calculate the TF.IDF values ############
 ########################################################
 
@@ -285,11 +288,27 @@ def processXML(table):
 ########## END - Find Most Popular Subjects ############
 ########################################################
 
+################## Question 3B #########################
+########### START - Create Subsets of Data  ############
+# Check if Files is in Subject  
+def checkFile(x, listFiles):
+    if x in listFiles:
+        return 1
+    else:
+        return 0
+def getSetList(x):
+    # Take 80% of the possible values for analysis
+    trainingList = random.sample(x, int(len(x)*0.8))
+    # Extract the Difference between the Full List and the Training List
+    subset = list(set(x).difference(trainingList))
+    # Sub-devide the list into two list
+    testList, validationList = zip(*[iter(subset)]*int(len(subset)/2)) 
+    return trainingList, testList, validationList
+########## END - Find Most Popular Subjects ############
+########################################################
+
+
 ################## Other Functions #####################
-# Extract the File Name - to use as the Folder name when saving Pickles
-def FileExtract(x):
-    File =  x[x.rfind('/')+1:]   
-    return File[:-4]
 # Funcion to Remove punctuation from Text
 def punctuationWord(x):
     # Remove Punctuation from Word
@@ -302,79 +321,101 @@ def punctuationWord(x):
 ################### Main Spark #########################
 if __name__ == "__main__":
     # Time of the Process
-    start_time_overall = time()    
+    start_time_overall = time()   
+    # Print Header to Output File
+    print('################################################')
+    print('############ Coursework1 - ackf415 #############')
+    print('############# IMN430 - 26/11/2014 ##############')
+    print('################################################\n')
     # Get Hierarchy of Data Structure
-    directory = '/home/dan/Desktop/IMN432-CW01/text-part/'
-    allFiles = getFileList(directory)
+    directory = ['/home/dan/Desktop/IMN432-CW01/text-part/' \
+                ,'/home/dan/Desktop/IMN432-CW01/TF_IDF/'    \
+                ,'/home/dan/Desktop/IMN432-CW01/Word_Freq/' \
+                ,'/home/dan/Desktop/IMN432-CW01/IDF/'       \
+                ,'/home/dan/Desktop/IMN432-CW01/IDF/IDF-Pairs' \
+                ,'/home/dan/Desktop/IMN432-CW01/IDF'        \
+                ,'/home/dan/Desktop/IMN432-CW01/TF_IDF/TF_IDF_File' \
+                ,'/home/dan/Desktop/IMN432-CW01/processXML/'\
+                ,'/home/dan/Desktop/IMN432-CW01/meta/'      \
+                ,'/home/dan/Desktop/IMN432-CW01/TF_IDF'      \
+                ,'/home/dan/Desktop/IMN432-CW01/processXML/Subject']
+    allFiles = getFileList(directory[0])
+    # Find the Number of Files in the Directory
     numFiles = len(allFiles)
-    # Create Spark Job Name
+    # Create Spark Job Name and Configuration Settings
     config = SparkConf().setMaster("local[*]")
-    config.set("spark.executor.memory","6g")
+    config.set("spark.executor.memory","5g")
     sc = SparkContext(conf=config, appName="ACKF415-Coursework-1")
-
     # Create a File Details List
-    fileEbook = []
-    ######################################################
-    ############### Process DatanumFiles Start ###################
+    N = numFiles; fileEbook = []
     print('################################################')
     print('###### Process Files > Word Freq to Pickle #####\n')
+    # Start Timer
+    WordFreq_Time = time()    
     # Pickled Word Frequencies
-    pickleWordF = getFileList('/home/dan/Desktop/IMN432-CW01/hashVectors/')
-    # Check If Pickles Exist
+    pickleWordF = getFileList(directory[2])
+    # Ascertain if Section has already been completed
     if len(pickleWordF) < 1:
         print 'Creating Work Freq Pickles and RDDs \n'
         # Loop Through Each of the Files to Extract the Required Parts    
-        for i in np.arange(0,numFiles): # Change to specify the number of Files to Process
-        ######################################################        
+        for i in np.arange(0, N): # Change to specify the number of Files to Process      
             # Process the Files and return the Individual Document Frequency
-            term_freq = processFile(allFiles[i], i, fileEbook)    
-            # Combine all the IDF into one RDD - Skip first Run
-            if i == 0:
-                term_freq_union = term_freq    
-            # Union all the Data togeather
-            else:
-                term_freq_union = term_freq_union.union(term_freq) 
-                del(term_freq)
-        # Save Pickles
-        #term_freq_union.saveAsPickleFile('/home/dan/Desktop/IMN432-CW01/Word_Freq/'+ 'Word_Freq')
-    else:
-        print 'Using Pre-Pickled Files \n'
-    ######################################################
+            text = processFile(allFiles[i], i, fileEbook)
+    # End Timer for this phase
+    WordFreq_Time = time() - WordFreq_Time
+    print('############ Processing Completed ##############')
+    print('################################################\n')
+
+    print('################################################')
+    print('############## Word Freq to IDF RDD ############\n')
+    # Start Timer
+    IDF_Time = time()
+    # Ascertain if Section has already been completed
+    if len(getDirectory(directory[3])) < 1:
+        allFolders = getDirectory(directory[2])
+        IDF = sc.union([sc.pickleFile(i) for i in allFolders])
+        IDF = IDF.flatMap(lambda (x,y): [(pair[0], [[x, str(pair[1])]]) for pair in y]) \
+                 .reduceByKey(add) \
+                 .map(lambda (x,y): (x,len(y),float(N),y)) \
+                 .map(lambda (x,y,z,a): (x,np.log2(z/y),a)) \
+                 .repartition(8)
+             
+        IDF.saveAsPickleFile(directory[4],50)
+    # End Timer for this phase  
+    IDF_Time = time() - IDF_Time
     print('############ Processing Completed ##############')
     print('################################################\n')
     
     print('################################################')
-    print('####### Word Freq to IDF and TF.IDF RDDs #######\n')
-    ######################################################
-    # Start the Timer
-    idf_tdf_pickle_time = time()   
-    # Check if Pickles have already been created
-    pickleIDF = getFileList('/home/dan/Desktop/IMN432-CW01/IDF/')
-    # Create Pickles if not already created
-    if len(pickleIDF) < 1: 
-        # Print Statement
-        print 'Creating Pickles and RDDs \n'
-        # Calculate the Number of Documents with the Term in it
-        idf, tf_idf, fileHash = processFiles(term_freq_union)
-    else:
-        print 'Using Pre-Pickled Files \n'
-    # End Timer fot this phase
-    idf_tdf_pickle_time = time() - idf_tdf_pickle_time
-    ######################################################   
+    print('################ IDF to TF.IDF #################\n')    
+    # Start Timer    
+    TFIDF_Time = time()
+    # Ascertain if Section has already been completed
+    if len(getDirectory(directory[1])) < 1:
+        allFolders = getDirectory(directory[5])
+        IDF = sc.union([sc.pickleFile(i) for i in allFolders])
+        TF_IDF = IDF.map(lambda (x,y,z): (x,[[pair[0],y*ast.literal_eval(pair[1])] for pair in z])) \
+                    .flatMap(lambda (x,y): [(pairs[0],[[x,str(pairs[1])]]) for pairs in y]) \
+                    .reduceByKey(add) \
+                    .map(lambda (x,y): (x,[[pairs[0], ast.literal_eval(pairs[1])] for pairs in y])) \
+                    .repartition(8)
+    
+        TF_IDF.saveAsPickleFile(directory[6], 50)
+    # End Timer for this phase
+    TFIDF_Time = time() - TFIDF_Time
     print('############ Processing Completed ##############')
-    print('################################################\n')
-    ######################################################
+    print('################################################\n')  
     
     print('################################################')
     print('############## Process XML Files ###############\n')
     # Start Timer    
     XML_Time = time()
     # Check Pickles have been created
-    pickleXML = getFileList('/home/dan/Desktop/IMN432-CW01/processXML/')
-    # Create Pickles if not already created
+    pickleXML = getFileList(directory[7])
+    # Ascertain if Section has already been completed
     if len(pickleXML) < 1:
         print 'Creating XML Pickles and RDDs \n'
-        file_loc = '/home/dan/Desktop/IMN432-CW01/meta/'
+        file_loc = directory[8]
         files = getFileList(file_loc)
         # Loop through Files
         table = []
@@ -384,44 +425,63 @@ if __name__ == "__main__":
         subjects, top_10 = processXML(table)
     else:
         print 'Using Pre-Pickled Files'
-    # End Timer fot this phase
+    # End Timer for this phase
     XML_Time = time() - XML_Time
     print('\n############ Processing Completed ##############')
     print('################################################\n')    
     ######################################################
     
     print('################################################')
-    print('######### Testing and Building Models ##########\n')    
+    print('######### Testing and Building Models ##########')    
     # Start Stopwatch    
-    model = time()
+    modelTime = time()
+    # Read in TF.IDF File
+    if len(getDirectory(directory[9])) == 1:
+        # Get a list of the directory where the TF.IDF Vector is stored as a Pickle
+        tf_idf_directory = getDirectory(directory[9])
+        # Read in all the Files
+        tf_idf = sc.union([sc.pickleFile(i) for i in tf_idf_directory])
+        # Get Ebook numbers for analysis and also remove Null Values
+        ebookNumbers = tf_idf.map(lambda (x,y): x) \
+                             .filter(lambda (x): len(x) > 1) \
+                             .collect()
+        # Create a N dimensional vector per document using the hashing trick
+        fileHash = tf_idf.map(lambda (f, wl): (hashVector(f,wl,100))) \
+                         .repartition(8)
     # Loop Through Subjects to build models
     for i in np.arange(0,10):
-        print 'Dealing with Subject #%i' % (i+1)
-        subject_lists = sc.pickleFile('/home/dan/Desktop/IMN432-CW01/processXML/Subject' + str(i) + '/') \
-                    .map(lambda x: x[1])
-        for j in np.arange(1,4): # Naive Bayes, Decision Tree, Logistic Regression
-            if j == 1:
-                mlA = 'Naive Bayes'
-            elif j == 2:
-                mlA = 'Decision Tree Analysis'
-            else:
-                mlA = 'Logistic Regression'
-            print('Subject: %i - Model: %s') % (i,mlA)
+        print '\nDealing with Subject #%i' % (i+1)
+        subject_lists = sc.pickleFile(directory[10] + str(i) + '/') \
+                          .map(lambda x: x[1]) \
+                          .collect()
+        # Naive Bayes, Decision Tree, Logistic Regression Testing
+        for j in np.arange(1,4):
+            # Make a Copy of the Hashed File
+            modelSet = fileHash
+            # 3 Machine Learning Algorithms to be used:
+            mlA = ['Naive Bayes','Decision Tree Analysis','Logistic Regression']
+            print('Subject: %i - Model: %s') % (i,mlA[j-1])
+            # Loop through the Sets of Data
             for k in np.arange(1,11):
-                print 'Cross Validation Fold: %i Complete' % (k)
+                # Create List for filtering the Data
+                trainingList, testList, validationList = getSetList(ebookNumbers)
+                # Print to show Completion
+                print 'Cross Validation Fold: %i Complete' % (k)     
     # Stop Watch
-    model = time() - model
+    modelTime = time() - modelTime
     print('\n############ Processing Completed ##############')
     print('################################################\n')    
     ######################################################
     
     print('################################################')
     print('##### Display Overall Time and Statistics ######')
+    print('Time to Process Word Freq Pickles: %.3f Seconds') % (WordFreq_Time)
     if len(fileEbook) > 0:
-        print('Average Time to Process Files:  %.3f Seconds' % (np.mean(np.array([i[4] for i in fileEbook]))))
-    print('Time to [IDF, TF.IDF, Hashing]: %.3f Seconds' % (idf_tdf_pickle_time))   
+        print('Average Time to Process Files:  %.3f Seconds') % (np.mean(np.array([i[4] for i in fileEbook])))
+    print('Time to Process IDF Pickle:     %.3f Seconds') % (IDF_Time)
+    print('Time to Process TF.IDF Pickle:  %.3f Seconds') % (TFIDF_Time)
     print('Time to Process XML Files:      %.3f Seconds' % (XML_Time))
-    print('Time to Test and Build Models:  %.3f Seconds' % (model))
+    print('Time to Test and Build Models:  %.3f Seconds' % (modelTime))
     print('Total Run Time:                 %.3f Seconds') % (time() - start_time_overall)
     print('################################################')
     ######################################################
