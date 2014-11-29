@@ -109,25 +109,25 @@ Cross Validation Fold: 9 Complete
 1.0 1.0 1.0
 Cross Validation Fold: 10 Complete
 Subject: 0 - Model: Logistic Regression
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 1 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 2 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 3 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 4 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 5 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 6 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 7 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 8 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 9 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 10 Complete
 
 Dealing with Subject #2
@@ -174,25 +174,25 @@ Cross Validation Fold: 9 Complete
 1.0 1.0 1.0
 Cross Validation Fold: 10 Complete
 Subject: 1 - Model: Logistic Regression
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 1 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 2 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 3 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 4 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 5 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 6 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 7 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 8 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 9 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 10 Complete
 
 Dealing with Subject #3
@@ -239,25 +239,25 @@ Cross Validation Fold: 9 Complete
 1.0 1.0 1.0
 Cross Validation Fold: 10 Complete
 Subject: 2 - Model: Logistic Regression
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 1 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 2 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 3 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 4 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 5 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 6 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 7 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 8 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 9 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 10 Complete
 
 Dealing with Subject #4
@@ -304,25 +304,25 @@ Cross Validation Fold: 9 Complete
 1.0 1.0 1.0
 Cross Validation Fold: 10 Complete
 Subject: 3 - Model: Logistic Regression
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 1 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 2 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 3 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 4 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 5 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 6 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 7 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 8 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 9 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 10 Complete
 
 Dealing with Subject #5
@@ -369,25 +369,25 @@ Cross Validation Fold: 9 Complete
 1.0 1.0 1.0
 Cross Validation Fold: 10 Complete
 Subject: 4 - Model: Logistic Regression
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 1 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 2 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 3 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 4 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 5 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 6 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 7 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 8 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 9 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 10 Complete
 
 Dealing with Subject #6
@@ -434,25 +434,25 @@ Cross Validation Fold: 9 Complete
 1.0 1.0 1.0
 Cross Validation Fold: 10 Complete
 Subject: 5 - Model: Logistic Regression
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 1 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 2 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 3 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 4 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 5 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 6 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 7 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 8 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 9 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 10 Complete
 
 Dealing with Subject #7
@@ -499,25 +499,25 @@ Cross Validation Fold: 9 Complete
 1.0 1.0 1.0
 Cross Validation Fold: 10 Complete
 Subject: 6 - Model: Logistic Regression
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 1 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 2 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 3 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 4 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 5 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 6 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 7 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 8 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 9 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 10 Complete
 
 Dealing with Subject #8
@@ -564,25 +564,25 @@ Cross Validation Fold: 9 Complete
 1.0 1.0 1.0
 Cross Validation Fold: 10 Complete
 Subject: 7 - Model: Logistic Regression
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 1 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 2 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 3 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 4 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 5 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 6 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 7 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 8 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 9 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 10 Complete
 
 Dealing with Subject #9
@@ -629,25 +629,25 @@ Cross Validation Fold: 9 Complete
 1.0 1.0 1.0
 Cross Validation Fold: 10 Complete
 Subject: 8 - Model: Logistic Regression
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 1 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 2 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 3 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 4 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 5 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 6 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 7 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 8 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 9 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 10 Complete
 
 Dealing with Subject #10
@@ -694,25 +694,25 @@ Cross Validation Fold: 9 Complete
 1.0 1.0 1.0
 Cross Validation Fold: 10 Complete
 Subject: 9 - Model: Logistic Regression
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 1 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 2 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 3 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 4 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 5 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 6 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 7 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 8 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 9 Complete
-Not Ready
+1.0 1.0 1.0
 Cross Validation Fold: 10 Complete
 
 ############ Processing Completed ##############
@@ -721,10 +721,10 @@ Cross Validation Fold: 10 Complete
 ################################################
 ##### Display Overall Time and Statistics ######
 ################################################
-Time to Process TF Pickles:     0.111 Seconds
+Time to Process TF Pickles:     0.102 Seconds
 Time to Process IDF Pickle:     0.000 Seconds
 Time to Process TF.IDF Pickle:  0.000 Seconds
 Time to Process XML Files:      0.001 Seconds
-Time to Test and Build Models:  1084.806 Seconds
-Total Run Time:                 1086.421 Seconds
+Time to Test and Build Models:  2522.901 Seconds
+Total Run Time:                 2524.463 Seconds
 ################################################
