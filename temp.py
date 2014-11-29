@@ -10,8 +10,8 @@
 from pyspark import SparkContext 
 from pyspark.conf import SparkConf
 from pyspark.storagelevel import StorageLevel
-from pyspark.mllib.regression import LabeledPoint, LinearRegressionWithSGD
-from pyspark.mllib.classification import NaiveBayes
+from pyspark.mllib.regression import LabeledPoint
+from pyspark.mllib.classification import NaiveBayes, LogisticRegressionWithSGD
 from pyspark.mllib.tree import DecisionTree
 # Import OS for Traversing Directories
 import os
@@ -537,7 +537,23 @@ if __name__ == "__main__":
                     # Print Results
                     print trainingAcc, validationAcc, testAcc
                 else:
-                    print 'Not Ready'
+                    # Train a Naive Bayes Model
+                    trainedModel = LogisticRegressionWithSGD.train(trainingRDD,miniBatchFraction=0.1,regType='l1', intercept=True, regParam=.3)
+                    # Prediction using the Trained Model - Training
+                    evalTraining = trainingRDD.map(lambda lp: (lp.label, trainedModel.predict(lp.features))) \
+                                                  .countByValue()
+                    # Prediction using the Trained Model - Validation
+                    evalValidation = validationRDD.map(lambda lp: (lp.label, trainedModel.predict(lp.features))) \
+                                                  .countByValue()
+                    # Prediction using the Trained Model - Test
+                    evalTest = testRDD.map(lambda lp: (lp.label, trainedModel.predict(lp.features))) \
+                                      .countByValue()
+                    # Get Accuracy Results
+                    trainingAcc = accuracy(evalTraining)
+                    validationAcc = accuracy(evalValidation)
+                    testAcc = accuracy(evalTest)
+                    # Print Results
+                    print trainingAcc, validationAcc, testAcc
                 print 'Cross Validation Fold: %i Complete' % (k)     
     # Stop Watch
     modelTime = time() - modelTime
