@@ -31,6 +31,8 @@ from xml.dom import minidom
 import ast
 # Import the Random Module
 import random
+# Import the Defaultdic sub module
+from collections import defaultdict
 ##########################################################
 
 ################ Coursework Question 1A ##################
@@ -290,12 +292,24 @@ def processXML(table):
 
 ################## Question 3B #########################
 ########### START - Create Subsets of Data  ############
+def makeSets(RDD, trainingList, testList, validationList, subject_lists):
+    # Create the training Set - Correctly at the data as labelled Points
+    trainingRDD = RDD.filter(lambda (x,y): x in trainingList) \
+                     .map(lambda (x,y): LabeledPoint(checkFile(x, subject_lists),y))
+    # Create the validation Set - Correctly at the data as labelled Points
+    testRDD = RDD.filter(lambda (x,y): x in testList) \
+                 .map(lambda (x,y): LabeledPoint(checkFile(x, subject_lists),y))
+    # Create the test Set - Correctly at the data as labelled Points
+    validationRDD = RDD.filter(lambda(x,y): x in validationList) \
+                        .map(lambda (x,y): LabeledPoint(checkFile(x, subject_lists),y))
+    # Retun the data into the Main function
+    return trainingRDD, testRDD, validationRDD
 # Check if Files is in Subject  
 def checkFile(x, listFiles):
     if x in listFiles:
-        return 1
+        return float(1)
     else:
-        return 0
+        return float(0)
 def getSetList(x):
     # Take 80% of the possible values for analysis
     trainingList = random.sample(x, int(len(x)*0.8))
@@ -315,6 +329,13 @@ def punctuationWord(x):
     for letter in string.punctuation:
         x = x.replace(letter,'')
     return str(x)
+# print the different performance metrics
+def accuracy(rm):
+    resultMap = defaultdict(lambda :0,rm) # use of defaultdic saves checking for missing values
+    total = sum(resultMap.values())
+    truePos = resultMap[(1,1,)]
+    trueNeg = resultMap[(0,0,)]
+    return ( float(truePos+trueNeg)/total )
 ########################################################
 
 ########################################################
@@ -456,13 +477,13 @@ if __name__ == "__main__":
                              .filter(lambda (x): len(x) > 1) \
                              .collect()
         # Create a N dimensional vector per document using the hashing trick
-        fileHash = tf_idf.map(lambda (f, wl): (hashVector(f,wl,100))) \
+        fileHash = tf_idf.map(lambda (f, wl): (hashVector(f,wl,10000))) \
                          .repartition(8)
     # Loop Through Subjects to build models
     for i in np.arange(0,10):
         print '\nDealing with Subject #%i' % (i+1)
         subject_lists = sc.pickleFile(directory[10] + str(i) + '/') \
-                          .map(lambda x: x[1]) \
+                          .map(lambda x: str(x[1])) \
                           .collect()
         # Naive Bayes, Decision Tree, Logistic Regression Testing
         for j in np.arange(1,4):
@@ -475,7 +496,48 @@ if __name__ == "__main__":
             for k in np.arange(1,11):
                 # Create List for filtering the Data
                 trainingList, testList, validationList = getSetList(ebookNumbers)
+                # Create Sets of data into the correct format...
+                trainingRDD, testRDD, validationRDD,  = makeSets(modelSet, trainingList, testList, validationList, subject_lists)
                 # Print to show Completion
+                if j == 1:
+                    # Train a Naive Bayes Model
+                    trainedModel = NaiveBayes.train(trainingRDD, 1.0)
+                    # Prediction using the Trained Model - Training
+                    evalTraining = trainingRDD.map(lambda lp: (lp.label, trainedModel.predict(lp.features))) \
+                                                  .countByValue()
+                    # Prediction using the Trained Model - Validation
+                    evalValidation = validationRDD.map(lambda lp: (lp.label, trainedModel.predict(lp.features))) \
+                                                  .countByValue()
+                    # Prediction using the Trained Model - Test
+                    evalTest = testRDD.map(lambda lp: (lp.label, trainedModel.predict(lp.features))) \
+                                      .countByValue()
+                    # Get Accuracy Results
+                    trainingAcc = accuracy(evalTraining)
+                    validationAcc = accuracy(evalValidation)
+                    testAcc = accuracy(evalTest)
+                    # Print Results
+                    print trainingAcc, validationAcc, testAcc
+                elif j == 2:
+                    # Train a Decision Tree Model
+                    trainedModel = DecisionTree.trainClassifier(trainingRDD, numClasses=2, categoricalFeaturesInfo={}, impurity="entropy", maxDepth=4, maxBins=5)
+                    # Prediction using the Trained Model - Training                    
+                    predictedLabels = trainedModel.predict(trainingRDD.map(lambda lp : lp.features))
+                    trueLabels = trainingRDD.map(lambda lp : lp.label)
+                    resultsTrain = trueLabels.zip(predictedLabels).countByValue()
+                    # Prediction using the Trained Model - Validation
+                    predictions = trainedModel.predict(validationRDD.map(lambda x: x.features))
+                    resultsVal = validationRDD.map(lambda lp: lp.label).zip(predictions).countByValue()
+                    # Prediction using the Trained Model - Test
+                    predictions = trainedModel.predict(testRDD.map(lambda x: x.features))
+                    resultsTest = testRDD.map(lambda lp: lp.label).zip(predictions).countByValue()                    
+                    # Get Accuracy Results
+                    trainingAcc = accuracy(resultsTrain)
+                    validationAcc = accuracy(resultsVal)
+                    testAcc = accuracy(resultsTest)
+                    # Print Results
+                    print trainingAcc, validationAcc, testAcc
+                else:
+                    print 'Not Ready'
                 print 'Cross Validation Fold: %i Complete' % (k)     
     # Stop Watch
     modelTime = time() - modelTime
@@ -486,7 +548,7 @@ if __name__ == "__main__":
     print('################################################')
     print('##### Display Overall Time and Statistics ######')
     print('################################################')
-    print('Time to Process Word Freq Pickles: %.3f Seconds') % (WordFreq_Time)
+    print('Time to Process TF Pickles:     %.3f Seconds') % (WordFreq_Time)
     if len(fileEbook) > 0:
         print('Average Time to Process Files:  %.3f Seconds') % (np.mean(np.array([i[4] for i in fileEbook])))
     print('Time to Process IDF Pickle:     %.3f Seconds') % (IDF_Time)
