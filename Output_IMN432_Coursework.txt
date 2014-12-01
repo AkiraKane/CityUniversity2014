@@ -52,8 +52,8 @@ Using Pre-Pickled Files
 ############ Traversing Directories ############
 
 Directory = /home/dan/Desktop/IMN432-CW01/processXML/
-Total Size is 80 bytes
-Number of Files = 20
+Total Size is 15258 bytes
+Number of Files = 180
 Total Number of Folders = 10
 ################################################
 
@@ -66,665 +66,113 @@ Using Pre-Pickled Files
 ######### Testing and Building Models ##########
 
 Dealing with Subject #1
-Subject: 0 - Model: Naive Bayes
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
-Subject: 0 - Model: Decision Tree Analysis
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
-Subject: 0 - Model: Logistic Regression
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
 
-Dealing with Subject #2
-Subject: 1 - Model: Naive Bayes
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
-Subject: 1 - Model: Decision Tree Analysis
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
-Subject: 1 - Model: Logistic Regression
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
+ Cross Validation: 1
+   Results for Naive Bayes
+      Training Set: 77.685
+      Test Set: 77.685
+   Results for Descision Tree
+      Training Set: 0.824
+      Test Set: 0.824
+   Results for Logistic Regression
+      Training Set: 77.685
+      Test Set: 77.685
 
-Dealing with Subject #3
-Subject: 2 - Model: Naive Bayes
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
-Subject: 2 - Model: Decision Tree Analysis
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
-Subject: 2 - Model: Logistic Regression
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
+ Cross Validation: 2
+   Results for Naive Bayes
+      Training Set: 78.020
+      Test Set: 78.020
+   Results for Descision Tree
+      Training Set: 0.831
+      Test Set: 0.831
+   Results for Logistic Regression
+      Training Set: 78.020
+      Test Set: 78.020
 
-Dealing with Subject #4
-Subject: 3 - Model: Naive Bayes
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
-Subject: 3 - Model: Decision Tree Analysis
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
-Subject: 3 - Model: Logistic Regression
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
+ Cross Validation: 3
+   Results for Naive Bayes
+      Training Set: 78.356
+      Test Set: 78.356
+   Results for Descision Tree
+      Training Set: 0.834
+      Test Set: 0.834
+   Results for Logistic Regression
+      Training Set: 78.356
+      Test Set: 78.356
 
-Dealing with Subject #5
-Subject: 4 - Model: Naive Bayes
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
-Subject: 4 - Model: Decision Tree Analysis
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
-Subject: 4 - Model: Logistic Regression
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
+ Cross Validation: 4
+   Results for Naive Bayes
+      Training Set: 79.027
+      Test Set: 79.027
+   Results for Descision Tree
+      Training Set: 0.842
+      Test Set: 0.842
+   Results for Logistic Regression
+      Training Set: 79.027
+      Test Set: 79.027
 
-Dealing with Subject #6
-Subject: 5 - Model: Naive Bayes
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
-Subject: 5 - Model: Decision Tree Analysis
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
-Subject: 5 - Model: Logistic Regression
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
+ Cross Validation: 5
+   Results for Naive Bayes
+      Training Set: 79.027
+      Test Set: 79.027
+   Results for Descision Tree
+      Training Set: 0.841
+      Test Set: 0.841
+   Results for Logistic Regression
+      Training Set: 79.027
+      Test Set: 79.027
 
-Dealing with Subject #7
-Subject: 6 - Model: Naive Bayes
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
-Subject: 6 - Model: Decision Tree Analysis
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
-Subject: 6 - Model: Logistic Regression
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
+ Cross Validation: 6
+   Results for Naive Bayes
+      Training Set: 77.349
+      Test Set: 77.349
+   Results for Descision Tree
+      Training Set: 0.819
+      Test Set: 0.819
+   Results for Logistic Regression
+      Training Set: 77.349
+      Test Set: 77.349
 
-Dealing with Subject #8
-Subject: 7 - Model: Naive Bayes
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
-Subject: 7 - Model: Decision Tree Analysis
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
-Subject: 7 - Model: Logistic Regression
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
+ Cross Validation: 7
+   Results for Naive Bayes
+      Training Set: 78.691
+      Test Set: 78.691
+   Results for Descision Tree
+      Training Set: 0.826
+      Test Set: 0.826
+   Results for Logistic Regression
+      Training Set: 78.691
+      Test Set: 78.691
 
-Dealing with Subject #9
-Subject: 8 - Model: Naive Bayes
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
-Subject: 8 - Model: Decision Tree Analysis
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
-Subject: 8 - Model: Logistic Regression
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
+ Cross Validation: 8
+   Results for Naive Bayes
+      Training Set: 77.685
+      Test Set: 77.685
+   Results for Descision Tree
+      Training Set: 0.807
+      Test Set: 0.807
+   Results for Logistic Regression
+      Training Set: 77.685
+      Test Set: 77.685
 
-Dealing with Subject #10
-Subject: 9 - Model: Naive Bayes
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
-Subject: 9 - Model: Decision Tree Analysis
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
-Subject: 9 - Model: Logistic Regression
-1.0 1.0 1.0
-Cross Validation Fold: 1 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 2 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 3 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 4 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 5 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 6 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 7 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 8 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 9 Complete
-1.0 1.0 1.0
-Cross Validation Fold: 10 Complete
+ Cross Validation: 9
+   Results for Naive Bayes
+      Training Set: 77.517
+      Test Set: 77.517
+   Results for Descision Tree
+      Training Set: 0.827
+      Test Set: 0.827
+   Results for Logistic Regression
+      Training Set: 77.517
+      Test Set: 77.517
 
-############ Processing Completed ##############
-################################################
-
-################################################
-##### Display Overall Time and Statistics ######
-################################################
-Time to Process TF Pickles:     0.102 Seconds
-Time to Process IDF Pickle:     0.000 Seconds
-Time to Process TF.IDF Pickle:  0.000 Seconds
-Time to Process XML Files:      0.001 Seconds
-Time to Test and Build Models:  2522.901 Seconds
-Total Run Time:                 2524.463 Seconds
-################################################
+ Cross Validation: 10
+   Results for Naive Bayes
+      Training Set: 77.852
+      Test Set: 77.852
+   Results for Descision Tree
+      Training Set: 0.824
+      Test Set: 0.824
+   Results for Logistic Regression
+      Training Set: 77.852
+      Test Set: 77.852
