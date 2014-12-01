@@ -49,11 +49,32 @@ def getFileList(directory):
     for root, dirs, files in os.walk(directory):
         folderCount += len(dirs)
         for file in files:
-            f = os.path.join(root,file)
+            f = os.path.join(root,file)    
             # Filter out Files greater than 1 mb and duplicate books
             if (os.path.getsize(f) < 1048576) & ('-' not in FileExtract(f)) & (f != directory):
                 fileSize = fileSize + os.path.getsize(f)
                 fileList.append(f)
+    # Print to Check Data has been located correctly
+    print('################################################')
+    print('############ Traversing Directories ############\n')
+    print('Directory = %s') % (directory)
+    print("Total Size is {0} bytes".format(fileSize))
+    print('Number of Files = %i') % (len(fileList))
+    print('Total Number of Folders = %i') % (folderCount)
+    print('################################################\n')
+    return fileList
+# Traverse Directories Recursively to create a list of files
+def getFileListv2(directory):
+    fileList = []
+    fileSize = 0
+    folderCount = 0
+    # For Loop to Cycle Through Directories 
+    for root, dirs, files in os.walk(directory):
+        folderCount += len(dirs)
+        for file in files:
+            f = os.path.join(root,file)
+            fileSize = fileSize + os.path.getsize(f)
+            fileList.append(f)
     # Print to Check Data has been located correctly
     print('################################################')
     print('############ Traversing Directories ############\n')
@@ -179,7 +200,7 @@ def processFile(x, i, fileEbook):
                 .map(lambda (x,y): findEBookNo(x)) \
                 .collect()            
     # Extract the File name from Root
-    filename = FileExtract(allFiles[i])            
+    filename = FileExtract(x)            
     # Subset of Text
     text = text.filter(lambda (x,y): y > headerLine) \
                 .filter(lambda (x,y): y < footerLine)         
@@ -196,7 +217,7 @@ def processFile(x, i, fileEbook):
                     .collect()
     MaxFreq = MaxFreq[0]
     # Find the Term Frequency Files
-    text.map(lambda (x): (str(Ebook[0]), [x[0],x[1],float(MaxFreq)])) \
+    text.map(lambda (x): (filename, [x[0],x[1],float(MaxFreq)])) \
                     .map(lambda (x,y): (x, [y[0], float(y[1]/y[2])])) \
                     .map(lambda (x,y): (x,[[y[0],y[1]]])) \
                     .repartition(8) \
@@ -261,17 +282,13 @@ def processXML(table):
     ebookNumbers = sc.union([sc.pickleFile(i) for i in tf_idf_directory])
     # Get Ebook numbers for analysis and also remove Null Values
     ebookNumbers = ebookNumbers.map(lambda (x,y): x) \
-                             .filter(lambda (x): len(x) > 1) \
                              .collect()
-        # Find the Top 10 Subjects
+    # Find the Top 10 Subjects
     top_10_subjects = sc.parallelize(table) \
                 .filter(lambda x: x[0] in ebookNumbers) \
                 .map(lambda x: (x[1],1)) \
                 .reduceByKey(add) \
                 .sortBy(lambda x: x[1], ascending=False)
-                
-    #for l in top_10_subjects.collect():
-    #    print l
         
     top_10_subjects =  top_10_subjects.map(lambda x: x[0])
     
@@ -282,7 +299,7 @@ def processXML(table):
         top_10["Subject{0}".format(num)] = i
         num += 1                   
     # Loop through to Find the Files where the Subjects are contained
-    num = 0; savePath = '/home/dan/Desktop/IMN432-CW01/processXML/'
+    savePath = '/home/dan/Desktop/IMN432-CW01/processXML/'
 
     file_list = sc.parallelize(table)  
     for i in top_10:
@@ -291,7 +308,8 @@ def processXML(table):
                                         .map(lambda x: (x[1], [x[0]])) \
                                         .reduceByKey(add) \
                                         .saveAsPickleFile(savePath + str(i))
-        num += 1
+                                        
+        #.saveAsPickleFile(savePath + str(i))
     # Return Two Objects
     return subjects, top_10
 ########## END - Find Most Popular Subjects ############
@@ -314,10 +332,9 @@ def makeSets(RDD, trainingList, testList, subject_lists, hashsize):
     return trainingRDD, testRDD, trainingRDDHashed, testRDDHashed
 # Check if Files is in Subject  
 def checkFile(x, listFiles):
-    # Check if File is in List
-    print x
-    if x in listFiles:
-        print 1
+    # Check if Files is in List
+    if x in listFiles[0]:
+        # Return 1 if in Subject List
         return 1
     else:
         # Return 0 if not
@@ -346,8 +363,8 @@ def naiveBayes(trainingRDD, trainingRDDHashed, testRDDHashed):
     resT = getAccuracy(resultsTest, nFilesT)
     # Print Results
     print('   Results for Naive Bayes')
-    print('   Training Set: %.3f') % (resV)
-    print('   Test Set: %.3f') % (resT)
+    print('      Training Set: %.3f') % (resV)
+    print('      Test Set: %.3f') % (resT)
 ## Decision Tree Models and Results
 def decisionTree(trainingRDD, trainingRDDHashed, testRDDHashed, testRDD):
     # Train the Decision Tree Model
@@ -364,11 +381,11 @@ def decisionTree(trainingRDD, trainingRDDHashed, testRDDHashed, testRDD):
     resT = labelsAndPredictions.filter(lambda (v, p): v == p).count() / float(trainingRDDHashed.count())
     # Print Results
     print('   Results for Descision Tree')
-    print('   Training Set: %.3f') % (resV)
-    print('   Test Set: %.3f') % (resT)
+    print('      Training Set: %.3f') % (resV)
+    print('      Test Set: %.3f') % (resT)
     # Print Decision Tree
-    print('   Learned Classification Tree Model:')
-    print(trainedModel)
+    #print('      Learned Classification Tree Model:')
+    #print(trainedModel)
 # Logistics Regression Models and Resuts
 def logisticRegression(trainingRDD, trainingRDDHashed, testRDDHashed):
     # Train a Naive Bayes Model
@@ -386,8 +403,8 @@ def logisticRegression(trainingRDD, trainingRDDHashed, testRDDHashed):
     resT = getAccuracy(resultsTest, nFilesT)
     # Print Results
     print('   Results for Logistic Regression')
-    print('   Training Set: %.3f') % (resV)
-    print('   Test Set: %.3f') % (resT)
+    print('      Training Set: %.3f') % (resV)
+    print('      Test Set: %.3f') % (resT)
 ########### END - Find Most Popular Subjects ############
 #########################################################
 
@@ -515,7 +532,7 @@ if __name__ == "__main__":
     # Start Timer    
     XML_Time = time()
     # Check Pickles have been created
-    pickleXML = getFileList(directory[7])
+    pickleXML = getFileListv2(directory[7])
     # Ascertain if Section has already been completed
     if len(pickleXML) < 1:
         print 'Creating XML Pickles and RDDs \n'
@@ -552,15 +569,15 @@ if __name__ == "__main__":
                              .filter(lambda (x): len(x) > 1) \
                              .collect()
         # Define the Hashsize
-        hashsize = 1000
+        hashsize = 10
         # Loop Through Subjects to build models
-        for i in np.arange(0,1):
+        for i in np.arange(0,10):
             print('\nDealing with Subject #%i') % (i+1)
             subject_lists = sc.pickleFile(directory[10] + str(i) + '/') \
                               .map(lambda x: x[1]) \
                               .collect()
             # Cross Validation Step
-            for k in np.arange(1,2):
+            for k in np.arange(1,11):
                 print('\n Cross Validation: %i') % (k)
                 # Copy the Hashed RDD
                 modelSet = tf_idf
