@@ -9,7 +9,6 @@
 # Import various elememts of the Pyspark Module
 from pyspark import SparkContext 
 from pyspark.conf import SparkConf
-from pyspark.storagelevel import StorageLevel
 from pyspark.mllib.regression import LabeledPoint
 from pyspark.mllib.classification import NaiveBayes, LogisticRegressionWithSGD
 from pyspark.mllib.tree import DecisionTree
@@ -25,8 +24,8 @@ from operator import add
 import re
 # Import String Module
 import string
-# Import Mindom Module
-from xml.dom import minidom
+# Import an XML Parser
+import xml.etree.ElementTree as ET
 # Import ast Helpers Module
 import ast
 # Import the Random Module
@@ -52,7 +51,7 @@ def getFileList(directory):
         for file in files:
             f = os.path.join(root,file)
             # Filter out Files greater than 1 mb and duplicate books
-            if (os.path.getsize(f) < 1048576) & ('-' not in FileExtract(f)):
+            if (os.path.getsize(f) < 1048576) & ('-' not in FileExtract(f)) & (f != directory):
                 fileSize = fileSize + os.path.getsize(f)
                 fileList.append(f)
     # Print to Check Data has been located correctly
@@ -216,9 +215,9 @@ def processFile(x, i, fileEbook):
 ################## Question 1F #########################
 ######## START - Calculate the TF.IDF values ###########
 # Creating a Hashed Vector
-def hashVector(fileName, wordCount, vsize):
+def hashVector(fileName, tf_idf, vsize):
     vec = [0] * vsize # initialise vector of vocabulary size
-    for wc in wordCount:
+    for wc in tf_idf:
         i = hash(wc[0]) % vsize # get word index
         vec[i] = vec[i] + wc[1] # add count to index
     return (fileName, vec)
@@ -227,32 +226,27 @@ def hashVector(fileName, wordCount, vsize):
 
 ################## Question 2 ##########################
 ########### START - Processing XML Files ###############
-def xmlExtract(files, table):
-    for direc in np.arange(0,len(files)):
-        # Read and Convert XML to String
-        x = files[direc]
-        if x[x.rfind('.')+1:]=='rdf':        
-            # Read and Convert XML to String
-            file = open(files[direc],'r')
-            data = file.read()
-            file.close()
-            # Ebook Number Retrieval
-            ebook = minidom.parseString(data)
-            ebook = ebook.getElementsByTagName('pgterms:ebook')[0].toxml()
-            ebook = ebook.replace('<pgterms:ebook>','').replace('</pgterms:ebook>','')
-            ebook = ebook[:ebook.find('>\n')]
-            ebook = (re.split('/',re.split('=',ebook)[1])[1]).replace('"','')
-            # Read XML into an Object
-            xmldoc = minidom.parse(files[direc])    
-            # Navigate onto the Tree to Find the Ebook No.
-            pgterms_ebook = xmldoc.getElementsByTagName('pgterms:ebook')[0]
-            # Navigate to the Subjects Tree
-            subjects = pgterms_ebook.getElementsByTagName('dcterms:subject')
-            # Print the Subjects values
-            for lines in subjects:
-                values = lines.getElementsByTagName('rdf:value')[0].firstChild.data
-                table.append([ebook,values])
-    # Return Table of Ebooks and Subjects
+def xmlExtract(x, table):
+    # Process only RDF Files
+    if '.rdf' in x:
+        root = ET.parse(x).getroot()
+        # Get the Ebook Child off the Root
+        ebookChild = root.find('{http://www.gutenberg.org/2009/pgterms/}ebook')
+        # Obtain the Namespace
+        book = ebookChild.get('{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about')
+        # Compile Regular Expression to Extract ID Number
+        rgID = re.compile('.*?(\\d+)', re.IGNORECASE|re.DOTALL)
+        # Extract the Ebook ID
+        ebookID = rgID.search(book).group(1)
+        # Find all the Child off the Ebook object to get all the Subjects
+        allSubjects = ebookChild.findall('{http://purl.org/dc/terms/}subject')
+        # Loop through the Subjects and save into a list
+        for subject in allSubjects:
+            # Find the Values
+            x = subject.find('*').find('{http://www.w3.org/1999/02/22-rdf-syntax-ns#}value')
+            # Add to a list
+            table.append([ebookID, x.text])
+    # Return the updated List
     return table
 ############ END - Processing XML Files ################
 ########################################################
@@ -261,12 +255,25 @@ def xmlExtract(files, table):
 ######### START - Find Most Popular Subjects ###########
 # Find Top Subjects and corresponding files
 def processXML(table):
+    # Get a list of the directory where the TF.IDF Vector is stored as a Pickle
+    tf_idf_directory = getDirectory('/home/dan/Desktop/IMN432-CW01/TF_IDF' )
+    # Read in all the Files
+    ebookNumbers = sc.union([sc.pickleFile(i) for i in tf_idf_directory])
+    # Get Ebook numbers for analysis and also remove Null Values
+    ebookNumbers = ebookNumbers.map(lambda (x,y): x) \
+                             .filter(lambda (x): len(x) > 1) \
+                             .collect()
         # Find the Top 10 Subjects
     top_10_subjects = sc.parallelize(table) \
+                .filter(lambda x: x[0] in ebookNumbers) \
                 .map(lambda x: (x[1],1)) \
                 .reduceByKey(add) \
-                .sortBy(lambda x: x[1], ascending=False) \
-                .map(lambda x: x[0])
+                .sortBy(lambda x: x[1], ascending=False)
+                
+    #for l in top_10_subjects.collect():
+    #    print l
+        
+    top_10_subjects =  top_10_subjects.map(lambda x: x[0])
     
     # Iterate through to get the Top 10 Subjects
     subjects = {}; num = 0; top_10={}
@@ -275,51 +282,114 @@ def processXML(table):
         top_10["Subject{0}".format(num)] = i
         num += 1                   
     # Loop through to Find the Files where the Subjects are contained
-    num = 0; savePath = '/home/dan/Desktop/IMN432-CW01/Backup/processXML/'
+    num = 0; savePath = '/home/dan/Desktop/IMN432-CW01/processXML/'
+
     file_list = sc.parallelize(table)  
-    # Save RDD as Files
     for i in top_10:
-        subjects[top_10[i]] = file_list.filter(lambda (x): x[1] in top_10[i]) \
-                                    .map(lambda x: (x[1], [x[0]])) \
-                                    .reduceByKey(add) \
-                                    .saveAsPickleFile(savePath + str(i))
-        # Increase step by One
+        subjects[top_10[i]] = file_list.filter(lambda x: x[0] in ebookNumbers) \
+                                        .filter(lambda (x): x[1] in top_10[i]) \
+                                        .map(lambda x: (x[1], [x[0]])) \
+                                        .reduceByKey(add) \
+                                        .saveAsPickleFile(savePath + str(i))
         num += 1
-    # Return two Objects
+    # Return Two Objects
     return subjects, top_10
 ########## END - Find Most Popular Subjects ############
 ########################################################
 
 ################## Question 3B #########################
 ########### START - Create Subsets of Data  ############
-def makeSets(RDD, trainingList, testList, validationList, subject_lists):
+def makeSets(RDD, trainingList, testList, subject_lists, hashsize):
     # Create the training Set - Correctly at the data as labelled Points
-    trainingRDD = RDD.filter(lambda (x,y): x in trainingList) \
-                     .map(lambda (x,y): LabeledPoint(checkFile(x, subject_lists),y))
+    trainingRDDHashed = RDD.filter(lambda (x,y): x in trainingList) \
+                            .map(lambda (x,y): (checkFile(x, subject_lists), y)) \
+                            .map(lambda (f, wl): (hashVector(f,wl,hashsize)))
+    trainingRDD = trainingRDDHashed.map(lambda (f,x): LabeledPoint(f,x))
     # Create the validation Set - Correctly at the data as labelled Points
-    testRDD = RDD.filter(lambda (x,y): x in testList) \
-                 .map(lambda (x,y): LabeledPoint(checkFile(x, subject_lists),y))
-    # Create the test Set - Correctly at the data as labelled Points
-    validationRDD = RDD.filter(lambda(x,y): x in validationList) \
-                        .map(lambda (x,y): LabeledPoint(checkFile(x, subject_lists),y))
+    testRDDHashed = RDD.filter(lambda (x,y): x in trainingList) \
+                            .map(lambda (x,y): (checkFile(x, subject_lists), y)) \
+                            .map(lambda (f, wl): (hashVector(f,wl,hashsize)))
+    testRDD = testRDDHashed.map(lambda (f,x): LabeledPoint(f,x))
     # Retun the data into the Main function
-    return trainingRDD, testRDD, validationRDD
+    return trainingRDD, testRDD, trainingRDDHashed, testRDDHashed
 # Check if Files is in Subject  
 def checkFile(x, listFiles):
+    # Check if File is in List
+    print x
     if x in listFiles:
-        return float(1)
+        print 1
+        return 1
     else:
-        return float(0)
+        # Return 0 if not
+        return 0
 def getSetList(x):
     # Take 80% of the possible values for analysis
     trainingList = random.sample(x, int(len(x)*0.8))
     # Extract the Difference between the Full List and the Training List
-    subset = list(set(x).difference(trainingList))
+    testList = list(set(x).difference(trainingList))
     # Sub-devide the list into two list
-    testList, validationList = zip(*[iter(subset)]*int(len(subset)/2)) 
-    return trainingList, testList, validationList
-########## END - Find Most Popular Subjects ############
-########################################################
+    return trainingList, testList
+# Naive Bayes Models and Results
+def naiveBayes(trainingRDD, trainingRDDHashed, testRDDHashed):
+    # Naive Bayes
+    trainedModel = NaiveBayes.train(trainingRDD, 1.0)
+    # Test on Validation and Test Sets
+    resultsValidation = trainingRDDHashed.map(lambda (l,v):  ((l,trainedModel.predict(v)),1)).reduceByKey(add).collectAsMap()
+    resultsTest = testRDDHashed.map(lambda (l,v):  ((l,trainedModel.predict(v)),1)).reduceByKey(add).collectAsMap()
+    # Get Counts
+    nFilesV = trainingRDDHashed.count(); nFilesT = testRDDHashed.count()
+    # Create a dictionary of the Values
+    resultsValidation = defaultdict(lambda :0, resultsValidation)
+    resultsTest = defaultdict(lambda :0, resultsTest)
+    # Get Results
+    resV = getAccuracy(resultsValidation, nFilesV)
+    resT = getAccuracy(resultsTest, nFilesT)
+    # Print Results
+    print('   Results for Naive Bayes')
+    print('   Training Set: %.3f') % (resV)
+    print('   Test Set: %.3f') % (resT)
+## Decision Tree Models and Results
+def decisionTree(trainingRDD, trainingRDDHashed, testRDDHashed, testRDD):
+    # Train the Decision Tree Model
+    trainedModel = DecisionTree.trainClassifier(trainingRDD, numClasses=2, categoricalFeaturesInfo={},impurity='gini', maxDepth=5, maxBins=10)
+    # Test the Model on the Training Set    
+    predictions = trainedModel.predict(trainingRDD.map(lambda x: x.features))
+    labelsAndPredictions = trainingRDD.map(lambda lp: lp.label).zip(predictions)
+    # Get Results
+    resV = labelsAndPredictions.filter(lambda (v, p): v == p).count() / float(trainingRDDHashed.count())
+    # Test the Model on the Test Set  
+    predictions = trainedModel.predict(testRDD.map(lambda x: x.features))
+    labelsAndPredictions = testRDD.map(lambda lp: lp.label).zip(predictions)
+    # Get Results
+    resT = labelsAndPredictions.filter(lambda (v, p): v == p).count() / float(trainingRDDHashed.count())
+    # Print Results
+    print('   Results for Descision Tree')
+    print('   Training Set: %.3f') % (resV)
+    print('   Test Set: %.3f') % (resT)
+    # Print Decision Tree
+    print('   Learned Classification Tree Model:')
+    print(trainedModel)
+# Logistics Regression Models and Resuts
+def logisticRegression(trainingRDD, trainingRDDHashed, testRDDHashed):
+    # Train a Naive Bayes Model
+    trainedModel = LogisticRegressionWithSGD.train(trainingRDD, miniBatchFraction=0.1, regType='l1', intercept=True, regParam=.3)
+    # Test on Validation and Test Sets
+    resultsValidation = trainingRDDHashed.map(lambda (l,v):  ((l,trainedModel.predict(v)),1)).reduceByKey(add).collectAsMap()
+    resultsTest = testRDDHashed.map(lambda (l,v):  ((l,trainedModel.predict(v)),1)).reduceByKey(add).collectAsMap()
+    # Get Counts
+    nFilesV = trainingRDDHashed.count(); nFilesT = testRDDHashed.count()
+    # Create a dictionary of the Values
+    resultsValidation = defaultdict(lambda :0, resultsValidation)
+    resultsTest = defaultdict(lambda :0, resultsTest)
+    # Get Results
+    resV = getAccuracy(resultsValidation, nFilesV)
+    resT = getAccuracy(resultsTest, nFilesT)
+    # Print Results
+    print('   Results for Logistic Regression')
+    print('   Training Set: %.3f') % (resV)
+    print('   Test Set: %.3f') % (resT)
+########### END - Find Most Popular Subjects ############
+#########################################################
 
 
 ################## Other Functions #####################
@@ -330,12 +400,15 @@ def punctuationWord(x):
         x = x.replace(letter,'')
     return str(x)
 # print the different performance metrics
-def accuracy(rm):
-    resultMap = defaultdict(lambda :0,rm) # use of defaultdic saves checking for missing values
-    total = sum(resultMap.values())
-    truePos = resultMap[(1,1,)]
-    trueNeg = resultMap[(0,0,)]
-    return ( float(truePos+trueNeg)/total )
+def getAccuracy(resDict, count):
+    trueNeg = resDict[(0,0,)]; truePos = resDict[(1,1,)];
+    return (float(truePos+trueNeg)/count)*100
+# Dealing with Zero Values
+def ifError(x):
+    if x > 0:
+        return x
+    else:
+        return 0.00000000000000000001
 ########################################################
 
 ########################################################
@@ -349,16 +422,16 @@ if __name__ == "__main__":
     print('############# IMN430 - 26/11/2014 ##############')
     print('################################################\n')
     # Get Hierarchy of Data Structure
-    directory = ['/home/dan/Desktop/IMN432-CW01/text-part/' \
-                ,'/home/dan/Desktop/IMN432-CW01/TF_IDF/'    \
-                ,'/home/dan/Desktop/IMN432-CW01/Word_Freq/' \
-                ,'/home/dan/Desktop/IMN432-CW01/IDF/'       \
-                ,'/home/dan/Desktop/IMN432-CW01/IDF/IDF-Pairs' \
-                ,'/home/dan/Desktop/IMN432-CW01/IDF'        \
+    directory = ['/home/dan/Desktop/IMN432-CW01/text-part/'         \
+                ,'/home/dan/Desktop/IMN432-CW01/TF_IDF/'            \
+                ,'/home/dan/Desktop/IMN432-CW01/Word_Freq/'         \
+                ,'/home/dan/Desktop/IMN432-CW01/IDF/'               \
+                ,'/home/dan/Desktop/IMN432-CW01/IDF/IDF-Pairs'      \
+                ,'/home/dan/Desktop/IMN432-CW01/IDF'                \
                 ,'/home/dan/Desktop/IMN432-CW01/TF_IDF/TF_IDF_File' \
-                ,'/home/dan/Desktop/IMN432-CW01/processXML/'\
-                ,'/home/dan/Desktop/IMN432-CW01/meta/'      \
-                ,'/home/dan/Desktop/IMN432-CW01/TF_IDF'      \
+                ,'/home/dan/Desktop/IMN432-CW01/processXML/'        \
+                ,'/home/dan/Desktop/IMN432-CW01/meta/'              \
+                ,'/home/dan/Desktop/IMN432-CW01/TF_IDF'             \
                 ,'/home/dan/Desktop/IMN432-CW01/processXML/Subject']
     allFiles = getFileList(directory[0])
     # Find the Number of Files in the Directory
@@ -450,8 +523,8 @@ if __name__ == "__main__":
         files = getFileList(file_loc)
         # Loop through Files
         table = []
-        # Extract Data from XML Files
-        table = xmlExtract(files, table)
+        for location in files:
+            table = xmlExtract(location, table)
         # Process XML Files
         subjects, top_10 = processXML(table)
     else:
@@ -472,89 +545,35 @@ if __name__ == "__main__":
         tf_idf_directory = getDirectory(directory[9])
         # Read in all the Files
         tf_idf = sc.union([sc.pickleFile(i) for i in tf_idf_directory])
+        # Repartition the TF_IDF RDD for speed
+        tf_idf = tf_idf.repartition(8)
         # Get Ebook numbers for analysis and also remove Null Values
         ebookNumbers = tf_idf.map(lambda (x,y): x) \
                              .filter(lambda (x): len(x) > 1) \
                              .collect()
-        # Create a N dimensional vector per document using the hashing trick
-        fileHash = tf_idf.map(lambda (f, wl): (hashVector(f,wl,10000))) \
-                         .repartition(8)
-    # Loop Through Subjects to build models
-    for i in np.arange(0,10):
-        print '\nDealing with Subject #%i' % (i+1)
-        subject_lists = sc.pickleFile(directory[10] + str(i) + '/') \
-                          .map(lambda x: str(x[1])) \
-                          .collect()
-        # Naive Bayes, Decision Tree, Logistic Regression Testing
-        for j in np.arange(1,4):
-            # Make a Copy of the Hashed File
-            modelSet = fileHash
-            # 3 Machine Learning Algorithms to be used:
-            mlA = ['Naive Bayes','Decision Tree Analysis','Logistic Regression']
-            print('Subject: %i - Model: %s') % (i,mlA[j-1])
-            # Loop through the Sets of Data
-            for k in np.arange(1,11):
+        # Define the Hashsize
+        hashsize = 1000
+        # Loop Through Subjects to build models
+        for i in np.arange(0,1):
+            print('\nDealing with Subject #%i') % (i+1)
+            subject_lists = sc.pickleFile(directory[10] + str(i) + '/') \
+                              .map(lambda x: x[1]) \
+                              .collect()
+            # Cross Validation Step
+            for k in np.arange(1,2):
+                print('\n Cross Validation: %i') % (k)
+                # Copy the Hashed RDD
+                modelSet = tf_idf
                 # Create List for filtering the Data
-                trainingList, testList, validationList = getSetList(ebookNumbers)
+                trainingList, testList = getSetList(ebookNumbers)
                 # Create Sets of data into the correct format...
-                trainingRDD, testRDD, validationRDD,  = makeSets(modelSet, trainingList, testList, validationList, subject_lists)
-                # Print to show Completion
-                if j == 1:
-                    # Train a Naive Bayes Model
-                    trainedModel = NaiveBayes.train(trainingRDD, 1.0)
-                    # Prediction using the Trained Model - Training
-                    evalTraining = trainingRDD.map(lambda lp: (lp.label, trainedModel.predict(lp.features))) \
-                                                  .countByValue()
-                    # Prediction using the Trained Model - Validation
-                    evalValidation = validationRDD.map(lambda lp: (lp.label, trainedModel.predict(lp.features))) \
-                                                  .countByValue()
-                    # Prediction using the Trained Model - Test
-                    evalTest = testRDD.map(lambda lp: (lp.label, trainedModel.predict(lp.features))) \
-                                      .countByValue()
-                    # Get Accuracy Results
-                    trainingAcc = accuracy(evalTraining)
-                    validationAcc = accuracy(evalValidation)
-                    testAcc = accuracy(evalTest)
-                    # Print Results
-                    print trainingAcc, validationAcc, testAcc
-                elif j == 2:
-                    # Train a Decision Tree Model
-                    trainedModel = DecisionTree.trainClassifier(trainingRDD, numClasses=2, categoricalFeaturesInfo={}, impurity="entropy", maxDepth=4, maxBins=5)
-                    # Prediction using the Trained Model - Training                    
-                    predictedLabels = trainedModel.predict(trainingRDD.map(lambda lp : lp.features))
-                    trueLabels = trainingRDD.map(lambda lp : lp.label)
-                    resultsTrain = trueLabels.zip(predictedLabels).countByValue()
-                    # Prediction using the Trained Model - Validation
-                    predictions = trainedModel.predict(validationRDD.map(lambda x: x.features))
-                    resultsVal = validationRDD.map(lambda lp: lp.label).zip(predictions).countByValue()
-                    # Prediction using the Trained Model - Test
-                    predictions = trainedModel.predict(testRDD.map(lambda x: x.features))
-                    resultsTest = testRDD.map(lambda lp: lp.label).zip(predictions).countByValue()                    
-                    # Get Accuracy Results
-                    trainingAcc = accuracy(resultsTrain)
-                    validationAcc = accuracy(resultsVal)
-                    testAcc = accuracy(resultsTest)
-                    # Print Results
-                    print trainingAcc, validationAcc, testAcc
-                else:
-                    # Train a Naive Bayes Model
-                    trainedModel = LogisticRegressionWithSGD.train(trainingRDD,miniBatchFraction=0.1,regType='l1', intercept=True, regParam=.3)
-                    # Prediction using the Trained Model - Training
-                    evalTraining = trainingRDD.map(lambda lp: (lp.label, trainedModel.predict(lp.features))) \
-                                                  .countByValue()
-                    # Prediction using the Trained Model - Validation
-                    evalValidation = validationRDD.map(lambda lp: (lp.label, trainedModel.predict(lp.features))) \
-                                                  .countByValue()
-                    # Prediction using the Trained Model - Test
-                    evalTest = testRDD.map(lambda lp: (lp.label, trainedModel.predict(lp.features))) \
-                                      .countByValue()
-                    # Get Accuracy Results
-                    trainingAcc = accuracy(evalTraining)
-                    validationAcc = accuracy(evalValidation)
-                    testAcc = accuracy(evalTest)
-                    # Print Results
-                    print trainingAcc, validationAcc, testAcc
-                print 'Cross Validation Fold: %i Complete' % (k)     
+                trainingRDD, testRDD, trainingRDDHashed, testRDDHashed = makeSets(modelSet, trainingList, testList, subject_lists, hashsize)
+                # Naive Bayes ML Algorithm
+                naiveBayes(trainingRDD, trainingRDDHashed, testRDDHashed)
+                # Decision Tree ML Algorithm
+                decisionTree(trainingRDD, trainingRDDHashed, testRDDHashed, testRDD)
+                # Logistic Regression ML Algorithm
+                logisticRegression(trainingRDD, trainingRDDHashed, testRDDHashed)
     # Stop Watch
     modelTime = time() - modelTime
     print('\n############ Processing Completed ##############')
