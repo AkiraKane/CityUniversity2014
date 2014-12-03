@@ -40,8 +40,6 @@ Using Pre-Pickled Files
 ################################################
 ################ IDF to TF.IDF #################
 
-Using Pre-Pickled Files
-
 ############ Processing Completed ##############
 ################################################
 
@@ -52,127 +50,1160 @@ Using Pre-Pickled Files
 ############ Traversing Directories ############
 
 Directory = /home/dan/Desktop/IMN432-CW01/processXML/
-Total Size is 15258 bytes
-Number of Files = 180
-Total Number of Folders = 10
+Total Size is 0 bytes
+Number of Files = 0
+Total Number of Folders = 0
 ################################################
 
-Using Pre-Pickled Files
+Creating XML Pickles and RDDs 
+
+################################################
+############ Traversing Directories ############
+
+Directory = /home/dan/Desktop/IMN432-CW01/meta/
+Total Size is 627385710 bytes
+Number of Files = 47196
+Total Number of Folders = 47196
+################################################
+
 
 ############ Processing Completed ##############
 ################################################
 
 ################################################
 ######### Testing and Building Models ##########
+Hashsize in Use: 1000
 
 Dealing with Subject #1
 
  Cross Validation: 1
    Results for Naive Bayes
-      Training Set: 77.685
-      Test Set: 77.685
-   Results for Descision Tree
-      Training Set: 0.824
-      Test Set: 0.824
+      Training Set: 81.208 and F-Score: 0.263
+      Test Set: 81.208 and F-Score: 0.263
+   Results for Decision Tree
+      Training Set: 93.289 and F-Score: 0.825
+      Test Set: 93.289 and F-Score: 0.825
    Results for Logistic Regression
-      Training Set: 77.685
-      Test Set: 77.685
+      Training Set: 78.188 and F-Score: -1.000
+      Test Set: 78.188 and F-Score: -1.000
 
  Cross Validation: 2
    Results for Naive Bayes
-      Training Set: 78.020
-      Test Set: 78.020
-   Results for Descision Tree
-      Training Set: 0.831
-      Test Set: 0.831
+      Training Set: 81.376 and F-Score: -1.000
+      Test Set: 81.376 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 91.611 and F-Score: 0.783
+      Test Set: 91.611 and F-Score: 0.783
    Results for Logistic Regression
-      Training Set: 78.020
-      Test Set: 78.020
+      Training Set: 78.356 and F-Score: -1.000
+      Test Set: 78.356 and F-Score: -1.000
 
  Cross Validation: 3
    Results for Naive Bayes
-      Training Set: 78.356
-      Test Set: 78.356
-   Results for Descision Tree
-      Training Set: 0.834
-      Test Set: 0.834
+      Training Set: 81.376 and F-Score: -1.000
+      Test Set: 81.376 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 90.436 and F-Score: 0.762
+      Test Set: 90.436 and F-Score: 0.762
    Results for Logistic Regression
-      Training Set: 78.356
-      Test Set: 78.356
+      Training Set: 77.181 and F-Score: -1.000
+      Test Set: 77.181 and F-Score: -1.000
 
  Cross Validation: 4
    Results for Naive Bayes
-      Training Set: 79.027
-      Test Set: 79.027
-   Results for Descision Tree
-      Training Set: 0.842
-      Test Set: 0.842
+      Training Set: 81.376 and F-Score: 0.275
+      Test Set: 81.376 and F-Score: 0.275
+   Results for Decision Tree
+      Training Set: 91.946 and F-Score: -1.000
+      Test Set: 91.946 and F-Score: -1.000
    Results for Logistic Regression
-      Training Set: 79.027
-      Test Set: 79.027
+      Training Set: 78.020 and F-Score: -1.000
+      Test Set: 78.020 and F-Score: -1.000
 
  Cross Validation: 5
    Results for Naive Bayes
-      Training Set: 79.027
-      Test Set: 79.027
-   Results for Descision Tree
-      Training Set: 0.841
-      Test Set: 0.841
+      Training Set: 81.376 and F-Score: -1.000
+      Test Set: 81.376 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 91.611 and F-Score: 0.775
+      Test Set: 91.611 and F-Score: 0.775
    Results for Logistic Regression
-      Training Set: 79.027
-      Test Set: 79.027
+      Training Set: 77.517 and F-Score: -1.000
+      Test Set: 77.517 and F-Score: -1.000
 
  Cross Validation: 6
    Results for Naive Bayes
-      Training Set: 77.349
-      Test Set: 77.349
-   Results for Descision Tree
-      Training Set: 0.819
-      Test Set: 0.819
+      Training Set: 82.047 and F-Score: -1.000
+      Test Set: 82.047 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 91.946 and F-Score: 0.778
+      Test Set: 91.946 and F-Score: 0.778
    Results for Logistic Regression
-      Training Set: 77.349
-      Test Set: 77.349
+      Training Set: 78.523 and F-Score: -1.000
+      Test Set: 78.523 and F-Score: -1.000
 
  Cross Validation: 7
    Results for Naive Bayes
-      Training Set: 78.691
-      Test Set: 78.691
-   Results for Descision Tree
-      Training Set: 0.826
-      Test Set: 0.826
+      Training Set: 80.872 and F-Score: 0.305
+      Test Set: 80.872 and F-Score: 0.305
+   Results for Decision Tree
+      Training Set: 93.289 and F-Score: 0.831
+      Test Set: 93.289 and F-Score: 0.831
    Results for Logistic Regression
-      Training Set: 78.691
-      Test Set: 78.691
+      Training Set: 77.181 and F-Score: -1.000
+      Test Set: 77.181 and F-Score: -1.000
 
  Cross Validation: 8
    Results for Naive Bayes
-      Training Set: 77.685
-      Test Set: 77.685
-   Results for Descision Tree
-      Training Set: 0.807
-      Test Set: 0.807
+      Training Set: 82.718 and F-Score: 0.290
+      Test Set: 82.718 and F-Score: 0.290
+   Results for Decision Tree
+      Training Set: 91.946 and F-Score: 0.762
+      Test Set: 91.946 and F-Score: 0.762
    Results for Logistic Regression
-      Training Set: 77.685
-      Test Set: 77.685
+      Training Set: 79.530 and F-Score: -1.000
+      Test Set: 79.530 and F-Score: -1.000
 
  Cross Validation: 9
    Results for Naive Bayes
-      Training Set: 77.517
-      Test Set: 77.517
-   Results for Descision Tree
-      Training Set: 0.827
-      Test Set: 0.827
+      Training Set: 80.369 and F-Score: 0.255
+      Test Set: 80.369 and F-Score: 0.255
+   Results for Decision Tree
+      Training Set: 92.114 and F-Score: 0.798
+      Test Set: 92.114 and F-Score: 0.798
    Results for Logistic Regression
-      Training Set: 77.517
-      Test Set: 77.517
+      Training Set: 77.349 and F-Score: -1.000
+      Test Set: 77.349 and F-Score: -1.000
 
  Cross Validation: 10
    Results for Naive Bayes
-      Training Set: 77.852
-      Test Set: 77.852
-   Results for Descision Tree
-      Training Set: 0.824
-      Test Set: 0.824
+      Training Set: 80.872 and F-Score: 0.250
+      Test Set: 80.872 and F-Score: 0.250
+   Results for Decision Tree
+      Training Set: 91.779 and F-Score: 0.778
+      Test Set: 91.779 and F-Score: 0.778
    Results for Logistic Regression
-      Training Set: 77.852
-      Test Set: 77.852
+      Training Set: 78.188 and F-Score: -1.000
+      Test Set: 78.188 and F-Score: -1.000
+
+Dealing with Subject #2
+
+ Cross Validation: 1
+   Results for Naive Bayes
+      Training Set: 87.081 and F-Score: 0.294
+      Test Set: 87.081 and F-Score: 0.294
+   Results for Decision Tree
+      Training Set: 88.255 and F-Score: 0.397
+      Test Set: 88.255 and F-Score: 0.397
+   Results for Logistic Regression
+      Training Set: 84.732 and F-Score: -1.000
+      Test Set: 84.732 and F-Score: -1.000
+
+ Cross Validation: 2
+   Results for Naive Bayes
+      Training Set: 87.584 and F-Score: -1.000
+      Test Set: 87.584 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 93.121 and F-Score: 0.732
+      Test Set: 93.121 and F-Score: 0.732
+   Results for Logistic Regression
+      Training Set: 85.235 and F-Score: -1.000
+      Test Set: 85.235 and F-Score: -1.000
+
+ Cross Validation: 3
+   Results for Naive Bayes
+      Training Set: 87.584 and F-Score: 0.288
+      Test Set: 87.584 and F-Score: 0.288
+   Results for Decision Tree
+      Training Set: 89.262 and F-Score: 0.644
+      Test Set: 89.262 and F-Score: 0.644
+   Results for Logistic Regression
+      Training Set: 85.235 and F-Score: -1.000
+      Test Set: 85.235 and F-Score: -1.000
+
+ Cross Validation: 4
+   Results for Naive Bayes
+      Training Set: 86.913 and F-Score: 0.316
+      Test Set: 86.913 and F-Score: 0.316
+   Results for Decision Tree
+      Training Set: 87.416 and F-Score: -1.000
+      Test Set: 87.416 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 84.060 and F-Score: -1.000
+      Test Set: 84.060 and F-Score: -1.000
+
+ Cross Validation: 5
+   Results for Naive Bayes
+      Training Set: 88.255 and F-Score: 0.340
+      Test Set: 88.255 and F-Score: 0.340
+   Results for Decision Tree
+      Training Set: 90.101 and F-Score: -1.000
+      Test Set: 90.101 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 85.403 and F-Score: -1.000
+      Test Set: 85.403 and F-Score: -1.000
+
+ Cross Validation: 6
+   Results for Naive Bayes
+      Training Set: 86.913 and F-Score: -1.000
+      Test Set: 86.913 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 90.268 and F-Score: 0.580
+      Test Set: 90.268 and F-Score: 0.580
+   Results for Logistic Regression
+      Training Set: 84.899 and F-Score: -1.000
+      Test Set: 84.899 and F-Score: -1.000
+
+ Cross Validation: 7
+   Results for Naive Bayes
+      Training Set: 87.416 and F-Score: 0.299
+      Test Set: 87.416 and F-Score: 0.299
+   Results for Decision Tree
+      Training Set: 88.255 and F-Score: -1.000
+      Test Set: 88.255 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 84.899 and F-Score: -1.000
+      Test Set: 84.899 and F-Score: -1.000
+
+ Cross Validation: 8
+   Results for Naive Bayes
+      Training Set: 87.584 and F-Score: 0.315
+      Test Set: 87.584 and F-Score: 0.315
+   Results for Decision Tree
+      Training Set: 91.443 and F-Score: 0.638
+      Test Set: 91.443 and F-Score: 0.638
+   Results for Logistic Regression
+      Training Set: 85.067 and F-Score: -1.000
+      Test Set: 85.067 and F-Score: -1.000
+
+ Cross Validation: 9
+   Results for Naive Bayes
+      Training Set: 87.752 and F-Score: 0.247
+      Test Set: 87.752 and F-Score: 0.247
+   Results for Decision Tree
+      Training Set: 90.940 and F-Score: 0.645
+      Test Set: 90.940 and F-Score: 0.645
+   Results for Logistic Regression
+      Training Set: 85.906 and F-Score: -1.000
+      Test Set: 85.906 and F-Score: -1.000
+
+ Cross Validation: 10
+   Results for Naive Bayes
+      Training Set: 87.584 and F-Score: 0.327
+      Test Set: 87.584 and F-Score: 0.327
+   Results for Decision Tree
+      Training Set: 89.933 and F-Score: 0.667
+      Test Set: 89.933 and F-Score: 0.667
+   Results for Logistic Regression
+      Training Set: 84.732 and F-Score: -1.000
+      Test Set: 84.732 and F-Score: -1.000
+
+Dealing with Subject #3
+
+ Cross Validation: 1
+   Results for Naive Bayes
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.664 and F-Score: -1.000
+      Test Set: 99.664 and F-Score: -1.000
+
+ Cross Validation: 2
+   Results for Naive Bayes
+      Training Set: 99.664 and F-Score: -1.000
+      Test Set: 99.664 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.664 and F-Score: -1.000
+      Test Set: 99.664 and F-Score: -1.000
+
+ Cross Validation: 3
+   Results for Naive Bayes
+      Training Set: 99.664 and F-Score: -1.000
+      Test Set: 99.664 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.497 and F-Score: -1.000
+      Test Set: 99.497 and F-Score: -1.000
+
+ Cross Validation: 4
+   Results for Naive Bayes
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.664 and F-Score: -1.000
+      Test Set: 99.664 and F-Score: -1.000
+
+ Cross Validation: 5
+   Results for Naive Bayes
+      Training Set: 99.664 and F-Score: -1.000
+      Test Set: 99.664 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.497 and F-Score: -1.000
+      Test Set: 99.497 and F-Score: -1.000
+
+ Cross Validation: 6
+   Results for Naive Bayes
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+
+ Cross Validation: 7
+   Results for Naive Bayes
+      Training Set: 99.664 and F-Score: -1.000
+      Test Set: 99.664 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.664 and F-Score: -1.000
+      Test Set: 99.664 and F-Score: -1.000
+
+ Cross Validation: 8
+   Results for Naive Bayes
+      Training Set: 99.664 and F-Score: -1.000
+      Test Set: 99.664 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.497 and F-Score: -1.000
+      Test Set: 99.497 and F-Score: -1.000
+
+ Cross Validation: 9
+   Results for Naive Bayes
+      Training Set: 99.664 and F-Score: -1.000
+      Test Set: 99.664 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.664 and F-Score: -1.000
+      Test Set: 99.664 and F-Score: -1.000
+
+ Cross Validation: 10
+   Results for Naive Bayes
+      Training Set: 99.664 and F-Score: -1.000
+      Test Set: 99.664 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.497 and F-Score: -1.000
+      Test Set: 99.497 and F-Score: -1.000
+
+Dealing with Subject #4
+
+ Cross Validation: 1
+   Results for Naive Bayes
+      Training Set: 92.450 and F-Score: -1.000
+      Test Set: 92.450 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 98.658 and F-Score: -1.000
+      Test Set: 98.658 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 91.611 and F-Score: -1.000
+      Test Set: 91.611 and F-Score: -1.000
+
+ Cross Validation: 2
+   Results for Naive Bayes
+      Training Set: 92.282 and F-Score: -1.000
+      Test Set: 92.282 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 99.497 and F-Score: -1.000
+      Test Set: 99.497 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 90.940 and F-Score: -1.000
+      Test Set: 90.940 and F-Score: -1.000
+
+ Cross Validation: 3
+   Results for Naive Bayes
+      Training Set: 92.450 and F-Score: -1.000
+      Test Set: 92.450 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 98.826 and F-Score: -1.000
+      Test Set: 98.826 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 90.604 and F-Score: -1.000
+      Test Set: 90.604 and F-Score: -1.000
+
+ Cross Validation: 4
+   Results for Naive Bayes
+      Training Set: 92.114 and F-Score: -1.000
+      Test Set: 92.114 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 98.658 and F-Score: -1.000
+      Test Set: 98.658 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 90.604 and F-Score: -1.000
+      Test Set: 90.604 and F-Score: -1.000
+
+ Cross Validation: 5
+   Results for Naive Bayes
+      Training Set: 91.611 and F-Score: -1.000
+      Test Set: 91.611 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 98.322 and F-Score: 0.907
+      Test Set: 98.322 and F-Score: 0.907
+   Results for Logistic Regression
+      Training Set: 90.268 and F-Score: -1.000
+      Test Set: 90.268 and F-Score: -1.000
+
+ Cross Validation: 6
+   Results for Naive Bayes
+      Training Set: 93.121 and F-Score: -1.000
+      Test Set: 93.121 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 98.658 and F-Score: -1.000
+      Test Set: 98.658 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 90.940 and F-Score: -1.000
+      Test Set: 90.940 and F-Score: -1.000
+
+ Cross Validation: 7
+   Results for Naive Bayes
+      Training Set: 92.450 and F-Score: -1.000
+      Test Set: 92.450 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 98.993 and F-Score: -1.000
+      Test Set: 98.993 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 90.436 and F-Score: -1.000
+      Test Set: 90.436 and F-Score: -1.000
+
+ Cross Validation: 8
+   Results for Naive Bayes
+      Training Set: 92.114 and F-Score: -1.000
+      Test Set: 92.114 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 98.658 and F-Score: -1.000
+      Test Set: 98.658 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 90.101 and F-Score: -1.000
+      Test Set: 90.101 and F-Score: -1.000
+
+ Cross Validation: 9
+   Results for Naive Bayes
+      Training Set: 92.282 and F-Score: -1.000
+      Test Set: 92.282 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 98.826 and F-Score: 0.937
+      Test Set: 98.826 and F-Score: 0.937
+   Results for Logistic Regression
+      Training Set: 90.436 and F-Score: -1.000
+      Test Set: 90.436 and F-Score: -1.000
+
+ Cross Validation: 10
+   Results for Naive Bayes
+      Training Set: 91.946 and F-Score: -1.000
+      Test Set: 91.946 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 98.826 and F-Score: -1.000
+      Test Set: 98.826 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 90.604 and F-Score: -1.000
+      Test Set: 90.604 and F-Score: -1.000
+
+Dealing with Subject #5
+
+ Cross Validation: 1
+   Results for Naive Bayes
+      Training Set: 92.617 and F-Score: 0.290
+      Test Set: 92.617 and F-Score: 0.290
+   Results for Decision Tree
+      Training Set: 99.329 and F-Score: 0.959
+      Test Set: 99.329 and F-Score: 0.959
+   Results for Logistic Regression
+      Training Set: 91.611 and F-Score: -1.000
+      Test Set: 91.611 and F-Score: -1.000
+
+ Cross Validation: 2
+   Results for Naive Bayes
+      Training Set: 93.289 and F-Score: 0.310
+      Test Set: 93.289 and F-Score: 0.310
+   Results for Decision Tree
+      Training Set: 99.329 and F-Score: -1.000
+      Test Set: 99.329 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 92.450 and F-Score: -1.000
+      Test Set: 92.450 and F-Score: -1.000
+
+ Cross Validation: 3
+   Results for Naive Bayes
+      Training Set: 94.128 and F-Score: -1.000
+      Test Set: 94.128 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 99.664 and F-Score: -1.000
+      Test Set: 99.664 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 92.953 and F-Score: -1.000
+      Test Set: 92.953 and F-Score: -1.000
+
+ Cross Validation: 4
+   Results for Naive Bayes
+      Training Set: 93.289 and F-Score: 0.333
+      Test Set: 93.289 and F-Score: 0.333
+   Results for Decision Tree
+      Training Set: 99.161 and F-Score: -1.000
+      Test Set: 99.161 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 92.617 and F-Score: -1.000
+      Test Set: 92.617 and F-Score: -1.000
+
+ Cross Validation: 5
+   Results for Naive Bayes
+      Training Set: 92.617 and F-Score: 0.333
+      Test Set: 92.617 and F-Score: 0.333
+   Results for Decision Tree
+      Training Set: 99.161 and F-Score: -1.000
+      Test Set: 99.161 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 91.443 and F-Score: -1.000
+      Test Set: 91.443 and F-Score: -1.000
+
+ Cross Validation: 6
+   Results for Naive Bayes
+      Training Set: 92.953 and F-Score: -1.000
+      Test Set: 92.953 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 99.329 and F-Score: -1.000
+      Test Set: 99.329 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 91.946 and F-Score: -1.000
+      Test Set: 91.946 and F-Score: -1.000
+
+ Cross Validation: 7
+   Results for Naive Bayes
+      Training Set: 92.617 and F-Score: 0.267
+      Test Set: 92.617 and F-Score: 0.267
+   Results for Decision Tree
+      Training Set: 99.161 and F-Score: -1.000
+      Test Set: 99.161 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 92.114 and F-Score: -1.000
+      Test Set: 92.114 and F-Score: -1.000
+
+ Cross Validation: 8
+   Results for Naive Bayes
+      Training Set: 92.450 and F-Score: 0.237
+      Test Set: 92.450 and F-Score: 0.237
+   Results for Decision Tree
+      Training Set: 98.826 and F-Score: -1.000
+      Test Set: 98.826 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 92.617 and F-Score: -1.000
+      Test Set: 92.617 and F-Score: -1.000
+
+ Cross Validation: 9
+   Results for Naive Bayes
+      Training Set: 92.282 and F-Score: 0.281
+      Test Set: 92.282 and F-Score: 0.281
+   Results for Decision Tree
+      Training Set: 99.161 and F-Score: -1.000
+      Test Set: 99.161 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 92.114 and F-Score: -1.000
+      Test Set: 92.114 and F-Score: -1.000
+
+ Cross Validation: 10
+   Results for Naive Bayes
+      Training Set: 92.785 and F-Score: 0.317
+      Test Set: 92.785 and F-Score: 0.317
+   Results for Decision Tree
+      Training Set: 98.322 and F-Score: -1.000
+      Test Set: 98.322 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 92.114 and F-Score: -1.000
+      Test Set: 92.114 and F-Score: -1.000
+
+Dealing with Subject #6
+
+ Cross Validation: 1
+   Results for Naive Bayes
+      Training Set: 95.134 and F-Score: -1.000
+      Test Set: 95.134 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 95.973 and F-Score: -1.000
+      Test Set: 95.973 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 95.134 and F-Score: -1.000
+      Test Set: 95.134 and F-Score: -1.000
+
+ Cross Validation: 2
+   Results for Naive Bayes
+      Training Set: 95.302 and F-Score: -1.000
+      Test Set: 95.302 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 98.658 and F-Score: 0.862
+      Test Set: 98.658 and F-Score: 0.862
+   Results for Logistic Regression
+      Training Set: 95.134 and F-Score: -1.000
+      Test Set: 95.134 and F-Score: -1.000
+
+ Cross Validation: 3
+   Results for Naive Bayes
+      Training Set: 95.638 and F-Score: -1.000
+      Test Set: 95.638 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 97.819 and F-Score: -1.000
+      Test Set: 97.819 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 95.470 and F-Score: -1.000
+      Test Set: 95.470 and F-Score: -1.000
+
+ Cross Validation: 4
+   Results for Naive Bayes
+      Training Set: 94.463 and F-Score: -1.000
+      Test Set: 94.463 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 97.987 and F-Score: 0.833
+      Test Set: 97.987 and F-Score: 0.833
+   Results for Logistic Regression
+      Training Set: 94.295 and F-Score: -1.000
+      Test Set: 94.295 and F-Score: -1.000
+
+ Cross Validation: 5
+   Results for Naive Bayes
+      Training Set: 94.799 and F-Score: -1.000
+      Test Set: 94.799 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 97.819 and F-Score: 0.827
+      Test Set: 97.819 and F-Score: 0.827
+   Results for Logistic Regression
+      Training Set: 94.631 and F-Score: -1.000
+      Test Set: 94.631 and F-Score: -1.000
+
+ Cross Validation: 6
+   Results for Naive Bayes
+      Training Set: 94.799 and F-Score: -1.000
+      Test Set: 94.799 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 96.141 and F-Score: 0.729
+      Test Set: 96.141 and F-Score: 0.729
+   Results for Logistic Regression
+      Training Set: 94.631 and F-Score: -1.000
+      Test Set: 94.631 and F-Score: -1.000
+
+ Cross Validation: 7
+   Results for Naive Bayes
+      Training Set: 94.966 and F-Score: -1.000
+      Test Set: 94.966 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 98.826 and F-Score: 0.885
+      Test Set: 98.826 and F-Score: 0.885
+   Results for Logistic Regression
+      Training Set: 94.799 and F-Score: -1.000
+      Test Set: 94.799 and F-Score: -1.000
+
+ Cross Validation: 8
+   Results for Naive Bayes
+      Training Set: 94.463 and F-Score: -1.000
+      Test Set: 94.463 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 98.658 and F-Score: -1.000
+      Test Set: 98.658 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 94.295 and F-Score: -1.000
+      Test Set: 94.295 and F-Score: -1.000
+
+ Cross Validation: 9
+   Results for Naive Bayes
+      Training Set: 95.302 and F-Score: -1.000
+      Test Set: 95.302 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 98.154 and F-Score: 0.831
+      Test Set: 98.154 and F-Score: 0.831
+   Results for Logistic Regression
+      Training Set: 95.134 and F-Score: -1.000
+      Test Set: 95.134 and F-Score: -1.000
+
+ Cross Validation: 10
+   Results for Naive Bayes
+      Training Set: 94.966 and F-Score: -1.000
+      Test Set: 94.966 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 97.651 and F-Score: 0.767
+      Test Set: 97.651 and F-Score: 0.767
+   Results for Logistic Regression
+      Training Set: 94.799 and F-Score: -1.000
+      Test Set: 94.799 and F-Score: -1.000
+
+Dealing with Subject #7
+
+ Cross Validation: 1
+   Results for Naive Bayes
+      Training Set: 95.638 and F-Score: 0.071
+      Test Set: 95.638 and F-Score: 0.071
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 97.483 and F-Score: -1.000
+      Test Set: 97.483 and F-Score: -1.000
+
+ Cross Validation: 2
+   Results for Naive Bayes
+      Training Set: 97.483 and F-Score: -1.000
+      Test Set: 97.483 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 99.497 and F-Score: -1.000
+      Test Set: 99.497 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 97.483 and F-Score: -1.000
+      Test Set: 97.483 and F-Score: -1.000
+
+ Cross Validation: 3
+   Results for Naive Bayes
+      Training Set: 95.302 and F-Score: 0.067
+      Test Set: 95.302 and F-Score: 0.067
+   Results for Decision Tree
+      Training Set: 98.490 and F-Score: 0.757
+      Test Set: 98.490 and F-Score: 0.757
+   Results for Logistic Regression
+      Training Set: 97.148 and F-Score: -1.000
+      Test Set: 97.148 and F-Score: -1.000
+
+ Cross Validation: 4
+   Results for Naive Bayes
+      Training Set: 96.644 and F-Score: -1.000
+      Test Set: 96.644 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 99.329 and F-Score: 0.900
+      Test Set: 99.329 and F-Score: 0.900
+   Results for Logistic Regression
+      Training Set: 96.644 and F-Score: -1.000
+      Test Set: 96.644 and F-Score: -1.000
+
+ Cross Validation: 5
+   Results for Naive Bayes
+      Training Set: 95.805 and F-Score: 0.074
+      Test Set: 95.805 and F-Score: 0.074
+   Results for Decision Tree
+      Training Set: 99.329 and F-Score: 0.875
+      Test Set: 99.329 and F-Score: 0.875
+   Results for Logistic Regression
+      Training Set: 97.148 and F-Score: -1.000
+      Test Set: 97.148 and F-Score: -1.000
+
+ Cross Validation: 6
+   Results for Naive Bayes
+      Training Set: 96.812 and F-Score: 0.095
+      Test Set: 96.812 and F-Score: 0.095
+   Results for Decision Tree
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 97.315 and F-Score: -1.000
+      Test Set: 97.315 and F-Score: -1.000
+
+ Cross Validation: 7
+   Results for Naive Bayes
+      Training Set: 95.470 and F-Score: 0.069
+      Test Set: 95.470 and F-Score: 0.069
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 97.148 and F-Score: -1.000
+      Test Set: 97.148 and F-Score: -1.000
+
+ Cross Validation: 8
+   Results for Naive Bayes
+      Training Set: 97.315 and F-Score: -1.000
+      Test Set: 97.315 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 98.993 and F-Score: -1.000
+      Test Set: 98.993 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 97.148 and F-Score: -1.000
+      Test Set: 97.148 and F-Score: -1.000
+
+ Cross Validation: 9
+   Results for Naive Bayes
+      Training Set: 97.148 and F-Score: -1.000
+      Test Set: 97.148 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 99.664 and F-Score: -1.000
+      Test Set: 99.664 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 96.980 and F-Score: -1.000
+      Test Set: 96.980 and F-Score: -1.000
+
+ Cross Validation: 10
+   Results for Naive Bayes
+      Training Set: 95.805 and F-Score: 0.074
+      Test Set: 95.805 and F-Score: 0.074
+   Results for Decision Tree
+      Training Set: 98.658 and F-Score: 0.765
+      Test Set: 98.658 and F-Score: 0.765
+   Results for Logistic Regression
+      Training Set: 96.980 and F-Score: -1.000
+      Test Set: 96.980 and F-Score: -1.000
+
+Dealing with Subject #8
+
+ Cross Validation: 1
+   Results for Naive Bayes
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+
+ Cross Validation: 2
+   Results for Naive Bayes
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+
+ Cross Validation: 3
+   Results for Naive Bayes
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+
+ Cross Validation: 4
+   Results for Naive Bayes
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+
+ Cross Validation: 5
+   Results for Naive Bayes
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+
+ Cross Validation: 6
+   Results for Naive Bayes
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+
+ Cross Validation: 7
+   Results for Naive Bayes
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+
+ Cross Validation: 8
+   Results for Naive Bayes
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+
+ Cross Validation: 9
+   Results for Naive Bayes
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+
+ Cross Validation: 10
+   Results for Naive Bayes
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+
+Dealing with Subject #9
+
+ Cross Validation: 1
+   Results for Naive Bayes
+      Training Set: 97.651 and F-Score: -1.000
+      Test Set: 97.651 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 99.497 and F-Score: 0.897
+      Test Set: 99.497 and F-Score: 0.897
+   Results for Logistic Regression
+      Training Set: 97.651 and F-Score: -1.000
+      Test Set: 97.651 and F-Score: -1.000
+
+ Cross Validation: 2
+   Results for Naive Bayes
+      Training Set: 98.490 and F-Score: -1.000
+      Test Set: 98.490 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 98.490 and F-Score: -1.000
+      Test Set: 98.490 and F-Score: -1.000
+
+ Cross Validation: 3
+   Results for Naive Bayes
+      Training Set: 97.987 and F-Score: -1.000
+      Test Set: 97.987 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 97.987 and F-Score: -1.000
+      Test Set: 97.987 and F-Score: -1.000
+
+ Cross Validation: 4
+   Results for Naive Bayes
+      Training Set: 97.651 and F-Score: -1.000
+      Test Set: 97.651 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 97.651 and F-Score: -1.000
+      Test Set: 97.651 and F-Score: -1.000
+
+ Cross Validation: 5
+   Results for Naive Bayes
+      Training Set: 97.651 and F-Score: -1.000
+      Test Set: 97.651 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 97.651 and F-Score: -1.000
+      Test Set: 97.651 and F-Score: -1.000
+
+ Cross Validation: 6
+   Results for Naive Bayes
+      Training Set: 97.987 and F-Score: -1.000
+      Test Set: 97.987 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 97.987 and F-Score: -1.000
+      Test Set: 97.987 and F-Score: -1.000
+
+ Cross Validation: 7
+   Results for Naive Bayes
+      Training Set: 97.651 and F-Score: -1.000
+      Test Set: 97.651 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 99.329 and F-Score: 0.867
+      Test Set: 99.329 and F-Score: 0.867
+   Results for Logistic Regression
+      Training Set: 97.651 and F-Score: -1.000
+      Test Set: 97.651 and F-Score: -1.000
+
+ Cross Validation: 8
+   Results for Naive Bayes
+      Training Set: 97.315 and F-Score: -1.000
+      Test Set: 97.315 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 99.832 and F-Score: -1.000
+      Test Set: 99.832 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 97.315 and F-Score: -1.000
+      Test Set: 97.315 and F-Score: -1.000
+
+ Cross Validation: 9
+   Results for Naive Bayes
+      Training Set: 97.483 and F-Score: -1.000
+      Test Set: 97.483 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 97.483 and F-Score: -1.000
+      Test Set: 97.483 and F-Score: -1.000
+
+ Cross Validation: 10
+   Results for Naive Bayes
+      Training Set: 97.315 and F-Score: -1.000
+      Test Set: 97.315 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 99.664 and F-Score: 0.938
+      Test Set: 99.664 and F-Score: 0.938
+   Results for Logistic Regression
+      Training Set: 97.315 and F-Score: -1.000
+      Test Set: 97.315 and F-Score: -1.000
+
+Dealing with Subject #10
+
+ Cross Validation: 1
+   Results for Naive Bayes
+      Training Set: 99.497 and F-Score: -1.000
+      Test Set: 99.497 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.161 and F-Score: -1.000
+      Test Set: 99.161 and F-Score: -1.000
+
+ Cross Validation: 2
+   Results for Naive Bayes
+      Training Set: 99.497 and F-Score: -1.000
+      Test Set: 99.497 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.329 and F-Score: -1.000
+      Test Set: 99.329 and F-Score: -1.000
+
+ Cross Validation: 3
+   Results for Naive Bayes
+      Training Set: 99.497 and F-Score: -1.000
+      Test Set: 99.497 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.161 and F-Score: -1.000
+      Test Set: 99.161 and F-Score: -1.000
+
+ Cross Validation: 4
+   Results for Naive Bayes
+      Training Set: 99.664 and F-Score: -1.000
+      Test Set: 99.664 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.664 and F-Score: -1.000
+      Test Set: 99.664 and F-Score: -1.000
+
+ Cross Validation: 5
+   Results for Naive Bayes
+      Training Set: 99.664 and F-Score: -1.000
+      Test Set: 99.664 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.497 and F-Score: -1.000
+      Test Set: 99.497 and F-Score: -1.000
+
+ Cross Validation: 6
+   Results for Naive Bayes
+      Training Set: 99.329 and F-Score: -1.000
+      Test Set: 99.329 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.161 and F-Score: -1.000
+      Test Set: 99.161 and F-Score: -1.000
+
+ Cross Validation: 7
+   Results for Naive Bayes
+      Training Set: 99.497 and F-Score: -1.000
+      Test Set: 99.497 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.329 and F-Score: -1.000
+      Test Set: 99.329 and F-Score: -1.000
+
+ Cross Validation: 8
+   Results for Naive Bayes
+      Training Set: 99.329 and F-Score: -1.000
+      Test Set: 99.329 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.329 and F-Score: -1.000
+      Test Set: 99.329 and F-Score: -1.000
+
+ Cross Validation: 9
+   Results for Naive Bayes
+      Training Set: 99.329 and F-Score: -1.000
+      Test Set: 99.329 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.329 and F-Score: -1.000
+      Test Set: 99.329 and F-Score: -1.000
+
+ Cross Validation: 10
+   Results for Naive Bayes
+      Training Set: 99.497 and F-Score: -1.000
+      Test Set: 99.497 and F-Score: -1.000
+   Results for Decision Tree
+      Training Set: 100.000 and F-Score: -1.000
+      Test Set: 100.000 and F-Score: -1.000
+   Results for Logistic Regression
+      Training Set: 99.329 and F-Score: -1.000
+      Test Set: 99.329 and F-Score: -1.000
+
+############ Processing Completed ##############
+################################################
+
+################################################
+##### Display Overall Time and Statistics ######
+################################################
+Time to Process TF Pickles:     2.366 Seconds
+Time to Process IDF Pickle:     0.007 Seconds
+Time to Process TF.IDF Pickle:  71.503 Seconds
+Time to Process XML Files:      107.719 Seconds
+Time to Test and Build Models:  4278.409 Seconds
+Total Run Time:                 4464.130 Seconds
+################################################
