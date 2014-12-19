@@ -68,3 +68,52 @@ print spelltest(tests1)
 print spelltest(tests2) ## only do this after everything is debugged
 
 ###################################################################
+# Facebook
+test_text = 'For all my friends, whether close or casual, just because. This is \
+             one of the longest posts I will ever make, and one of the most real \
+             too. Everyone will go through some hard times at some point. Life \
+             isn''t easy. Just something to think about. Did you know the people \
+             that are the strongest are usually the most sensitive? Did you know \
+             the people who exhibit the most kindness are the first to get \
+             mistreated? Did you know the ones who take care of others all the time \
+             are usually the ones who need it the most? Did you know the three \
+             hardest things to say are I love you, I''m sorry, and help me? \
+             Sometimes just because a person looks happy, you have to look past \
+             their smile to see how much pain they may be in. To all my friends \
+             who are going through some issues right now--let''s start an intentional\
+             avalanche. We all need positive intentions right now. If I don''t see \
+             your name, I''ll understand. May I ask my friends wherever you might \
+             be, to kindly copy and paste this status for one hour to give a moment \
+             of support to all of those who have family problems, health struggles, \
+             job issues, worries of any kind and just needs to know that someone cares. \
+             Do it for all of us, for nobody is immune. I hope to see this on the walls \
+             of all my friends just for moral support. I know some will!!! I did \
+             it for a friend and you can too. You have to copy and paste this one, \
+             NO SHARING... I will leave it in the comments so it is easier \
+             for you to copy.'
+# Split into Words
+test_text = words(test_text)
+# Loop through
+for word in test_text:
+    if correct(word)==word.capitalize():
+        print word.capitalize()
+    else:
+        y = 'CORRECTION TO'
+        print word.capitalize(), y, correct(word)
+##################################################################
+# Import Data
+Dilberate = words(file('/home/dan/Spark_Files/Web/Spellings_and_Errors.txt').read())
+# Create a Subset of 1000 Words
+Dilberate2 = Dilberate[0:100]
+# Loop through
+n = 0; p=0; list_corrections = []
+for word in Dilberate2:
+    start_time = time()
+    correction = correct(word)
+    if correction==word.capitalize():
+        p += 1
+    else:
+        y = 'CORRECTION TO'
+        list_corrections.append([word.capitalize(), y, correction, time()-start_time])
+        n += 1
+print('Number of Corrections: %i   Number of Correctly Spelt Words: %i') % (n, p)
