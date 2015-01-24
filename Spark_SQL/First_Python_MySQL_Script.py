@@ -71,6 +71,24 @@ if __name__ == "__main__":
     # Show First 10 Rows
     print Table_Col_DF.head(10)
     # Obtain the Size of Table
-    print('\nNumber of Combinations of Database, Table and Columns: %i') % Table_Col_DF.shape[0]
+    print('\nNumber of Combinations of Database, Table and Columns: %i\n') % Table_Col_DF.shape[0]
     # Close Connection    
     con.close()
+    
+# Example Output
+    
+#Database version : 5.5.41-0ubuntu0.14.10.1 
+#
+#        Database_Name      Table_Name           Column_Name
+#0  information_schema  CHARACTER_SETS    CHARACTER_SET_NAME
+#1  information_schema  CHARACTER_SETS  DEFAULT_COLLATE_NAME
+#2  information_schema  CHARACTER_SETS           DESCRIPTION
+#3  information_schema  CHARACTER_SETS                MAXLEN
+#4  information_schema      COLLATIONS        COLLATION_NAME
+#5  information_schema      COLLATIONS    CHARACTER_SET_NAME
+#6  information_schema      COLLATIONS                    ID
+#7  information_schema      COLLATIONS            IS_DEFAULT
+#8  information_schema      COLLATIONS           IS_COMPILED
+#9  information_schema      COLLATIONS               SORTLEN
+#
+#Number of Combinations of Database, Table and Columns: 811
