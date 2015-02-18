@@ -1,0 +1,11 @@
+Rank	Subject	No. files in Subject	% Total
+0	PS	162	21.745%
+1	PR	111	14.899%
+2	PZ	87	11.678%
+3	Science fiction	69	9.262%
+4	Short stories	57	7.651%
+5	AP	39	5.235%
+6	Fiction	22	2.953%
+7	Popular literature -- Great Britain -- Periodicals	18	2.416%
+8	Adventure stories	17	2.282%
+9	England -- Social life and customs -- Fiction	15	2.013%
