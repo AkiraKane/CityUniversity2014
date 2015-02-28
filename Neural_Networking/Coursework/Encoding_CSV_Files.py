@@ -16,6 +16,7 @@ numeric_col = Bank_Data_Numerics.columns
 Cat_col_names = bank_data.columns - numeric_col
 bank_data_Cat = bank_data[Cat_col_names]
 
+# Create an empty Mapping Table
 Mapping_Table = pd.DataFrame()
 
 # Loop Through the Categorical Table and Convert to Numerics
@@ -23,10 +24,14 @@ for col in Cat_col_names:
     # Convert String to Integer
     bank_data[col] = pd.Categorical.from_array(bank_data[col]).codes
     # Join Togeather and create a Mapping Table
-    Mapping_Table = Mapping_Table.append(pd.concat([bank_data_Cat[col], bank_data[col]],axis=1,ignore_index=True).drop_duplicates())
+    X = pd.concat([bank_data_Cat[col], bank_data[col]],axis=1,ignore_index=True).drop_duplicates()
+    # Add Column Name to the Temp Table 
+    X['Colname'] = col
+    # Append New Data onto the Mapping Table
+    Mapping_Table = Mapping_Table.append(X)
 
 # Correct the Dataframe Headings
-Mapping_Table.columns = ['Label','Numerical_Code']
+Mapping_Table.columns = ['Label','Numerical_Code','Column_Name']
 
 # Save Encoded Dataframes
 bank_data.to_csv('/home/dan/Documents/Dropbox/Data Science Share/City - MSc Data Science/IMN427_Neural_Computing/Week 5/lab/bank-additional-full-encoded.csv', sep=',', index=False)
