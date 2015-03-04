@@ -10,4 +10,6 @@ Adjustment_2 = 10;
 
 Parameters = [Layer_1 Layer_2 Learning_rate Adjustment_1 Adjustment_2];               % Learning Rate of the Algorithm
 
-Results = fminsearch(@Cross_Validation, Parameters)         % Minimisation Function
+% Results = fminsearch(@Cross_Validation, Parameters)         % Minimisation Function
+
+Results = Cross_Validation( Parameters)         % Minimisation Function

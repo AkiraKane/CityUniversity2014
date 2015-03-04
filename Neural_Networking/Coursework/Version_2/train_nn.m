@@ -3,7 +3,7 @@ function [MSE, model, trn_acc] = train_nn(configuration, Weights, Bias, train_da
     %% Determine the Sizes of the Matrix
     [Instances,Dimensions] = size(train_data);              % Instances = Training Instances, Dimensions = Number of Dimensions
     depth_of_Network = length(configuration.hidNum)+1;      % depth = Number of Hidden Layers + Output Layer 
-    labNum = size(unique(training_label),1);                % Number of Different Labels
+    labNum = size(unique(training_label),1);              % Number of Different Labels
 
     %% Setting Up the Weight(s) Matrix
     if isempty(Weights)
@@ -43,6 +43,7 @@ function [MSE, model, trn_acc] = train_nn(configuration, Weights, Bias, train_da
             inx = (b-1)*configuration.sNum+1:min(b*configuration.sNum,Instances);
             batch_x = train_data(inx,:);
             batch_y = training_label(inx)+1;
+            size(batch_y);
             sNum = size(batch_x,1);
             %% Feedforward
             % Forward mesage to get output

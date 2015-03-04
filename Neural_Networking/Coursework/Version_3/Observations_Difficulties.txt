@@ -1,0 +1,29 @@
+4/3/2015 - 11:08 - Daniel Dixey
+
+Observation:
+
+- Class Imbalance
+    -   There is a significant imbalance in the binary classes. Current the algorithm 
+        is using Random slicing to breakout the validation and training sets, the 
+        inbalance is approximately 88-12. 
+    -   From inspection of the results the NN is only learning one class!!
+    -   If you look in the Crossvalidation.m file you will notice that there is a call 
+        for Tabulate. This function pivots on the Labelled vector to give you a count
+        and percentage ratios of the classes.
+- Optimisation
+    -   I plan to implement a combination of Brute force method (using the allcomb 
+        function) and then use on a optimisation algorithm to fine tune the parameters.
+        Benefit of doing it this way is that the alcomb method will define all possible
+        combinations that I enter. I will then run the code to determine the best model
+        using those. If your happy I will then choose the set upo with the best Accuracy
+        and MSE (or Cross Entropy) values. The proceed with even finer tuning of the 
+        other input parameters (Momentum, Dropout ect..)
+- Cross Validation 
+    -   Got this working - works well. Nothing notable to report.
+
+Current Difficulties:
+
+- Implementing SMOTE
+    -   I need to either look at how Arthur's method works for this OR find another
+        version online. I will start with Arthur's and comment and break it down. 
+        If not I will 
