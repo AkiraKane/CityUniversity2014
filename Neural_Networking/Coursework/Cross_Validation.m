@@ -1,6 +1,6 @@
 function [Error] = Cross_Validation(Parameters)
 
-    configuration.hidNum = [floor(Parameters(1)), floor(Parameters(2))];      % Number of Hidden Nodes by layer
+    configuration.hidNum = [floor(Parameters(1)/10 + (1/100)*Parameters(4)), floor(Parameters(2)/10  + (1/100)*Parameters(5))];      % Number of Hidden Nodes by layer
     configuration.activationFnc = {'tansig','tansig','logsig'}; % Activation Functions
     configuration.eNum   = 40;                                  % Max Number of Epochs to Train On
     configuration.bNum   = 1;                                   % Batch Size
@@ -9,7 +9,7 @@ function [Error] = Cross_Validation(Parameters)
     file = 'bank-additional-full-encoded';                      % Filename to Import
     X = csvread([file '.csv'],1,0);                             % Import the File into an Matrix
 
-    fprintf('\nNeurons on Layer 1: %d - Layer_2: %d and Learning Rate: %.9f\n', floor(Parameters(1)), floor(Parameters(2)), Parameters(3)/100)
+    fprintf('\nNeurons on Layer 1: %d - Layer_2: %d and Learning Rate: %.9f Adjustment Factor 1: %.4f 2: %.4f \n', floor(Parameters(1)/10), floor(Parameters(2)/10), Parameters(3)/100, Parameters(4), Parameters(5))
                                                                 % Display Tuning Results
     
     Acc = 0;                                                    % Avg Accuracy Reset
