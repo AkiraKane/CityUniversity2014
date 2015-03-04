@@ -1,0 +1,6 @@
+clc                                                         % Clear Command Window
+clear all                                                   % Clear Workspace
+
+%Number of Neurons of the First Layer
+
+Results = fminsearch(@Cross_Validation, Parameters)
