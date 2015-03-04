@@ -92,7 +92,7 @@ function [MSE, model, trn_acc] = train_nn(configuration, Weights, Bias, train_da
         Output_Val = run_nn(configuration.activationFnc,model,validation_data);
         vld_acc = sum((Output_Val-1)==validation_label)/size(validation_label,1);
         
-        fprintf('[Eppoch %4d] MSE = %.9f | Train Acc = %.9f | Validation Acc = %.9f\n',e,MSE,trn_acc,vld_acc);
+        %fprintf('[Eppoch %4d] MSE = %.9f | Train Acc = %.9f | Validation Acc = %.9f\n',e,MSE,trn_acc,vld_acc);
         
         % Collect data for plot
         plot_trn_acc = [plot_trn_acc trn_acc];
@@ -100,16 +100,16 @@ function [MSE, model, trn_acc] = train_nn(configuration, Weights, Bias, train_da
         plot_mse     = [plot_mse MSE];
         %pause;
     end
-    fig1 = figure(2);
-    set(fig1,'Position',[10,20,300,200]);
-    plot(1:size(plot_trn_acc,2),plot_trn_acc,'r');
-    hold on;
-    plot(1:size(plot_vld_acc,2),plot_vld_acc);
-    legend('Training','Validation');
-    xlabel('Epochs');ylabel('Accuracy');
+    %fig1 = figure(2);
+    %set(fig1,'Position',[10,20,300,200]);
+    %plot(1:size(plot_trn_acc,2),plot_trn_acc,'r');
+    %hold on;
+    %plot(1:size(plot_vld_acc,2),plot_vld_acc);
+    %legend('Training','Validation');
+    %xlabel('Epochs');ylabel('Accuracy');
 
-    fig2 = figure(3);
-    set(fig2,'Position',[10,20,300,200]);
-    plot(1:size(plot_mse,2),plot_mse);
-    xlabel('Epochs');ylabel('MSE');
+    %fig2 = figure(3);
+    %set(fig2,'Position',[10,20,300,200]);
+    %plot(1:size(plot_mse,2),plot_mse);
+    %xlabel('Epochs');ylabel('MSE');
 end

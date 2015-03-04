@@ -2,7 +2,7 @@ clc                                                         % Clear Command Wind
 clear all                                                   % Clear Workspace
 
 
-Combins = allcomb([5:5:50],[5:5:95]);                      % Using the allcomb function (LICENSE IN FOLDER)
+Combins = allcomb([5:50:50],[5:50:95]);                       % Using the allcomb function (LICENSE IN FOLDER)
                                                             % Changing Learning Rate and number of Epochs
                                                        
 file = 'bank-additional-full-encoded';                      % Filename to Import
@@ -17,7 +17,7 @@ for row = 1:size(Combins,1);                                % Iterate through co
                                                             % Configurable Parameters
     configuration.hidNum = [Neurons, Neurons, Neurons];     % Number of Hidden Nodes by layer
     configuration.activationFnc = {'tansig','tansig','tansig','logsig'}; % Activation Functions
-    configuration.eNum   = 10;                             % Max Number of Epochs to Train On
+    configuration.eNum   = 10;                              % Max Number of Epochs to Train On
     configuration.bNum   = 1;                               % Batch Size
     configuration.params = [Learning_rate 0.1 0.1 0.0001];  % Additional parameters
     
