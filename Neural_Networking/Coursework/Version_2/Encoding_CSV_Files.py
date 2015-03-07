@@ -48,7 +48,7 @@ Transformed_Target_DF = pd.DataFrame(Transformed_Target)
 Transformed_Target_DF.columns = ['y']
 
 # Concat all the Dataframes
-Finished_DF = pd.concat([Bank_Data_Numerics, Dataset_Binary_DF, Transformed_Target_DF], axis=1)
+Finished_DF = pd.concat([Dataset_Binary_DF, Transformed_Target_DF], axis=1)
 
 # Save Encoded Dataframes
-Finished_DF.to_csv('/home/dan/Documents/Dropbox/Data Science Share/City - MSc Data Science/CityUniversity2014/Neural_Networking/Coursework/Version_2/bank-additional-full-binary-transform.csv', sep=',', index=False)
+Finished_DF.to_csv('/home/dan/Documents/Dropbox/Data Science Share/City - MSc Data Science/CityUniversity2014/Neural_Networking/Coursework/Version_4/bank-additional-full-binary-transform.csv', sep=',', index=False)

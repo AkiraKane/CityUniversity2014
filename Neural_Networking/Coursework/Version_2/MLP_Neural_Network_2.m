@@ -5,11 +5,8 @@ Layer_1 = 100;                                               % Number of Neurons
 Layer_2 = 100;                                                % Number of Neurons of the Second Layer
 Learning_rate = 5;                                       % Learning rate of the Neural Net
 
-Adjustment_1 = 10;
-Adjustment_2 = 10;
-
-Parameters = [Layer_1 Layer_2 Learning_rate Adjustment_1 Adjustment_2];               % Learning Rate of the Algorithm
+Parameters = [Layer_1 Layer_2 Learning_rate];               % Learning Rate of the Algorithm
 
 % Results = fminsearch(@Cross_Validation, Parameters)         % Minimisation Function
 
-Results = Cross_Validation( Parameters)         % Minimisation Function
+Results = Cross_Validation( Parameters );        % Minimisation Function
