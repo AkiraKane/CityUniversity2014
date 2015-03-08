@@ -28,7 +28,7 @@ Full_target = X(:,51);
 % Neural Network Parameters
 Reg     = [1e-5];     % Regularisation Value
 epochs  = [3000];      % Number of Epochs to Train Network with
-LR      = [0.1];   % Learning Rate value
+LR      = [0.4];   % Learning Rate value
 Mo      = [0.5];        % Momentum
 K_Folds = 2;                   % Number of K-Folds 
 % Define Stopping Criteria.....TO DO

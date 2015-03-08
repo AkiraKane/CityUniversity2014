@@ -16,7 +16,7 @@ function [net] = create_neural_network(N_inputs, N_outputs, N_Layers_N_Neurons)
     Combined = [[N_inputs], [N_Layers_N_Neurons], [N_outputs]];
     
     % Initate Neurons with a Weight in Range [a,b]
-    a = 1; b = -1;
+    a = 20; b = -20;
     
     % Iterate through and create Weight Matrix(s)
     for i = 1:length(Combined)

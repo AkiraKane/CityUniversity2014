@@ -28,10 +28,20 @@ def import_Data():
     start = time.time()    
     
     # Import the Data
-    bank_data = pd.read_csv('/home/dan/Documents/Dropbox/Data Science Share/City - MSc Data Science/CityUniversity2014/Neural_Networking/Coursework/Version_3/Original_Data/bank-additional-full.csv', sep=';')
+    #Working_DataFrame = pd.read_csv('https://raw.githubusercontent.com/EricChiang/churn/master/data/churn.csv')
+    Working_DataFrame = pd.read_table('/home/dan/Documents/Dropbox/Data Science Share/City - MSc Data Science/CityUniversity2014/Neural_Networking/Coursework/Version_3_Mashroom_Dataset/Original_Data/agaricus-lepiota.data', sep=',', header=None)      
+    
+    # Import Headers
+    Headers = ['Mushroom-Classes','cap-shape','cap-surface','cap-color','bruises?','odor','gill-attachment','gill-spacing','gill-size','gill-color','stalk-shape','stalk-root','stalk-surface-above-ring','stalk-surface-below-ring','stalk-color-above-ring','stalk-color-below-ring','veil-type','veil-color','ring-number','ring-type','spore-print-color','population','habitat']       
+    
+    # Add Columns Headers to Dataframe
+    Working_DataFrame.columns = Headers  
+        
+    # Drop Columns #11 as Others have - for Consistancy and Comparisional Value in doing so
+    del Working_DataFrame['stalk-root']
     
     # Check the Data was Imported correctly
-    bank_data.head(3)
+    Working_DataFrame.head(3)
     
     # End Stop Watch
     end = time.time()
@@ -40,23 +50,23 @@ def import_Data():
     print('Import Complete - Time to Complete: %.4f Seconds') % (end - start)   
     
     # Return Output
-    return bank_data
+    return Working_DataFrame
     
-def process_Data(bank_data):
+def process_Data(Working_DataFrame):
      # Start Clock    
     start = time.time()
     
     # Get Numberic Columns
     numerics = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
-    Bank_Data_Numerics = bank_data.select_dtypes(include=numerics)
-    numeric_col = Bank_Data_Numerics.columns
+    Working_DataFrame_Numerics = Working_DataFrame.select_dtypes(include=numerics)
+    numeric_col = Working_DataFrame_Numerics.columns
 
     # Get Categorial Columns
-    Cat_col_names = bank_data.columns - numeric_col
-    bank_data_Cat = bank_data[Cat_col_names]
+    Cat_col_names = Working_DataFrame.columns - numeric_col - ['Mushroom-Classes']
+    Working_DataFrame_Cat = Working_DataFrame[Cat_col_names]
     
     # Get a dictionary for the transformation
-    dict_DF = bank_data_Cat.T.to_dict().values()
+    dict_DF = Working_DataFrame_Cat.T.to_dict().values()
     
     # Vectorizer
     vectorizer = DV( sparse = False )
@@ -77,28 +87,28 @@ def process_Data(bank_data):
     Dataset_Binary_DF = Dataset_Binary_DF.ix[:,0:52]
 
     # Convert the Binary Yes No to binary values
-    Transformed_Target = pd.Categorical.from_array(bank_data['y']).codes
+    Transformed_Target = pd.Categorical.from_array(Working_DataFrame['Mushroom-Classes']).codes
 
     # Convert the code to a dataframe
     Transformed_Target_DF = pd.DataFrame(Transformed_Target)
 
     # Add the column Names - as it was lost in the transformation
-    Transformed_Target_DF.columns = ['y']
+    Transformed_Target_DF.columns = ['Mushroom-Classes']
     
     # Normalise the Numerical Data - Convert Pandas DF to Numpy Matrix
-    Bank_Data_Numerics = Bank_Data_Numerics.as_matrix()
+    Working_DataFrame_Numerics = Working_DataFrame_Numerics.as_matrix()
 
     # Define the Scaling Range
     minmax_scale = preprocessing.MinMaxScaler(feature_range=(0, 1), copy=True)
     
     # Transform Data and then recreate Pandas Array
-    Bank_Data_Numerics = pd.DataFrame(minmax_scale.fit_transform(Bank_Data_Numerics))
+    Working_DataFrame_Numerics = pd.DataFrame(minmax_scale.fit_transform(Working_DataFrame_Numerics))
     
     # Add Columns Names
-    Bank_Data_Numerics.columns = numeric_col
+    Working_DataFrame_Numerics.columns = numeric_col
     
     # Concat all the Dataframes
-    Finished_DF = pd.concat([Bank_Data_Numerics, Dataset_Binary_DF, Transformed_Target_DF], axis=1)
+    Finished_DF = pd.concat([Working_DataFrame_Numerics, Dataset_Binary_DF, Transformed_Target_DF], axis=1)
 
     # End Stop Watch
     end = time.time() 
@@ -114,13 +124,14 @@ def saving_Data(Finished_DF):
     start = time.time()  
     
     # Save Encoded Dataframes
-    Finished_DF.to_csv('/home/dan/Documents/Dropbox/Data Science Share/City - MSc Data Science/CityUniversity2014/Neural_Networking/Coursework/Version_3/transform.csv', sep=',', index=False)
+    Finished_DF.to_csv('/home/dan/Documents/Dropbox/Data Science Share/City - MSc Data Science/CityUniversity2014/Neural_Networking/Coursework/Version_3_Mashroom_Dataset/Transformed.csv', sep=',', index=False)
     
     # End Stop Watch
     end = time.time()
     
     # Print a Message
-    print('Saving Dataframe to CSV - Time to Complete: %.4f Seconds') % (end - start)   
+    print('Saving Dataframe to CSV - Time to Complete: %.4f Seconds') % (end - start)
+    print('Save File Name: Transformed.csv\n')
 
 # Processing Algorithm
 if __name__ == "__main__":
@@ -128,10 +139,10 @@ if __name__ == "__main__":
     start1 = time.time()
 
     # Import the Data
-    bank_data = import_Data()
+    Working_DataFrame = import_Data()
 
     # Process Data
-    Finished_DF = process_Data(bank_data)
+    Finished_DF = process_Data(Working_DataFrame)
     
     # Saving_Data as a CSV to Read into Matlab
     saving_Data(Finished_DF)

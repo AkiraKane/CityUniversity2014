@@ -7,13 +7,13 @@ function Collect_Results()
 %   OPTIMISATION USING FMINSEARCH - Medium - By Tuesday
 %   IMPORT BANKING DATA - Easy - By Monday
 %   ADD ABILITY TO ADD MULTIPLE HIDDEN LAYERS - Hard - By Wednesday - COMPLETED
-%   AMEND PYTHON SCRIPT TO CONVERT DATA - Easy - By Sunday
+%   AMEND PYTHON SCRIPT TO CONVERT DATA - Easy - By Sunday - COMPLETED
 %   ADD THE ABILITY TO USE DIFFERENT ACTIVATION FUNCs - Medium - By Tuesday
 %   ADD SMOTE Functionality - Medium - By Tuesday
 
 % Import Data - TO DO - Import Data
 
-file = 'transform';                                         % Filename to Import
+file = 'transform';                                       % Filename to Import
 X = csvread([file '.csv'],1,0);                             % Import the File into an Matrix
 Full = X(:,1:62);
 Full_target = X(:,63);
@@ -27,10 +27,10 @@ Full_target = X(:,63);
 
 % Neural Network Parameters
 Reg     = [1e-5];     % Regularisation Value
-epochs  = [300];      % Number of Epochs to Train Network with
-LR      = [0.9];   % Learning Rate value
-Mo      = [0.9];        % Momentum
-K_Folds = 4;                   % Number of K-Folds 
+epochs  = [3000];      % Number of Epochs to Train Network with
+LR      = [0.4];   % Learning Rate value
+Mo      = [0.5];        % Momentum
+K_Folds = 2;                   % Number of K-Folds 
 % Define Stopping Criteria.....TO DO
 
 % Find all combinations and 

@@ -32,7 +32,7 @@ function [net] = train_nn(net, X, Y, Reg, epochs, LR, Mo, X_target, Y_target)
     
     % Proceed with Training - Starting with Backpropagation
     for e=2:epochs
-        
+        fprintf('Epoch: %i\n', e)
         % Backpropage the Error through the Network
         net = back_propagation(net, X_target, Reg, Y_Prediction_t);
 
@@ -46,8 +46,12 @@ function [net] = train_nn(net, X, Y, Reg, epochs, LR, Mo, X_target, Y_target)
         [net, Y_Prediction_t]   = forward_propagate(X, net);
         
         % Record Cost Function Value
-        net.Cost_Function_Training(e,1) = cost_function(X_target, Y_Prediction_t);    
+        net.Cost_Function_Training(e,1) = cost_function(X_target, Y_Prediction_t);   
+        net.Weights{l}
         
+        [c,cm,ind,per] = confusion(X_target',round(Y_Prediction_t)');
+        
+        cm
     end
     
     %fprintf('Training Complete...\n')
