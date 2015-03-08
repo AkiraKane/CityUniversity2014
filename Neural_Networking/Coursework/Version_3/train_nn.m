@@ -9,7 +9,7 @@ function [net] = train_nn(net, X, Y, Reg, epochs, LR, Mo, X_target, Y_target)
     % LR    - Learning Rate of the Network
     % Mo    - Momentum of the Network - Assistance for finding the Minima
     
-    fprintf('\nTraining Neural Neural Network\n\n')
+    % fprintf('\nTraining Neural Neural Network\n\n') % Uncomment to Inspect
     
     % Delta Weights - Create Weight Changing Stroage
     for i = 1:length(net.Weights)       

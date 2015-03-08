@@ -72,7 +72,7 @@ for row_n = 1:length(Ranking_Table)    % 50 % length(Ranking_Table) % Add this i
     Ranking_Table(row_n,:) = [mean(CV_Results(:, 6)) mean(CV_Results(:, 10)) Comb(row_n,1), Comb(row_n,2), Comb(row_n,3), Comb(row_n,4)];
     
     % Completion Percentage
-    fprintf('Finding Starting Paramters: %.2f\n', 100*(row_n/length(Ranking_Table)))
+    fprintf('Finding Starting
 end
 
 % Save Ranking Matrix to Text File
