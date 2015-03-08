@@ -6,7 +6,7 @@ function Collect_Results()
 %   RANKING ALGORITHM - Medium - By Tuesday - COMPLETE including Saving of Results table
 %   OPTIMISATION USING FMINSEARCH - Medium - By Tuesday
 %   IMPORT BANKING DATA - Easy - By Monday
-%   ADD ABILITY TO ADD MULTIPLE HIDDEN LAYERS - Hard - By Wednesday
+%   ADD ABILITY TO ADD MULTIPLE HIDDEN LAYERS - Hard - By Wednesday - COMPLETED
 %   AMEND PYTHON SCRIPT TO CONVERT DATA - Easy - By Sunday
 %   ADD THE ABILITY TO USE DIFFERENT ACTIVATION FUNCs - Medium - By Tuesday
 %   ADD SMOTE Functionality - Medium - By Tuesday
