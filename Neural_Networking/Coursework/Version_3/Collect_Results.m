@@ -7,15 +7,18 @@ function Collect_Results()
 %   OPTIMISATION USING FMINSEARCH - Medium - By Tuesday
 %   IMPORT BANKING DATA - Easy - By Monday
 %   ADD ABILITY TO ADD MULTIPLE HIDDEN LAYERS - Hard - By Wednesday
-%   AMMEND PYTHON SCRIPT TO CONVERT DATA - Easy - By Sunday
+%   AMEND PYTHON SCRIPT TO CONVERT DATA - Easy - By Sunday
 %   ADD THE ABILITY TO USE DIFFERENT ACTIVATION FUNCs - Medium - By Tuesday
 
 % Import Data - TO DO - Import Data
-X = [1 0;0 1;1 1;0 0];
-Y=X;
 
-X_target = [1 1 0 0]';
-Y_target = X_target;
+% X = Training Data
+% Y = Validation Data
+X = [1 0;0 1;1 1;0 0]; Y=X;
+
+% X_target = Training Data Labels
+% Y_target = Validation Data Labels
+X_target = [1 1 0 0]'; Y_target = X_target;
 
 % Neural Network Parameters
 Reg     = [1e-5 1e-3 0.01];     % Regularisation Value
