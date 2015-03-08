@@ -140,5 +140,5 @@ if __name__ == "__main__":
     end1 = time.time()
     
     # Print a Message
-    print('Import, Process and Saving Complete - Time to Complete: %.4f Seconds') % (end1 - start1) 
+    print('Import, Process and Saving Complete - Time to Complete: %.4f Seconds') % (end1 - start1)
     

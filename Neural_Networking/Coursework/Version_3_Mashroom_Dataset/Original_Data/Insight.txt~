@@ -1,0 +1,11 @@
+mushrooms
+
+Source: UCI / mushrooms
+Preprocessing: Each nominal attribute is expaned into several binary attributes. The original attribute #12 has missing values and is not used.
+# of classes: 2
+# of data: 8124
+# of features: 112
+Files:
+mushrooms
+
+http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary.html
