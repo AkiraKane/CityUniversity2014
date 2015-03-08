@@ -1,5 +1,16 @@
 function Collect_Results()
-% Import Data
+
+% WORK OUTSTANDING - Difficulty - Estimated Delivery Date
+%   CROSS VALIDATION - Easy - By Monday
+%   SAVING JPEG FILES OF CONFUSION MATRIX - Easy - By Monday
+%   RANKING ALGORITHM - Medium - By Tuesday
+%   OPTIMISATION USING FMINSEARCH - Medium - By Tuesday
+%   IMPORT BANKING DATA - Easy - By Monday
+%   ADD ABILITY TO ADD MULTIPLE HIDDEN LAYERS - Hard - By Wednesday
+%   AMMEND PYTHON SCRIPT TO CONVERT DATA - Easy - By Sunday
+%   ADD THE ABILITY TO USE DIFFERENT ACTIVATION FUNCs - Medium - By Tuesday
+
+% Import Data - TO DO - Import Data
 X = [1 0;0 1;1 1;0 0];
 Y=X;
 
