@@ -91,6 +91,8 @@ Calculated_Rank = Calculated_Rank(d2,:);
 
 % Get a List of the Top 5 Configurations
 Top_5_Initial_Configurations = Ranking_Table(Calculated_Rank(1:5,1),:);
+%csvwrite('Top_5_Initial_Configurations.csv', Top_5_Initial_Configurations);
+
 
 % Implement Finer Tuning using an Optimisation Algorithm
 % fminsearch - http://uk.mathworks.com/help/matlab/ref/fminsearch.html
