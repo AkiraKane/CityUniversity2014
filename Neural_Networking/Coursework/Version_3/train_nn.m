@@ -8,8 +8,6 @@ function [net] = train_nn(net, X, Y, Reg, epochs, LR, Mo, X_target, Y_target)
     % epoch - Number of times the Net is trained with - Defaulted to 100
     % LR    - Learning Rate of the Network
     % Mo    - Momentum of the Network - Assistance for finding the Minima
-    % LA    - Defined as Learning acceleration in Python code
-    % LB    - Defined as Learning backup in the Python code
     
     fprintf('\nTraining Neural Neural Network\n\n')
     
@@ -50,11 +48,4 @@ function [net] = train_nn(net, X, Y, Reg, epochs, LR, Mo, X_target, Y_target)
         
     end
     
-    fprintf('Training Complete...\n')
-    
-    
-    
-    
-    
-    
-    
+    %fprintf('Training Complete...\n')
