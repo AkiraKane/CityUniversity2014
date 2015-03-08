@@ -22,7 +22,7 @@ function net = back_propagation(net, X_target, Reg)
     k = 2;
     for j=T:-1:1+1
         % Add Data to Temp Object
-        Temp.L_Delta{k} = (delta*net.Weights{j}(:,2:end)).*(net.Activation{j}(:,2:end).*(1 - net.Activation{j}(:,2:end)));
+        Temp.L_Delta{k} = (Temp.L_Delta{k-1}*net.Weights{j}(:,2:end)).*(net.Activation{j}(:,2:end).*(1 - net.Activation{j}(:,2:end)));
         k = k + 1;
     end
     
