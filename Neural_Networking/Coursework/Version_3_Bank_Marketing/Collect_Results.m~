@@ -5,7 +5,7 @@ function Collect_Results()
 %   SAVING JPEG FILES OF CONFUSION MATRIX - Easy - By Monday
 %   RANKING ALGORITHM - Medium - By Tuesday - COMPLETE including Saving of Results table
 %   OPTIMISATION USING FMINSEARCH - Medium - By Tuesday
-%   IMPORT BANKING DATA - Easy - By Monday - COMPLETE
+%   IMPORT BANKING DATA - Easy - By Monday
 %   ADD ABILITY TO ADD MULTIPLE HIDDEN LAYERS - Hard - By Wednesday - COMPLETED
 %   AMEND PYTHON SCRIPT TO CONVERT DATA - Easy - By Sunday - COMPLETED
 %   ADD THE ABILITY TO USE DIFFERENT ACTIVATION FUNCs - Medium - By Tuesday

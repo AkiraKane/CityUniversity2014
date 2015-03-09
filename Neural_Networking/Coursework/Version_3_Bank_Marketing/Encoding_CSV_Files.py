@@ -28,17 +28,7 @@ def import_Data():
     start = time.time()    
     
     # Import the Data
-    #Working_DataFrame = pd.read_csv('https://raw.githubusercontent.com/EricChiang/churn/master/data/churn.csv')
-    Working_DataFrame = pd.read_table('/home/dan/Documents/Dropbox/Data Science Share/City - MSc Data Science/CityUniversity2014/Neural_Networking/Coursework/Version_3_Mashroom_Dataset/Original_Data/agaricus-lepiota.data', sep=',', header=None)      
-    
-    # Import Headers
-    Headers = ['Mushroom-Classes','cap-shape','cap-surface','cap-color','bruises?','odor','gill-attachment','gill-spacing','gill-size','gill-color','stalk-shape','stalk-root','stalk-surface-above-ring','stalk-surface-below-ring','stalk-color-above-ring','stalk-color-below-ring','veil-type','veil-color','ring-number','ring-type','spore-print-color','population','habitat']       
-    
-    # Add Columns Headers to Dataframe
-    Working_DataFrame.columns = Headers  
-        
-    # Drop Columns #11 as Others have - for Consistancy and Comparisional Value in doing so
-    del Working_DataFrame['stalk-root']
+    Working_DataFrame = pd.read_table('/home/dan/Documents/Dropbox/Data Science Share/City - MSc Data Science/CityUniversity2014/Neural_Networking/Coursework/Version_3_Bank_Marketing/Original_Data/bank-additional-full.csv', sep=';')    
     
     # Check the Data was Imported correctly
     Working_DataFrame.head(3)
@@ -62,7 +52,7 @@ def process_Data(Working_DataFrame):
     numeric_col = Working_DataFrame_Numerics.columns
 
     # Get Categorial Columns
-    Cat_col_names = Working_DataFrame.columns - numeric_col - ['Mushroom-Classes']
+    Cat_col_names = Working_DataFrame.columns - numeric_col - ['y']
     Working_DataFrame_Cat = Working_DataFrame[Cat_col_names]
     
     # Get a dictionary for the transformation
@@ -83,17 +73,14 @@ def process_Data(Working_DataFrame):
     # Add columns Names
     Dataset_Binary_DF.columns = New_Colnames
     
-    # Drop the Last two Columns
-    Dataset_Binary_DF = Dataset_Binary_DF.ix[:,0:52]
-
     # Convert the Binary Yes No to binary values
-    Transformed_Target = pd.Categorical.from_array(Working_DataFrame['Mushroom-Classes']).codes
+    Transformed_Target = pd.Categorical.from_array(Working_DataFrame['y']).codes
 
     # Convert the code to a dataframe
     Transformed_Target_DF = pd.DataFrame(Transformed_Target)
 
     # Add the column Names - as it was lost in the transformation
-    Transformed_Target_DF.columns = ['Mushroom-Classes']
+    Transformed_Target_DF.columns = ['y']
     
     # Normalise the Numerical Data - Convert Pandas DF to Numpy Matrix
     Working_DataFrame_Numerics = Working_DataFrame_Numerics.as_matrix()
@@ -124,7 +111,7 @@ def saving_Data(Finished_DF):
     start = time.time()  
     
     # Save Encoded Dataframes
-    Finished_DF.to_csv('/home/dan/Documents/Dropbox/Data Science Share/City - MSc Data Science/CityUniversity2014/Neural_Networking/Coursework/Version_3_Mashroom_Dataset/Transformed.csv', sep=',', index=False)
+    Finished_DF.to_csv('/home/dan/Documents/Dropbox/Data Science Share/City - MSc Data Science/CityUniversity2014/Neural_Networking/Coursework/Version_3_Bank_Marketing/Transformed1.csv', sep=',', index=False)
     
     # End Stop Watch
     end = time.time()
