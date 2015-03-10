@@ -27,10 +27,10 @@ Full_target = X(:,63);
 
 % Neural Network Parameters
 Reg     = [1e-5];     % Regularisation Value
-epochs  = [3000];      % Number of Epochs to Train Network with
+epochs  = [30 50];      % Number of Epochs to Train Network with
 LR      = [0.4];   % Learning Rate value
 Mo      = [0.5];        % Momentum
-K_Folds = 2;                   % Number of K-Folds 
+K_Folds = 10;                   % Number of K-Folds 
 % Define Stopping Criteria.....TO DO
 
 % Find all combinations and 
@@ -47,7 +47,7 @@ Comb  = allcomb(Reg, epochs, LR, Mo);
 Ranking_Table = zeros(size(Comb, 1), 6); 
 
 % Loop Through all Combinations
-for row_n = 1:length(Ranking_Table)    % 50 % length(Ranking_Table) % Add this in to run throgh all combinations
+for row_n = 1:size(Ranking_Table, 1)    % 50 % length(Ranking_Table) % Add this in to run throgh all combinations
     
     % Get Indices for Cross Validation
     Indices = crossvalind('Kfold', length(Full), K_Folds);    
@@ -64,11 +64,11 @@ for row_n = 1:length(Ranking_Table)    % 50 % length(Ranking_Table) % Add this i
         % Slice and Dice the Datasets
         Y = Full(Indices == fold, 1:size(Full,2));         % Create the Validation Data
         Y_target = Full_target(Indices == fold,1);         % Create the Validation Labels
-        X = Full(Indices ~=fold, 1:size(Full,2));             % Create the Training Data
+        X = Full(Indices ~=fold, 1:size(Full,2));          % Create the Training Data
         X_target = Full_target(Indices ~=fold, 1);         % Create the Training Labels
         
         % Initiate, Train and Score Models
-        CV_Results(fold, :) = Create_And_Train(X, X_target, Y, Y_target, Comb(row_n,2), Comb(row_n,3), Comb(row_n,4), Comb(row_n,1), 0)
+        CV_Results(fold, :) = Create_And_Train(X, X_target, Y, Y_target, Comb(row_n,2), Comb(row_n,3), Comb(row_n,4), Comb(row_n,1), 0);
         
     end
     % Aggregate Folds Data - Saving...

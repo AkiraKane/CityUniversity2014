@@ -47,11 +47,7 @@ function [net] = train_nn(net, X, Y, Reg, epochs, LR, Mo, X_target, Y_target)
         
         % Record Cost Function Value
         net.Cost_Function_Training(e,1) = cost_function(X_target, Y_Prediction_t);   
-        net.Weights{l}
-        
-        [c,cm,ind,per] = confusion(X_target',round(Y_Prediction_t)');
-        
-        cm
+                
     end
     
     %fprintf('Training Complete...\n')

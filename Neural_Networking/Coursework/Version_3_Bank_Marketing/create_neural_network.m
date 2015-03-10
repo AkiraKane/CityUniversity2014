@@ -16,12 +16,19 @@ function [net] = create_neural_network(N_inputs, N_outputs, N_Layers_N_Neurons)
     Combined = [[N_inputs], [N_Layers_N_Neurons], [N_outputs]];
     
     % Initate Neurons with a Weight in Range [a,b]
-    a = 20; b = -20;
+    % a = 20; b = -20;
+    
+    sigma = sqrt(N_inputs);
+    mu = 0;
     
     % Iterate through and create Weight Matrix(s)
     for i = 1:length(Combined)
         % Ignore the Input Now
         if i > 1
-            net.Weights{i-1} = a + (b-a).*rand(Combined(:,i),Combined(:,i-1)+1);
+            % Defined Range
+            % net.Weights{i-1} = a + (b-a).*rand(Combined(:,i),Combined(:,i-1)+1);
+            
+            % Gaussian Range Initiations
+            net.Weights{i-1} = randn(Combined(:,i),Combined(:,i-1)+1) .* sigma + mu;
         end
     end
