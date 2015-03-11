@@ -120,7 +120,7 @@ def process_Data(Working_DataFrame):
 ### Run the Models, Training and Collecting the Results
 def run_cv(X,y,clf_class,**kwargs):
     # Construct a kfolds object
-    kf = KFold(len(y),n_folds=5,shuffle=True)
+    kf = KFold(len(y),n_folds=10,shuffle=True)
     y_pred = y.copy()
     # Iterate through folds
     for train_index, test_index in kf:

@@ -1,0 +1,30 @@
+Import Complete - Time to Complete: 0.1226 Seconds
+Processing Data - Time to Complete: 3.7149 Seconds
+
+Feature space holds 41188 observations and 63 features
+Unique target labels: [0 1]
+
+Testing Models (Accuracy):
+Support vector machines:
+Import Complete - Time to Complete: 0.1203 Seconds
+Processing Data - Time to Complete: 3.6390 Seconds
+
+Feature space holds 41188 observations and 63 features
+Unique target labels: [0 1]
+
+Testing Models (Accuracy):
+Support vector machines:
+89.740
+Random forest:
+90.602
+K-Nearest-neighbors:
+89.084
+Logistic Regression:
+90.988
+Gradient Boosting Classifier
+91.733
+AdaBoost Classifier
+90.968
+Testing Models - Time to Complete: 964.1307 Seconds
+
+Import, Process and Test Multiple Models - Time to Complete: 967.9093 Seconds
