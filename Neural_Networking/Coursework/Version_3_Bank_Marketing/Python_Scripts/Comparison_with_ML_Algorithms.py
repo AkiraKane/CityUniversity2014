@@ -23,6 +23,17 @@ from sklearn import preprocessing                            # Normalising the N
 import numpy as np                                           # Fast Matrix operations
 import time                                                  # Import the Time module for Timing the Process
 
+# Import Modules - For Machine Learning
+from sklearn.cross_validation import KFold
+from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier as RF
+from sklearn.neighbors import KNeighborsClassifier as KNN
+from sklearn.linear_model import LogisticRegression as LR
+from sklearn.ensemble import GradientBoostingClassifier as GBC
+from sklearn.ensemble import AdaBoostClassifier as ABC
+
+##############################################################################
+### Functions to Preprocess Data
 def import_Data():
     # Start Clock    
     start = time.time()    
@@ -43,7 +54,7 @@ def import_Data():
     return Working_DataFrame
     
 def process_Data(Working_DataFrame):
-     # Start Clock    
+    # Start Clock    
     start = time.time()
     
     # Get Numberic Columns
@@ -101,26 +112,72 @@ def process_Data(Working_DataFrame):
     end = time.time() 
 
     # Print a Message
-    print('Processing Data - Time to Complete: %.4f Seconds') % (end - start)
+    print('Processing Data - Time to Complete: %.4f Seconds\n') % (end - start)
        
     # Return Complete Dataframe
     return Finished_DF
 
-def saving_Data(Finished_DF):
+### Run the Models, Training and Collecting the Results
+def run_cv(X,y,clf_class,**kwargs):
+    # Construct a kfolds object
+    kf = KFold(len(y),n_folds=5,shuffle=True)
+    y_pred = y.copy()
+    # Iterate through folds
+    for train_index, test_index in kf:
+        X_train, X_test = X[train_index], X[test_index]
+        y_train = y[train_index]
+        # Initialize a classifier with key word arguments
+        clf = clf_class(**kwargs)
+        clf.fit(X_train,y_train)
+        y_pred[test_index] = clf.predict(X_test)
+    # Return Predicted Results
+    return y_pred
+
+# Get the Accuracy of the System
+def accuracy(y_true,y_pred):
+    # NumPy interprets True and False as 1. and 0.
+    return np.mean(y_true == y_pred)*100
+
+# Create: def Classification Metrics
+# Link: http://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics
+
+# Running the Different Machine Learning CLassifiers
+def Running_Models(Finished_DF):
      # Start Clock    
-    start = time.time()  
+    start = time.time()        
     
-    # Save Encoded Dataframes
-    Finished_DF.to_csv('/home/dan/Documents/Dropbox/Data Science Share/City - MSc Data Science/CityUniversity2014/Neural_Networking/Coursework/Version_3_Bank_Marketing/Transformed1.csv', sep=',', index=False)
+    # Split Data - Input Data and Target Data
+    y = Finished_DF['y'].as_matrix()
+    col = Finished_DF.columns - ['y']
+    X = Finished_DF[col].as_matrix()
+    
+    # Basic Metrics of the Data
+    print "Feature space holds %d observations and %d features" % X.shape
+    print "Unique target labels:", np.unique(y)
+    
+    
+    # Testing Models Sequentially
+    print "\nTesting Models (Accuracy):"
+    print "Support vector machines:"
+    print "%.3f" % accuracy(y, run_cv(X,y,SVC))
+    print "Random forest:"
+    print "%.3f" % accuracy(y, run_cv(X,y,RF))
+    print "K-Nearest-neighbors:"
+    print "%.3f" % accuracy(y, run_cv(X,y,KNN))
+    print "Logistic Regression:"
+    print "%.3f" % accuracy(y, run_cv(X,y,LR))
+    print "Gradient Boosting Classifier"
+    print "%.3f" % accuracy(y, run_cv(X,y,GBC))
+    print "AdaBoost Classifier"
+    print "%.3f" % accuracy(y, run_cv(X,y,ABC))
     
     # End Stop Watch
-    end = time.time()
-    
-    # Print a Message
-    print('Saving Dataframe to CSV - Time to Complete: %.4f Seconds') % (end - start)
-    print('Save File Name: Transformed.csv\n')
+    end = time.time() 
 
-# Processing Algorithm
+    # Print a Message
+    print('Testing Models - Time to Complete: %.4f Seconds\n') % (end - start)
+    
+# The Main Processing Algorithm
 if __name__ == "__main__":
     # Start Clock
     start1 = time.time()
@@ -131,12 +188,13 @@ if __name__ == "__main__":
     # Process Data
     Finished_DF = process_Data(Working_DataFrame)
     
-    # Saving_Data as a CSV to Read into Matlab
-    saving_Data(Finished_DF)
+    # Testing the Models Function
+    Running_Models(Finished_DF)
     
     # End Stop Watch
     end1 = time.time()
     
     # Print a Message
-    print('Import, Process and Saving Complete - Time to Complete: %.4f Seconds') % (end1 - start1)
+    print('Import, Process and Test Multiple Models - Time to Complete: %.4f Seconds') % (end1 - start1)
     
+    # End of Algorithm
