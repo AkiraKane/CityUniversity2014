@@ -32,7 +32,7 @@ function [net] = train_nn(net, X, Y, Reg, epochs, LR, Mo, X_target, Y_target)
     
     % Proceed with Training - Starting with Backpropagation
     for e=2:epochs
-        fprintf('Epoch: %i\n', e)
+        %fprintf('Epoch: %i\n', e)
         % Backpropage the Error through the Network
         net = back_propagation(net, X_target, Reg, Y_Prediction_t);
 
