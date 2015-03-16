@@ -166,32 +166,32 @@ def Running_Models(Training_DF, Testing_DF):
     print "\nTesting Models (Accuracy):"
     print "Support vector machines:" # SVC
     Acc1, Acc2 = run_cv(X_Train, y_Train, SVC, X_Test)
-    print "Average Validation Accurancy:    %.3f" % accuracy(y_Train, Acc1)
+    print "Average Validation Accuracy:    %.3f" % accuracy(y_Train, Acc1)
     print "Tesing on Unseen Dataframe:      %.3f" % accuracy(y_Test, Acc2)
 
     print "Random forest:" #RF
     Acc1, Acc2 = run_cv(X_Train, y_Train, RF, X_Test)
-    print "Average Validation Accurancy:    %.3f" % accuracy(y_Train, Acc1)
+    print "Average Validation Accuracy:    %.3f" % accuracy(y_Train, Acc1)
     print "Prediction on Testing Dataset:   %.3f" % accuracy(y_Test, Acc2)
     
     print "K-Nearest-neighbors:" # KNN
     Acc1, Acc2 = run_cv(X_Train, y_Train, KNN, X_Test)
-    print "Average Validation Accurancy:    %.3f" % accuracy(y_Train, Acc1)
+    print "Average Validation Accuracy:    %.3f" % accuracy(y_Train, Acc1)
     print "Prediction on Testing Dataset:   %.3f" % accuracy(y_Test, Acc2)
     
     print "Logistic Regression:" #LR
     Acc1, Acc2 = run_cv(X_Train, y_Train, LR, X_Test)
-    print "Average Validation Accurancy:    %.3f" % accuracy(y_Train, Acc1)
+    print "Average Validation Accuracy:    %.3f" % accuracy(y_Train, Acc1)
     print "Prediction on Testing Dataset:   %.3f" % accuracy(y_Test, Acc2)
     
     print "Gradient Boosting Classifier" # GBC
     Acc1, Acc2 = run_cv(X_Train, y_Train, GBC, X_Test)
-    print "Average Validation Accurancy:    %.3f" % accuracy(y_Train, Acc1)
+    print "Average Validation Accuracy:    %.3f" % accuracy(y_Train, Acc1)
     print "Prediction on Testing Dataset:   %.3f" % accuracy(y_Test, Acc2)
     
     print "AdaBoost Classifier" # ABC
     Acc1, Acc2 = run_cv(X_Train, y_Train, ABC, X_Test)
-    print "Average Validation Accurancy:    %.3f" % accuracy(y_Train, Acc1)
+    print "Average Validation Accuracy:    %.3f" % accuracy(y_Train, Acc1)
     print "Prediction on Testing Dataset:   %.3f" % accuracy(y_Test, Acc2)
     
     # End Stop Watch
