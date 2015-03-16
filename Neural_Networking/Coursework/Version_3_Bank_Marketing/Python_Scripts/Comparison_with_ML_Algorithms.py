@@ -14,7 +14,7 @@
 
 ############################
 
-# Import Specific Modules and Libraries
+##### Import Specific Modules and Libraries
 
 ## Preparation of the Data
 import pandas as pd                                          # Managing the Data
@@ -118,7 +118,7 @@ def process_Data(Working_DataFrame):
     return Finished_DF
 
 ### Run the Models, Training and Collecting the Results
-def run_cv(X,y,clf_class,**kwargs):
+def run_cv(X, y, clf_class, X_Test, **kwargs):
     # Construct a kfolds object
     kf = KFold(len(y),n_folds=10,shuffle=True)
     y_pred = y.copy()
@@ -130,8 +130,10 @@ def run_cv(X,y,clf_class,**kwargs):
         clf = clf_class(**kwargs)
         clf.fit(X_train,y_train)
         y_pred[test_index] = clf.predict(X_test)
+    # Test the model on the Testing Dataframe
+    y_test_pred =  clf.predict(X_Test)
     # Return Predicted Results
-    return y_pred
+    return y_pred, y_test_pred
 
 # Get the Accuracy of the System
 def accuracy(y_true,y_pred):
@@ -142,41 +144,94 @@ def accuracy(y_true,y_pred):
 # Link: http://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics
 
 # Running the Different Machine Learning CLassifiers
-def Running_Models(Finished_DF):
+def Running_Models(Training_DF, Testing_DF):
      # Start Clock    
     start = time.time()        
     
     # Split Data - Input Data and Target Data
-    y = Finished_DF['y'].as_matrix()
-    col = Finished_DF.columns - ['y']
-    X = Finished_DF[col].as_matrix()
+    # Training Data    
+    y_Train = Training_DF['y'].as_matrix()
+    col = Training_DF.columns - ['y']
+    X_Train = Training_DF[col].as_matrix()
     
+    # Testing Data
+    y_Test = Testing_DF['y'].as_matrix()
+    X_Test = Testing_DF[col].as_matrix()
+        
     # Basic Metrics of the Data
-    print "Feature space holds %d observations and %d features" % X.shape
-    print "Unique target labels:", np.unique(y)
-    
+    print "Feature space holds %d observations and %d features" % X_Train.shape
+    print "Unique target labels:", np.unique(y_Train)
     
     # Testing Models Sequentially
     print "\nTesting Models (Accuracy):"
-    print "Support vector machines:"
-    print "%.3f" % accuracy(y, run_cv(X,y,SVC))
-    print "Random forest:"
-    print "%.3f" % accuracy(y, run_cv(X,y,RF))
-    print "K-Nearest-neighbors:"
-    print "%.3f" % accuracy(y, run_cv(X,y,KNN))
-    print "Logistic Regression:"
-    print "%.3f" % accuracy(y, run_cv(X,y,LR))
-    print "Gradient Boosting Classifier"
-    print "%.3f" % accuracy(y, run_cv(X,y,GBC))
-    print "AdaBoost Classifier"
-    print "%.3f" % accuracy(y, run_cv(X,y,ABC))
+    print "Support vector machines:" # SVC
+    Acc1, Acc2 = run_cv(X_Train, y_Train, SVC, X_Test)
+    print "Average Validation Accurancy:    %.3f" % accuracy(y_Train, Acc1)
+    print "Tesing on Unseen Dataframe:      %.3f" % accuracy(y_Test, Acc2)
+
+    print "Random forest:" #RF
+    Acc1, Acc2 = run_cv(X_Train, y_Train, RF, X_Test)
+    print "Average Validation Accurancy:    %.3f" % accuracy(y_Train, Acc1)
+    print "Prediction on Testing Dataset:   %.3f" % accuracy(y_Test, Acc2)
+    
+    print "K-Nearest-neighbors:" # KNN
+    Acc1, Acc2 = run_cv(X_Train, y_Train, KNN, X_Test)
+    print "Average Validation Accurancy:    %.3f" % accuracy(y_Train, Acc1)
+    print "Prediction on Testing Dataset:   %.3f" % accuracy(y_Test, Acc2)
+    
+    print "Logistic Regression:" #LR
+    Acc1, Acc2 = run_cv(X_Train, y_Train, LR, X_Test)
+    print "Average Validation Accurancy:    %.3f" % accuracy(y_Train, Acc1)
+    print "Prediction on Testing Dataset:   %.3f" % accuracy(y_Test, Acc2)
+    
+    print "Gradient Boosting Classifier" # GBC
+    Acc1, Acc2 = run_cv(X_Train, y_Train, GBC, X_Test)
+    print "Average Validation Accurancy:    %.3f" % accuracy(y_Train, Acc1)
+    print "Prediction on Testing Dataset:   %.3f" % accuracy(y_Test, Acc2)
+    
+    print "AdaBoost Classifier" # ABC
+    Acc1, Acc2 = run_cv(X_Train, y_Train, ABC, X_Test)
+    print "Average Validation Accurancy:    %.3f" % accuracy(y_Train, Acc1)
+    print "Prediction on Testing Dataset:   %.3f" % accuracy(y_Test, Acc2)
     
     # End Stop Watch
     end = time.time() 
 
     # Print a Message
     print('Testing Models - Time to Complete: %.4f Seconds\n') % (end - start)
+ 
+# Get Random stratified split into training set and testing sets to preserve class sizes
+def stratified_Sampling(y, train_allocation=0.9):
+    # Convert inputt columns to Array
+    y=np.array(y)
+    train_inds = np.zeros(len(y),dtype=bool)
+    test_inds = np.zeros(len(y),dtype=bool)
+    values = np.unique(y)
+    # Loop through Datasets to breakout into Training and Test Indicies
+    for value in values:
+        value_inds = np.nonzero(y==value)[0]
+        np.random.shuffle(value_inds)
+        n = int(train_allocation*len(value_inds))
+        # Identification by Boolean
+        train_inds[value_inds[:n]]=True
+        test_inds[value_inds[n:]]=True
+    # Return Ind Vectors
+    return train_inds, test_inds # stratified sampling - Returning Indicies
+
+def saving_Data(DF, file_name):
+     # Start Clock    
+    start = time.time()  
     
+    # Save Encoded Dataframes
+    DF.to_csv('/home/dan/Documents/Dropbox/Data Science Share/City - MSc Data Science/CityUniversity2014/Neural_Networking/Coursework/Version_3_Bank_Marketing/' + file_name, sep=',', index=False)
+    
+    # End Stop Watch
+    end = time.time()
+    
+    # Print a Message
+    print('Saving Dataframe to CSV - Time to Complete: %.4f Seconds') % (end - start)
+    print('Save File Name: %s\n') % (file_name)
+
 # The Main Processing Algorithm
 if __name__ == "__main__":
     # Start Clock
@@ -188,13 +243,24 @@ if __name__ == "__main__":
     # Process Data
     Finished_DF = process_Data(Working_DataFrame)
     
+    # Seperate Full Dataset into Training and Testing Elements    
+    test_ind, training_ind = stratified_Sampling(Finished_DF['y'], train_allocation=0.1)
+    
+    # Create Training and Datasets withe     
+    Testing_DF  =  Finished_DF[test_ind]
+    Training_DF =  Finished_DF[training_ind]
+    
     # Testing the Models Function
-    Running_Models(Finished_DF)
+    Running_Models(Training_DF, Testing_DF)
+    
+    # Saving Testing and Training Dataframes
+    saving_Data(Testing_DF, 'Testing.csv')
+    saving_Data(Training_DF, 'Training.csv')
     
     # End Stop Watch
     end1 = time.time()
     
     # Print a Message
-    print('Import, Process and Test Multiple Models - Time to Complete: %.4f Seconds') % (end1 - start1)
+    print('Import, Pre-Processing, Testing Multiple Models and Saving \nTime to Complete: %.4f Seconds') % (end1 - start1)
     
     # End of Algorithm

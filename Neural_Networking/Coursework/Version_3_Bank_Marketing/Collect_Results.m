@@ -11,10 +11,10 @@ function Collect_Results()
 %   ADD THE ABILITY TO USE DIFFERENT ACTIVATION FUNCs - Medium - By Tuesday
 %   ADD SMOTE Functionality - Medium - By Tuesday
 
-% Import Data - TO DO - Import Data
+% Import Data
 
 file = 'transform';                                       % Filename to Import
-X = csvread([file '.csv'],1,0);                             % Import the File into an Matrix
+X = csvread([file '.csv'],1,0);                           % Import the File into an Matrix
 Full = X(:,1:62);
 Full_target = X(:,63);
 
@@ -27,8 +27,8 @@ Full_target = X(:,63);
 
 % Neural Network Parameters
 Reg     = [1e-5];     % Regularisation Value
-epochs  = [30 50];      % Number of Epochs to Train Network with
-LR      = [0.4];   % Learning Rate value
+epochs  = [30 50 100 200];      % Number of Epochs to Train Network with
+LR      = [0.1 0.2 0.4];   % Learning Rate value
 Mo      = [0.5];        % Momentum
 K_Folds = 10;                   % Number of K-Folds 
 % Define Stopping Criteria.....TO DO
