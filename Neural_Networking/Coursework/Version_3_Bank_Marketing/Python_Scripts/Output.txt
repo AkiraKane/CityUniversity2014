@@ -1,0 +1,35 @@
+Import Complete - Time to Complete: 0.0774 Seconds
+Processing Data - Time to Complete: 2.3963 Seconds
+
+Feature space holds 37070 observations and 63 features
+Unique target labels: [0 1]
+
+Testing Models (Accuracy):
+Support vector machines:
+Average Validation Accurancy:    89.795
+Tesing on Unseen Dataframe:      89.704
+Random forest:
+Average Validation Accurancy:    90.777
+Prediction on Testing Dataset:   90.845
+K-Nearest-neighbors:
+Average Validation Accurancy:    89.072
+Prediction on Testing Dataset:   89.364
+Logistic Regression:
+Average Validation Accurancy:    91.030
+Prediction on Testing Dataset:   90.748
+Gradient Boosting Classifier
+Average Validation Accurancy:    91.670
+Prediction on Testing Dataset:   91.404
+AdaBoost Classifier
+Average Validation Accurancy:    90.987
+Prediction on Testing Dataset:   90.724
+Testing Models - Time to Complete: 508.0668 Seconds
+
+Saving Dataframe to CSV - Time to Complete: 0.0911 Seconds
+Save File Name: Testing.csv
+
+Saving Dataframe to CSV - Time to Complete: 0.8237 Seconds
+Save File Name: Training.csv
+
+Import, Pre-Processing, Testing Multiple Models and Saving 
+Time to Complete: 511.5115 Seconds
