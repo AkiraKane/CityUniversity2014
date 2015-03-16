@@ -18,7 +18,65 @@ X = csvread([file '.csv'],1,0);                           % Import the File into
 Full = X(:,1:63);
 Full_target = X(:,64);
 
-% ADD SMOTE IMPLEMENTATION HERE
+% Implementing Smote (synthetic minority over sampling technique)
+fprintf('\nImported Dataset Overview by Target Class\n')
+Pre_Ammendment = tabulate(Full_target);
+tabulate(Full_target)
+
+% Current Directory
+folder = cd;
+
+% Adding necessary files to the java path
+javaaddpath([folder '/Java_Extensions/weka.jar']);
+javaaddpath([folder '/Java_Extensions/smote.jar']);
+
+smote = 1; % SMOTE oversampling ELSE WILL BE USING AN RBM
+
+% Setting SMOTE/RBM up
+if(smote),
+    data = [Full , Full_target];
+    
+    data2arff(data, file);
+    
+    filter = javaObjectEDT('weka.filters.supervised.instance.SMOTE');
+    
+    fileReader = javaObjectEDT('java.io.FileReader',[file '.arff']);
+    buffReader = javaObjectEDT('java.io.BufferedReader', fileReader);
+    arffReader = javaObjectEDT('weka.core.converters.ArffLoader$ArffReader', buffReader);
+    
+    instances = arffReader.getData();
+    instances.setClassIndex(size(data, 2)-1);
+    
+    paramFilter = java.lang.String('-C 0 -K 5 -P 100.0 -S 123');
+    paramFilter = paramFilter.split(' ');
+    
+    filter.setOptions(paramFilter);
+    filter.setInputFormat(instances);
+    result = filter.useFilter(instances, filter);
+    
+    filteredData = zeros(result.numAttributes(),result.numInstances());
+    for i = 1:result.numAttributes(),
+        filteredData(i,:) = result.attributeToDoubleArray(i-1);
+    end;
+    
+    % Get the Target Data
+    Full_target = (filteredData(size(filteredData, 1),:)*2)-1;
+    Full_target = Full_target'; 
+    Full_target( Full_target < 0 )= 0;
+    fprintf('\nPost SMOTE Result\n')
+    tabulate(Full_target)
+    Post_Ammendment = tabulate(Full_target);
+    
+    % Get the Input Data
+    Full = filteredData;
+    Full(size(filteredData, 1),:) = [];
+    Full = Full';
+    
+    % Display Change in Class Sizes
+    fprintf('Change in Class Sizes: %i \n', (Post_Ammendment(:,2) - Pre_Ammendment(:,2)))
+else
+    fprintf('Generating synthetic Data using a Restricted Boltzmann Machine\n')
+end;
 
 
 % Neural Network Parameters
