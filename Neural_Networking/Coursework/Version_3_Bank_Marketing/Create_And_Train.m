@@ -1,11 +1,11 @@
-function Result_Line = Create_And_Train(X, X_target, Y, Y_target, epochs, LR, Mo, Reg, Show_Config)
+function Result_Line = Create_And_Train(X, X_target, Y, Y_target, epochs, LR, Mo, Reg, Hidden_Neurons, Show_Config)
    
     % Get characteristics
     N_inputs = size(X, 2);
     N_outputs = size(X_target, 2);
     
     % Define the Number of Hidden Neurons
-    N_Layers_N_Neurons = [30]; % Can be a row Vector
+    N_Layers_N_Neurons = [Hidden_Neurons]; % Can be a row Vector
     
     % Create the Neural Network
     net = create_neural_network(N_inputs, N_outputs, N_Layers_N_Neurons);

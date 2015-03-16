@@ -18,9 +18,6 @@ X = csvread([file '.csv'],1,0);                           % Import the File into
 Full = X(:,1:63);
 Full_target = X(:,64);
 
-% ADD SMOTE IMPLEMENTATION HERE
-
-
 % Neural Network Parameters
 Reg         = [1e-5];                   % Regularisation Value
 epochs      = [50 100 200 500];         % Number of Epochs to Train Network with
@@ -31,7 +28,7 @@ K_Folds = 10;                           % Number of K-Folds
 % Define Stopping Criteria.....TO DO
 
 % Find all combinations and 
-Comb  = allcomb(Reg, epochs, LR, Mo, Hidden_N);
+Comb  = allcomb(Reg, epochs, LR, Mo);
 
 % Results Table for Ranking - 6 Columns
 %    Store Cost Of Validation
@@ -41,12 +38,11 @@ Comb  = allcomb(Reg, epochs, LR, Mo, Hidden_N);
 %    Learning Rate
 %    Momentum
 %    No. Hidden Neurons
-Ranking_Table = zeros(size(Comb, 1), 9); 
+Ranking_Table = zeros(size(Comb, 1), 7); 
 
 % Get Indices for Cross Validation
 % Indc creation is outside of the main Loops to ensure that there alleast
-% the data is used for Training and Validation is consistant accross each
-% model
+% the data is used for Training and Validation
 Indices = crossvalind('Kfold', length(Full), K_Folds);
 
 % Loop Through all Combinations
@@ -64,25 +60,36 @@ for row_n = 1:size(Ranking_Table, 1)    % 50 % length(Ranking_Table) % Add this 
         X_target = Full_target(Indices ~=fold, 1);         % Create the Training Labels
         
         % Initiate, Train and Score Models
-        CV_Results(fold, :) = Create_And_Train(X, X_target, Y, Y_target, Comb(row_n,2), Comb(row_n,3), Comb(row_n,4), Comb(row_n,1), Comb(row_n, 5), 0);
+        CV_Results(fold, :) = Create_And_Train(X, X_target, Y, Y_target, Comb(row_n,2), Comb(row_n,3), Comb(row_n,4), Comb(row_n,1), 0);
         
     end
     % Aggregate Folds Data - Saving...
     %   Accuracy of Validation
     %   Cost Functions of Validation
     %   + Initial Setup
-    Ranking_Table(row_n,:) = [mean(CV_Results(:, 6)) std(CV_Results(:, 6)) mean(CV_Results(:, 10)) std(CV_Results(:, 10)) Comb(row_n,1) Comb(row_n,2) Comb(row_n,3) Comb(row_n,4) Comb(row_n,5)];
+    Ranking_Table(row_n,:) = [mean(CV_Results(:, 6)) mean(CV_Results(:, 10)) Comb(row_n,1), Comb(row_n,2), Comb(row_n,3), Comb(row_n,4)];
     
     % Completion Percentage
     fprintf('Finding Starting Paramters: %.2f\n', 100*(row_n/length(Ranking_Table)))
 end
 
 % Save Ranking Matrix to Text File
-csvwrite('Ranking_Matrix.csv',Ranking_Table)
+%csvwrite('Ranking_Matrix.csv',Ranking_Table)
 
 % Creating a Basic Ranked Table
 % Rank Each Row by its Cost Function (Error of the Validation Set)
 % AND the Accuracy of the Validation Result
+
+% [Index, Rank Accuracy, Rank Cost Function, Score]
+Calculated_Rank = [ [1:size(Ranking_Table, 1)]' tiedrank(Ranking_Table(:,1)) tiedrank(Ranking_Table(:,2)) [tiedrank(Ranking_Table(:,1))+tiedrank(Ranking_Table(:,2))] ];
+
+% Sort Matrix and Get Top 5 Results
+[d1,d2] = sort(Calculated_Rank(:,4));
+Calculated_Rank = Calculated_Rank(d2,:);
+
+% Get a List of the Top 5 Configurations
+Top_5_Initial_Configurations = Ranking_Table(Calculated_Rank(1:5,1),:);
+%csvwrite('Top_5_Initial_Configurations.csv', Top_5_Initial_Configurations);
 
 % Implement Finer Tuning using an Optimisation Algorithm
 % fminsearch - http://uk.mathworks.com/help/matlab/ref/fminsearch.html
