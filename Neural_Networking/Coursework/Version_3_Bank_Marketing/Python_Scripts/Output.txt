@@ -6,22 +6,22 @@ Unique target labels: [0 1]
 
 Testing Models (Accuracy):
 Support vector machines:
-Average Validation Accurancy:    89.795
+Average Validation Accuracy:     89.795
 Tesing on Unseen Dataframe:      89.704
 Random forest:
-Average Validation Accurancy:    90.777
+Average Validation Accuracy:     90.777
 Prediction on Testing Dataset:   90.845
 K-Nearest-neighbors:
-Average Validation Accurancy:    89.072
+Average Validation Accuracy:     89.072
 Prediction on Testing Dataset:   89.364
 Logistic Regression:
-Average Validation Accurancy:    91.030
+Average Validation Accuracy:     91.030
 Prediction on Testing Dataset:   90.748
 Gradient Boosting Classifier
-Average Validation Accurancy:    91.670
+Average Validation Accuracy:     91.670
 Prediction on Testing Dataset:   91.404
 AdaBoost Classifier
-Average Validation Accurancy:    90.987
+Average Validation Accuracy:     90.987
 Prediction on Testing Dataset:   90.724
 Testing Models - Time to Complete: 508.0668 Seconds
 
