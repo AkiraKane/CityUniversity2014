@@ -36,7 +36,7 @@ smote = 1; % SMOTE oversampling ELSE WILL BE USING AN RBM
 if(smote),
     data = [Full , Full_target];
     
-    data2arff(data, file);
+    %data2arff(data, file);
     
     filter = javaObjectEDT('weka.filters.supervised.instance.SMOTE');
     
