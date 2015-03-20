@@ -80,16 +80,16 @@ end;
 
 
 % Neural Network Parameters
-Reg         = [1e-5];                   % Regularisation Value
-epochs      = [50 100 200 500];         % Number of Epochs to Train Network with
-LR          = [0.1 0.3 0.5 0.7 0.9];    % Learning Rate value
-Mo          = [0.5];                    % Momentum
-Hidden_N    = [10 20 40 80];            % Number of Hidden Neurons           
+Reg         = [1e-5 0.1];                   % Regularisation Value
+epochs      = [100 150];         % Number of Epochs to Train Network with
+LR          = [0.1 0.3 0.5];    % Learning Rate value
+Mo          = [0.1];                    % Momentum
+Hidden_N    = [20 40 80];            % Number of Hidden Neurons           
 K_Folds = 10;                           % Number of K-Folds 
 % Define Stopping Criteria.....TO DO
 
 % Find all combinations and 
-Comb  = allcomb(Reg, epochs, LR, Mo, Hidden_N);
+Comb  = allcomb(Reg, epochs, LR, Mo, Hidden_N)
 
 % Results Table for Ranking - 6 Columns
 %    Store Cost Of Validation
@@ -131,12 +131,13 @@ for row_n = 1:size(Ranking_Table, 1)    % 50 % length(Ranking_Table) % Add this 
     %   + Initial Setup
     Ranking_Table(row_n,:) = [mean(CV_Results(:, 6)) std(CV_Results(:, 6)) mean(CV_Results(:, 10)) std(CV_Results(:, 10)) Comb(row_n,1) Comb(row_n,2) Comb(row_n,3) Comb(row_n,4) Comb(row_n,5)];
     
+    % Save Ranking Matrix to Text File
+    csvwrite('Ranking_Matrix.csv',Ranking_Table)
+
     % Completion Percentage
     fprintf('Finding Starting Paramters: %.2f\n', 100*(row_n/length(Ranking_Table)))
 end
 
-% Save Ranking Matrix to Text File
-csvwrite('Ranking_Matrix.csv',Ranking_Table)
 
 % Creating a Basic Ranked Table
 % Rank Each Row by its Cost Function (Error of the Validation Set)
