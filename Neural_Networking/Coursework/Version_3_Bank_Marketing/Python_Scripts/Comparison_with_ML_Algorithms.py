@@ -619,33 +619,41 @@ def get_RBM_Data(Training_DF):
 if __name__ == "__main__":
     # Start Clock
     start1 = time.time()
-    # Import the Data
-    Working_DataFrame = import_Data()
-    # Process Data
-    Finished_DF = process_Data(Working_DataFrame)
-    # Seperate Full Dataset into Training and Testing Elements    
-    test_ind, training_ind = stratified_Sampling(Finished_DF['y'], train_allocation=0.1)
-    # Create Training and Datasets withe     
-    Testing_DF  =  Finished_DF[test_ind]
-    Training_DF =  Finished_DF[training_ind]
-    # Testing the Models Function - Machine Learning Results
-    #Running_ML_Models(Training_DF, Testing_DF) 
-    # Grid Search the Neural Network
-    #Averaged_Results = grid_search_nn(Training_DF, 'Non_Boosted')
-    # Get the SMOTE Boosted Adjusted Array
-    #SMOTE_Boosted = get_SMOTE(Training_DF)
-    # Grid Search the Neural Network - SMOTE BOOSTED
-    #Averaged_Results_SMOTE = grid_search_nn(SMOTE_Boosted, 'SMOTE')   
-    # Grid Search the Neural Network - RBM BOOSTED
-    RBM_Boosted = get_RBM_Data(Training_DF)
-    # Grid Search the Neural Network - RBM BOOSTED
-    Averaged_Results_RBM = grid_search_nn(RBM_Boosted, 'RBM')   
-    # Saving Testing and Training Dataframes - Testing Data frame Required for Evaulation Later
-    saving_Data(Testing_DF, 'Testing.csv')
-    saving_Data(Training_DF, 'Training.csv')
-    #saving_Data(SMOTE_Boosted, 'SMOTE_Boosted.csv')
-    saving_Data(RBM_Boosted, 'RBM_Boosted.csv')   
-    # End Stop Watch
-    end1 = time.time()    
-    # Print a Message
-    print('Import, Pre-Processing, Testing ML Models, Training 3 Neural Network Models (Non Boosted, SMOTE and RBM)\nWhere Boosting is of the Weak Class\nTime to Complete: %.4f Seconds' % (end1 - start1))
+    # Differentiate the Algorithm between Training and Testing Modes    
+    testing = 'Yes'
+    # Switch between modes
+    if testing != 'Yes':
+        print('\nTraining Mode - Finding the Optimal Model')
+        # Import the Data
+        Working_DataFrame = import_Data()
+        # Process Data
+        Finished_DF = process_Data(Working_DataFrame)
+        # Seperate Full Dataset into Training and Testing Elements    
+        test_ind, training_ind = stratified_Sampling(Finished_DF['y'], train_allocation=0.1)
+        # Create Training and Datasets withe     
+        Testing_DF  =  Finished_DF[test_ind]
+        Training_DF =  Finished_DF[training_ind]
+        # Testing the Models Function - Machine Learning Results
+        Running_ML_Models(Training_DF, Testing_DF) 
+        # Grid Search the Neural Network
+        Averaged_Results = grid_search_nn(Training_DF, 'Non_Boosted')
+        # Get the SMOTE Boosted Adjusted Array
+        SMOTE_Boosted = get_SMOTE(Training_DF)
+        # Grid Search the Neural Network - SMOTE BOOSTED
+        Averaged_Results_SMOTE = grid_search_nn(SMOTE_Boosted, 'SMOTE')   
+        # Grid Search the Neural Network - RBM BOOSTED
+        RBM_Boosted = get_RBM_Data(Training_DF)
+        # Grid Search the Neural Network - RBM BOOSTED
+        Averaged_Results_RBM = grid_search_nn(RBM_Boosted, 'RBM')   
+        # Saving Testing and Training Dataframes - Testing Data frame Required for Evaulation Later
+        saving_Data(Testing_DF, 'Testing.csv')
+        saving_Data(Training_DF, 'Training.csv')
+        saving_Data(SMOTE_Boosted, 'SMOTE_Boosted.csv')
+        saving_Data(RBM_Boosted, 'RBM_Boosted.csv')   
+        # End Stop Watch
+        end1 = time.time()    
+        # Print a Message
+        print('Import, Pre-Processing, Testing ML Models, Training 3 Neural Network Models (Non Boosted, SMOTE and RBM)\nWhere Boosting is of the Weak Class\nTime to Complete: %.4f Seconds' % (end1 - start1))
+    else:
+        print('\nTesting Mode - Evaluation of Refined Models')
+    
