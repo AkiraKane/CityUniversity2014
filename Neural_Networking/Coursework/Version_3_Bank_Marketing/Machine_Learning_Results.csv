@@ -1,0 +1,7 @@
+Model,Validation/Training Avg Accuracy,Test Accuracy
+Gradient Boosting Classifier,91.57718664,91.753212987
+Support Vector Machines,91.0025360168,90.9664885867
+Random Forest,90.8001942481,90.9422049539
+AdaBoost Classifier,90.9998381266,90.6993686255
+Support Vector Machines,89.7453191604,89.776590578
+K-Nearest-neighbors,89.103221281,88.9509470617

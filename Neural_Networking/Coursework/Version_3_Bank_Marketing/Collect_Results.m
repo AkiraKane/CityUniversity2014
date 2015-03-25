@@ -30,7 +30,7 @@ folder = cd;
 javaaddpath([folder '/Java_Extensions/weka.jar']);
 javaaddpath([folder '/Java_Extensions/smote.jar']);
 
-smote = 1; % SMOTE oversampling ELSE WILL BE USING AN RBM
+smote = 0; % SMOTE oversampling ELSE WILL BE USING AN RBM
 
 % Setting SMOTE/RBM up
 if(smote),
@@ -81,15 +81,15 @@ end;
 
 % Neural Network Parameters
 Reg         = [1e-5 0.1];                   % Regularisation Value
-epochs      = [100 150];         % Number of Epochs to Train Network with
+epochs      = [50 100];         % Number of Epochs to Train Network with
 LR          = [0.1 0.3 0.5];    % Learning Rate value
-Mo          = [0.1];                    % Momentum
-Hidden_N    = [20 40 80];            % Number of Hidden Neurons           
+Mo          = [0.3];                    % Momentum
+Hidden_N    = [[100,50,10]];            % Number of Hidden Neurons           
 K_Folds = 10;                           % Number of K-Folds 
 % Define Stopping Criteria.....TO DO
 
 % Find all combinations and 
-Comb  = allcomb(Reg, epochs, LR, Mo, Hidden_N)
+Comb  = allcomb(Reg, epochs, LR, Mo, Hidden_N);
 
 % Results Table for Ranking - 6 Columns
 %    Store Cost Of Validation

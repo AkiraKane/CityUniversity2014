@@ -45,6 +45,12 @@ function [net] = train_nn(net, X, Y, Reg, epochs, LR, Mo, X_target, Y_target)
         % Update Units
         [net, Y_Prediction_t]   = forward_propagate(X, net);
         
+        % Calculate confusion matrix - Validation 
+        [c,cm,ind,per] = confusion(Y_target',round(Y_Prediction_v)');
+     
+        % Calculating Results - Validation
+        cm
+        
         % Record Cost Function Value
         net.Cost_Function_Training(e,1) = cost_function(X_target, Y_Prediction_t);   
                 
