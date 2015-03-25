@@ -21,8 +21,6 @@ from __future__ import print_function
 # Test 3: Accuracy, F1 Score, Log Loss of a boosted Neual Network - Using SMOTE
 # Test 4: Accuracy, F1 Score, Log Loss of a boosted Neual Network - Using a Restricted Boltzmann Machine
 
-# TO DO: Add Momentum and Regularisation into Neural Network Script
-
 # Saves the Data into a CSV incrementally
 # Also prints Statements to Console for tracking progress
 
@@ -62,6 +60,9 @@ from sklearn.grid_search import ParameterGrid                # Grid Search
 from sklearn.metrics import f1_score, accuracy_score, log_loss
 from random import choice
 from sklearn.neighbors import NearestNeighbors
+
+# Plotting Results
+import matplotlib.pyplot as plt
 
 ##############################################################################
 ### Functions to Preprocess Data
@@ -729,10 +730,21 @@ if __name__ == "__main__":
                                       recall_score(Testing_DF_Targets, y_Pred_Val), 
                                       roc_auc_score(Testing_DF_Targets, y_Pred_Val), 
                                       cm[0,0], cm[1,1], cm[0,1], cm[1,0]]
-            import pylab as pl
-            fpr, tpr, thresholds = roc_curve(y_test, probas_[:, 1])
-            roc_auc = auc(fpr, tpr)
-            print "Area under the ROC curve : %f" % roc_auc            
+            
+            # Plot of a ROC curve for a specific class
+            plt.figure()
+            plt.plot(fpr, tpr, label='ROC curve (area = %0.2f)' % roc_auc)
+            plt.plot([0, 1], [0, 1], 'k--')
+            plt.xlim([0.0, 1.0])
+            plt.ylim([0.0, 1.05])
+            plt.xlabel('False Positive Rate')
+            plt.ylabel('True Positive Rate')
+            plt.title('Receiver operating characteristic example')
+            plt.legend(loc="lower right")
+            plt.show()
+
+            # This is the AUC
+            auc = np.trapz(y,x)
             
             i += 1
             
