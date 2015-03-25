@@ -57,7 +57,7 @@ from sklearn.ensemble import AdaBoostClassifier as ABC       # AdaBoost Classifi
 
 # Import Modules - For Neural Networking
 from sklearn.grid_search import ParameterGrid                # Grid Search
-from sklearn.metrics import f1_score, accuracy_score, log_loss
+from sklearn.metrics import f1_score, accuracy_score, log_loss, auc_score, classification_report, confusion_matrix, fbeta_score, precision_score, recall_score, roc_auc_score, roc_curve, auc
 from random import choice
 from sklearn.neighbors import NearestNeighbors
 
@@ -662,6 +662,146 @@ def training_mode():
     print('Import, Pre-Processing, Testing ML Models, Training 3 Neural Network Models (Non Boosted, SMOTE and RBM)\nWhere Boosting is of the Weak Class\nTime to Complete: %.4f Seconds' % (end1 - start1))
     return Averaged_Results, Averaged_Results_SMOTE, Averaged_Results_RBM
 
+def make_save_roc_plot(i, Testing_DF_Targets, y_Pred_Val):   
+    # Get Statistics
+    fpr, tpr, thresholds = roc_curve(Testing_DF_Targets, y_Pred_Val)
+    roc_auc = roc_auc_score(Testing_DF_Targets, np.round(y_Pred_Val))
+    # Plot of a ROC curve for a specific class
+    plt.figure()
+    plt.plot(fpr, tpr, color='g', linewidth=2.0, label='ROC curve (area = %0.4f)' % roc_auc)
+    plt.plot([0, 1], [0, 1], 'k--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Receiver Operating Characteristic')
+    plt.legend(loc="lower right")
+    # Save Figure
+    plt.savefig('ROC_Plot_Model_' + str(i) + '.png', dpi=150)
+
+def getConfusionMatrixPlot(true_labels, predicted_labels, i):
+    # Compute confusion matrix
+    cm = confusion_matrix(true_labels, predicted_labels)
+    # create figure
+    fig = plt.figure()
+    plt.clf()
+    ax = fig.add_subplot(111)
+    ax.set_aspect(1)
+    res = ax.imshow(cm, cmap=plt.cm.binary,
+                    interpolation='nearest', vmin=cm.min(), vmax=cm.max())
+    # Add a color to the Right hand side
+    plt.colorbar(res)
+    # Annotate Confustion Matrix
+    width = len(cm)
+    height = len(cm[0])
+    # Add nuerical Labels
+    for x in xrange(width):
+        for y in xrange(height):
+            ax.annotate(str(cm[x][y]), xy=(y, x), horizontalalignment='center',
+                        verticalalignment='center', color=getFontColor(cm[x][y]))
+    # Add axis labels
+    alphabet = [0,1]
+    plt.xticks(range(width), alphabet[:width])
+    plt.yticks(range(height), alphabet[:height])
+    # Axis labels and title
+    plt.xlabel('Prediction')
+    plt.ylabel('True Labels')
+    plt.title('Confusion Matrix Plot')
+    plt.savefig('Confustion_Model_' + str(i) + '.png', dpi=150)
+
+# Due to the class inbalance the needs to different color plots
+def getFontColor(value):
+    if value < 500:
+        return "black"
+    else:
+        return "white"
+
+# Function collects, trains and tests the "Best" Neural Network Models
+def testing_mode_results(Collecting_results, i, Results, Training_DF, Training_DF_Targets, Testing_DF, Testing_DF_Targets):
+    # Loop through array    
+    for val in Results.as_matrix():
+            # Create Network
+            nn = NeuralNetwork([Training_DF.shape[1], int(val[3]), 1], 'tanh')
+            # Training Network on Dataset
+            nn.fit(Training_DF, Training_DF_Targets, np.float(val[4]), int(val[5]))
+            # Get Prediction from the Trained net on the unseen Dataset
+            y_Pred_Val = np.zeros(shape=(Testing_DF_Targets.shape[0], 1))
+            # Testing
+            for row in np.arange(0, Testing_DF_Targets.shape[0]):
+                y_Pred_Val[row] = nn.predict(Testing_DF[row])          
+            # Compute the Confusion Matrix
+            cm = confusion_matrix(Testing_DF_Targets, np.round(y_Pred_Val))
+            # Collect the Results and Add to Collecting Results Array
+            Collecting_results[i,] = [int(val[3]), np.float(val[4]), int(val[5]), 
+                                      f1_score(Testing_DF_Targets, np.round(y_Pred_Val)), 
+                                      accuracy_score(Testing_DF_Targets, np.round(y_Pred_Val)), 
+                                      log_loss(Testing_DF_Targets, np.round(y_Pred_Val)), 
+                                      precision_score(Testing_DF_Targets, np.round(y_Pred_Val)), 
+                                      recall_score(Testing_DF_Targets, np.round(y_Pred_Val)), 
+                                      roc_auc_score(Testing_DF_Targets, np.round(y_Pred_Val)), 
+                                      cm[0,0], cm[1,1], cm[0,1], cm[1,0]]
+            # Create ROC Plots
+            make_save_roc_plot(i, Testing_DF_Targets, y_Pred_Val)
+            # Create Confustion Matrix Plots
+            getConfusionMatrixPlot(Testing_DF_Targets, np.round(y_Pred_Val), i)
+            # Collecting Results iterator
+            i += 1
+    # Return Results to testing mode function
+    return Collecting_results, i
+
+def testing_mode():
+    print('\nTesting Mode - Evaluation of Optimal Grid Searched Models')
+    # Start Clock
+    start = time.time()
+    # Load Training and Testing Sets
+    Training_DF = loading_Data(file_name='Training')
+    Testing_DF = loading_Data(file_name='Testing')
+    SMOTE_Boosted = loading_Data(file_name='SMOTE_Boosted')
+    RBM_Boosted = loading_Data(file_name='RBM_Boosted')
+    # Create Targets Data Splits
+    col = Training_DF.columns - ['y']
+    Training_DF_Targets = Training_DF['y']; Training_DF = Training_DF[col]
+    SMOTE_Boosted_Targets = SMOTE_Boosted['y']; SMOTE_Boosted = SMOTE_Boosted[col]
+    RBM_Boosted_Targets = RBM_Boosted['y']; RBM_Boosted = RBM_Boosted[col]
+    Testing_DF_Targets = Testing_DF['y']; Testing_DF = Testing_DF[col].as_matrix()
+    # Load in the Results Data
+    Unboosted_Results = loading_Data(file_name='Grid_Search_Results_Non_Boosted')
+    SMOTE_Results = loading_Data(file_name='Grid_Search_Results_SMOTE')
+    RBM_Results = loading_Data(file_name='Grid_Search_Results_RBM')
+    # Get the Top 5 Models by Accuracy from Each of the Results Tables
+    Unboosted_Results = Unboosted_Results.sort(columns=['Avg Accuracy'], ascending=False).head(5)
+    SMOTE_Results = SMOTE_Results.sort(columns=['Avg Accuracy'], ascending=False).head(5)
+    RBM_Results = RBM_Results.sort(columns=['Avg Accuracy'], ascending=False).head(5)
+    # Retrain once and get Testing metrics        
+    """ The following section will take the top 5 models of each of the 
+    three neural networks. The metrics that will be stored in the section 
+    are:
+    - Accuracy - for both the model and class
+    - F1 Score - for both the model and class
+    - Precision - for both the model and class
+    - Recall - for both the model and class
+    - ROC AUC Scores and Arrays - for both the model and class
+    """
+    # Store Results in Array       
+    Collecting_results = np.zeros(shape=(15,13)); i=0
+    # Dataframe
+    col_names = ['No_Neurons', 'Learning_Rate','Epochs','F1_Score','Accuracy','Log_Loss','Precision_Score','Recall_Score','ROC_AUC_Score','TP','TN','FP','FN']
+    # Train Once using the Parameters - Unboosted
+    Collecting_results, i = testing_mode_results(Collecting_results, i, Unboosted_Results, Training_DF, Training_DF_Targets, Testing_DF, Testing_DF_Targets)
+    # Testing Boosted - SMOTE
+    Collecting_results, i = testing_mode_results(Collecting_results, i, SMOTE_Results, SMOTE_Boosted, SMOTE_Boosted_Targets, Testing_DF, Testing_DF_Targets)
+    # Testing Boosted - RBM
+    Collecting_results, i = testing_mode_results(Collecting_results, i, RBM_Results, RBM_Boosted, RBM_Boosted_Targets, Testing_DF, Testing_DF_Targets)
+    # Save Results to CSV for confirmation
+    Collecting_results = pd.DataFrame(Collecting_results, columns=col_names)
+    saving_Data(Collecting_results, 'Final_Test.csv')
+    # End Stop Watch
+    end = time.time()    
+    # Print a Message
+    print('Testing with the Unseen Dataset %.4f Seconds\nIncluding collection of Results\nCreating confusion matrix plots\nROC Curves' % (end - start))
+    # Return Results
+    return Collecting_results
+
 # The Main Processing Algorithm
 if __name__ == "__main__":
     # Start Clock
@@ -673,83 +813,6 @@ if __name__ == "__main__":
         # Run the training Mode of the Algorithm
         Averaged_Results, Averaged_Results_SMOTE, Averaged_Results_RBM = training_mode()
     else:
-        print('\nTesting Mode - Evaluation of Optimal Grid Searched Models')
-        # Load Training and Testing Sets
-        Training_DF = loading_Data(file_name='Training')
-        Testing_DF = loading_Data(file_name='Testing')
-        SMOTE_Boosted = loading_Data(file_name='SMOTE_Boosted')
-        RBM_Boosted = loading_Data(file_name='RBM_Boosted')
-        # Create Targets Data Splits
-        col = Training_DF.columns - ['y']
-        Training_DF_Targets = Training_DF['y']; Training_DF = Training_DF[col]
-        SMOTE_Boosted_Targets = SMOTE_Boosted['y']; SMOTE_Boosted = SMOTE_Boosted[col]
-        RBM_Boosted_Targets = RBM_Boosted['y']; RBM_Boosted = RBM_Boosted[col]
-        Testing_DF_Targets = Testing_DF['y']; Testing_DF = Testing_DF[col].as_matrix()
-        # Load in the Results Data
-        Unboosted_Results = loading_Data(file_name='Grid_Search_Results_Non_Boosted')
-        SMOTE_Results = loading_Data(file_name='Grid_Search_Results_SMOTE')
-        RBM_Results = loading_Data(file_name='Grid_Search_Results_RBM')
-        # Get the Top 5 Models by Accuracy from Each of the Results Tables
-        Unboosted_Results = Unboosted_Results.sort(columns=['Avg Accuracy'], ascending=False).head(5)
-        SMOTE_Results = SMOTE_Results.sort(columns=['Avg Accuracy'], ascending=False).head(5)
-        RBM_Results = RBM_Results.sort(columns=['Avg Accuracy'], ascending=False).head(5)
-        # Retrain once and get Testing metrics        
-        """ The following section will take the top 5 models of each of the 
-        three neural networks. The metrics that will be stored in the section 
-        are:
-        - Accuracy - for both the model and class
-        - F1 Score - for both the model and class
-        - Precision - for both the model and class
-        - Recall - for both the model and class
-        - ROC AUC Scores and Arrays - for both the model and class
-        """
-        from sklearn.metrics import f1_score, accuracy_score, log_loss, auc_score, classification_report, confusion_matrix, fbeta_score, precision_score, recall_score, roc_auc_score, roc_curve, auc
-        
-        Collecting_results = np.zeros(shape=(15,13)); i=0
-        col_names = ['No_Neurons', 'Learning_Rate','Epochs','F1_Score','Accuracy','Log_Loss','Precision_Score','Recall_Score','ROC_AUC_Score','TP','TN','FP','FN']
-        # Train Once using the Parameters - Unboosted
-        for val in Unboosted_Results.as_matrix():
-            print(val[3], val[4], val[5])
-            # Create Network
-            nn = NeuralNetwork([Training_DF.shape[1], int(val[3]), 1], 'tanh')
-            # Training Network on Dataset
-            nn.fit(Training_DF, Training_DF_Targets, np.float(val[4]), int(val[5]))
-            # Get Prediction from the Trained net on the unseen Dataset
-            y_Pred_Val = np.zeros(shape=(Testing_DF_Targets.shape[0], 1))
-            # Testing
-            for row in np.arange(0, Testing_DF_Targets.shape[0]):
-                y_Pred_Val[row] = np.round(nn.predict(Testing_DF[row]))          
-            # Compute the Confusion Matrix
-            cm = confusion_matrix(Testing_DF_Targets, y_Pred_Val)
-            # Collect the Results and Add to Collecting Results Array
-            Collecting_results[i,] = [int(val[3]), np.float(val[4]), int(val[5]), 
-                                      f1_score(Testing_DF_Targets, y_Pred_Val), 
-                                      accuracy_score(Testing_DF_Targets, y_Pred_Val), 
-                                      log_loss(Testing_DF_Targets, y_Pred_Val), 
-                                      precision_score(Testing_DF_Targets, y_Pred_Val), 
-                                      recall_score(Testing_DF_Targets, y_Pred_Val), 
-                                      roc_auc_score(Testing_DF_Targets, y_Pred_Val), 
-                                      cm[0,0], cm[1,1], cm[0,1], cm[1,0]]
-            
-            # Plot of a ROC curve for a specific class
-            plt.figure()
-            plt.plot(fpr, tpr, label='ROC curve (area = %0.2f)' % roc_auc)
-            plt.plot([0, 1], [0, 1], 'k--')
-            plt.xlim([0.0, 1.0])
-            plt.ylim([0.0, 1.05])
-            plt.xlabel('False Positive Rate')
-            plt.ylabel('True Positive Rate')
-            plt.title('Receiver operating characteristic example')
-            plt.legend(loc="lower right")
-            plt.show()
-
-            # This is the AUC
-            auc = np.trapz(y,x)
-            
-            i += 1
-            
-        from scikit    
-        # Testing Unboosted
-        # Testing Boosted - SMOTE
-        # Testing Boosted - RBM
-    
+        Collecting_results = testing_mode()
+    # The End!
+    print('Script Complete!')
