@@ -25,6 +25,8 @@ my_function = function() print('hello world') end
 
 -- Execute/Call Function
 my_function()
+------------------------------------------------------------------------------
+
 
 ----------------------------------------------------------------------------
 
@@ -42,7 +44,7 @@ opt = {
    learningRate = 0.05, --training learning rate
    momentum = 0.9, --momentum factor to use for training
    maxOutNorm = 1, --maximum norm allowed for output neuron weights
-   batchSize = 128, --number of examples per mini-batch
+   batchSize = 500, --number of examples per mini-batch
    maxTries = 100, --maximum number of epochs without reduction in validation error.
    maxEpoch = 10 --maximum number of epochs of training
 }
@@ -52,6 +54,8 @@ opt = {
 --[[data]]--
 
 datasource = dp.Mnist{input_preprocess = dp.Standardize()}
+
+print("feature size: ", datasource:featureSize())
 
 ------------------------------------------------------------------------------
 
