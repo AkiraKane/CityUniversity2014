@@ -43,27 +43,24 @@ def Pattern_Module_Twitter_Stream():
      # Start Stop Watch    
     t1 = time.time()
     
-    # Top Trending Tweet - Phase/Handle
-    TwitterObj = str(Twitter().trends()[0])
-
     # Create a list to Store the Data
-    List = Twitter().stream(TwitterObj)
+    List = Twitter().stream('#Fail')
 
     # For 10 Instances
     for second in range(10):
         # Get Stream Data
-        value = List.update(bytes=1024).text
+        value = List.update(bytes=1024)
         # Add Value to List if not Empty
-        if value == '':
+        if len(value) == 0:
             # Pass
             continue
         else:
             # Storing Results
             List.append()
             # Print Tweet
-            print('Tweet: %s') % (value)
+            print('Tweet: %s') % (value.text)
             # Get Sentiment
-            print('Sentiment Analysis of Tweet: %s') % (TextBlob(str(value), 
+            print('Sentiment Analysis of Tweet: %s') % (TextBlob(str(value.text), 
                                      analyzer=NaiveBayesAnalyzer() ).sentiment[0].upper())
         # Wait 3 Seconds between queries - Do not want to get blocked
         time.sleep(3) 
@@ -82,6 +79,3 @@ if __name__ == "__main__":
     timeF1 = Pattern_Module_Twitter_Stream()
     
     print('Time to Complete: %.3f Seconds') % (timeF1)
-    
-    
-    
