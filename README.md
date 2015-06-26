@@ -1,18 +1,17 @@
 City University 2014 - MSc Data Science
 
-http://dillinger.io/
+
 ==================
-
-
 
 
 
 
 Name: Dan Dixey
 
-Email: dan.dixey@gmail.com; daniel.dixey@city.ac.uk
+Email: dan.dixey@gmail.com; dan.dixey@datagenicgroup.com
 
-Contact Number: 07825 33 2546
+Contact Number: 07471688817
+
 
 Work Completed to Date:
 ==================
