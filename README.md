@@ -1,75 +1,26 @@
-City University 2014 - MSc Data Science
+# City University 2014 - MSc Data Science  
 
+> Dan Dixey
 
-==================
+Contact Item | Detail
+------------- | -------------
+Personal Email | dan.dixey@gmail.com
+Work Email | dan.dixey@datagenicgroup.com
+Mobile Number | 07471688817
+CV (PDF) | [Click Here](https://github.com/dandxy89/CityUniversity2014/blob/master/Daniel_Dixey/Daniel_Dixey_CV.docx?raw=true)
+CV (Word) | [Click Here](https://github.com/dandxy89/CityUniversity2014/blob/master/Daniel_Dixey/Daniel_Dixey_CV.pdf)
 
+#### Contents of Github
 
+This Github contains a mixture of Data Science and Python experimention work (Torch too for Deep Learning)
 
+##### City University
 
-Name: Dan Dixey
-
-Email: dan.dixey@gmail.com; dan.dixey@datagenicgroup.com
-
-Contact Number: 07471688817
-
-
-Work Completed to Date:
-==================
-
-
-
-
-Neural Computing -  Project comparing SMOTE Boosting to a RBM Boost Dataset
-
-Script - "/Neural_Networking/Coursework/Version_3_Bank_Marketing/Python_Scripts/Comparison_with_ML_Algorithms.py"
-
-Report - In Progress (Deadline 4 April 2015)
-
-
-
-
-
-Big Data - Coursework using Apache Spark (Python) - Classifying Books from the Gutenberg Project
-
-Script - '/Big_Data/Coursework/ackf415-Local-TextPart.py'
-
-Report - '/Big_Data/Coursework/Text_Classification_ackf415.docx'
-
-
-
-
-
-Introduction to Data Science - Coursework Files
-
-Script - '/Introduction_to_Data_Science/Coursework/IMN430-CW01.py'
-
-Report - '/Introduction_to_Data_Science/Coursework/Report_ackf415.pdf'
-
-Script - '/Introduction_to_Data_Science/Coursework/IMN430-CW02.py'
-
-Report - '/Introduction_to_Data_Science/Coursework/Final_Report.pdf'
-
-
-
-
-
-
-
-Visual Analytics
-
-Lit Review - 'Visual_Analytics/Literature_review_28_Feb_2015.pdf'
-
-
-
-
-
-Experiment with Spark SQL, Python to Mysql
-
-Script - '/Spark_SQL/Spark_SQL.py'
-
-Script '/Spark_SQL/First_Python_MySQL_Script.py'
-
-
-
-
-
+Course Title | Course Item | Link to Item
+------------- | ------------- | -------------
+Neural Computing | Report | [Click Here](www.github.com)
+Neural Computing | Python Script | [Click Here](www.github.com)
+Big Data | Report | [Click Here](www.github.com)
+Big Data | Python Script | [Click Here](www.github.com)
+Intro. to Data Science | Courseworks (x2) | [Click Here](www.github.com)
+Visual Analytics | Liturature Review | [Click Here](www.github.com)
