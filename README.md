@@ -25,7 +25,7 @@ Neural Computing | Python Script | [Click Here](https://github.com/dandxy89/City
 Big Data | Report | [Click Here](https://github.com/dandxy89/CityUniversity2014/blob/master/Big_Data/Coursework/Text_Classification_ackf415.pdf)
 Big Data | Python Script | [Click Here](https://github.com/dandxy89/CityUniversity2014/blob/master/Big_Data/Coursework/ackf415-Lewes-TextFull.py)
 Intro. to Data Science | Courseworks (x2) | [Click Here](https://github.com/dandxy89/CityUniversity2014/tree/master/Introduction_to_Data_Science/Coursework)
-Visual Analytics | Liturature Review | [Click Here](https://github.com/dandxy89/CityUniversity2014/blob/master/Visual_Analytics/Literature%20Review/Literature_review_28_Feb_2015.pdf)
+Visual Analytics | Literature Review | [Click Here](https://github.com/dandxy89/CityUniversity2014/blob/master/Visual_Analytics/Literature%20Review/Literature_review_28_Feb_2015.pdf)
 Visual Analytics | Presentation | [Click Here](https://github.com/dandxy89/CityUniversity2014/blob/master/Visual_Analytics/Presentation/Visual_Analytics_Powerpoint.pdf)
 Visual Analytics | Report | [Click Here](https://github.com/dandxy89/CityUniversity2014/blob/master/Visual_Analytics/Visual_Analytics_Report_23_5_2015.docx?raw=true)
 
