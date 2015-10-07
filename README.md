@@ -16,7 +16,7 @@ CV (Word) | [Click Here](https://github.com/dandxy89/CityUniversity2014/blob/mas
 
 This Github contains a mixture of Data Science and Python experimention work (Torch too for Deep Learning)
 
-Over the course of the Summer I have since been employed by DataGenic to work initially on a News Analytics System (NAS). The NAS will be purposefull designed for the Commodity Industry to identify pertinent News and Tweets, Sentiment Analysis and Event Detection.
+Over the course of the Summer I been employed by DataGenic, as a Data Scientist, to develop a News Analytics System (NAS). The NAS will be bespoke in design, where output will be specific to the Commodity Industry. The system will be able to identify pertinent News/Tweets, Sentiment Analysis and Event Detection.
 
 ##### City University
 
