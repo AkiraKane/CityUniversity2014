@@ -1,6 +1,5 @@
-# Personal Github Items
 ## Dan Dixey
-#### City University & Personally Developed Stuff
+#### City University and Personal Code
 
 > Contact Details
 
