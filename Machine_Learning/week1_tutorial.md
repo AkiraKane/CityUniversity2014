@@ -52,10 +52,10 @@ indicates that *20%* of all drivers have smoked cannabis during the last *72* ho
 * What is the probability that a driver has smoked cannabis in the last *72* hours if they have tested
 positive?
 
-Let `A` = probability of positive test
-Let `B` = probability of smoking cannabis = `0.2`
-`p(A|~B) = 0.1`
-`p(A|B) = 0.9`
+* Let `A` = probability of positive test
+* Let `B` = probability of smoking cannabis = `0.2`
+* `p(A|~B) = 0.1`
+* `p(A|B) = 0.9`
 
 *Bayes' Theorem*: `p(Y|X) = p(X|Y)p(Y) / p(X)`
 
