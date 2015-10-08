@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-In this problem set you work with another type of infobox data, audit it, clean it, 
+In this problem set you work with another type of infobox data, audit it, clean it,
 come up with a data model, insert it into a MongoDB and then run some queries against your database.
 The set contains data about Arachnid class.
 Your task in this exercise is to parse the file, process only the fields that are listed in the
-FIELDS dictionary as keys, and return a dictionary of cleaned values. 
+FIELDS dictionary as keys, and return a dictionary of cleaned values.
 The following things should be done:
 - keys of the dictionary changed according to the mapping in FIELDS dictionary
 - trim out redundant description in parenthesis from the 'rdf-schema#label' field, like "(spider)"
@@ -38,17 +38,17 @@ import pprint
 import re
 
 DATAFILE = 'arachnid.csv'
-FIELDS ={'rdf-schema#label': 'label',
-         'URI': 'uri',
-         'rdf-schema#comment': 'description',
-         'synonym': 'synonym',
-         'name': 'name',
-         'family_label': 'family',    # \
-         'class_label': 'class',      #  \
-         'phylum_label': 'phylum',    #   \
-         'order_label': 'order',      #    classification
-         'kingdom_label': 'kingdom',  #   /
-         'genus_label': 'genus'}      #  /
+FIELDS = {'rdf-schema#label': 'label',
+          'URI': 'uri',
+          'rdf-schema#comment': 'description',
+          'synonym': 'synonym',
+          'name': 'name',
+          'family_label': 'family',    # \
+          'class_label': 'class',  # \
+          'phylum_label': 'phylum',  # \
+          'order_label': 'order',  # classification
+          'kingdom_label': 'kingdom',  # /
+          'genus_label': 'genus'}  # /
 
 
 def process_file(filename, fields):
@@ -68,7 +68,8 @@ def process_file(filename, fields):
                 if field in FIELDS:
                     new_key = FIELDS[field]
                     new_val = value
-                    if new_key in ['kingdom','family','class','phylum','order','genus']:
+                    if new_key in ['kingdom', 'family',
+                                   'class', 'phylum', 'order', 'genus']:
                         classification[new_key] = new_val
                     else:
                         arachnid[new_key] = new_val
@@ -78,13 +79,16 @@ def process_file(filename, fields):
         # additional cleaning
         for arachnid in data:
             # strip redundant text from label
-            arachnid['label'] = re.sub('\(.*?\)', '', arachnid['label']).strip()
+            arachnid['label'] = re.sub(
+                '\(.*?\)', '', arachnid['label']).strip()
             # fix 'name' if 'NULL' or contains non-alphanumeric characters
             if arachnid['name'] == 'NULL' or not arachnid['name'].isalnum():
                 arachnid['name'] = arachnid['label']
-            # if synonym is not None, convert to an array (strip '{}' and split on '|')
+            # if synonym is not None, convert to an array (strip '{}' and split
+            # on '|')
             if arachnid['synonym'] != 'NULL':
-                arachnid['synonym'] = arachnid['synonym'].replace('{','').replace('}','').split('|')
+                arachnid['synonym'] = arachnid['synonym'].replace(
+                    '{', '').replace('}', '').split('|')
             # if any value is 'NULL' change to None
             for field, value in arachnid.items():
                 if value == 'NULL':
@@ -96,11 +100,12 @@ def process_file(filename, fields):
                     continue
             # fix 'classification' whitespace and 'NULL' values
             for field, value in arachnid['classification'].items():
-                arachnid['classification'][field] = arachnid['classification'][field].strip()
+                arachnid['classification'][field] = arachnid[
+                    'classification'][field].strip()
                 if value == 'NULL':
                     arachnid['classification'][field] = None
 
-    #pprint.pprint(data)
+    # pprint.pprint(data)
     return data
 
 
@@ -119,20 +124,20 @@ def test():
 
     pprint.pprint(data[0])
     assert data[0] == {
-                        "synonym": None, 
-                        "name": "Argiope", 
-                        "classification": {
-                            "kingdom": "Animal", 
-                            "family": "Orb-weaver spider", 
-                            "order": "Spider", 
-                            "phylum": "Arthropod", 
-                            "genus": None, 
-                            "class": "Arachnid"
-                        }, 
-                        "uri": "http://dbpedia.org/resource/Argiope_(spider)", 
-                        "label": "Argiope", 
-                        "description": "The genus Argiope includes rather large and spectacular spiders that often have a strikingly coloured abdomen. These spiders are distributed throughout the world. Most countries in tropical or temperate climates host one or more species that are similar in appearance. The etymology of the name is from a Greek name meaning silver-faced."
-                    }
+        "synonym": None,
+        "name": "Argiope",
+        "classification": {
+            "kingdom": "Animal",
+            "family": "Orb-weaver spider",
+            "order": "Spider",
+            "phylum": "Arthropod",
+            "genus": None,
+            "class": "Arachnid"
+        },
+        "uri": "http://dbpedia.org/resource/Argiope_(spider)",
+        "label": "Argiope",
+        "description": "The genus Argiope includes rather large and spectacular spiders that often have a strikingly coloured abdomen. These spiders are distributed throughout the world. Most countries in tropical or temperate climates host one or more species that are similar in appearance. The etymology of the name is from a Greek name meaning silver-faced."
+    }
 
 
 if __name__ == "__main__":

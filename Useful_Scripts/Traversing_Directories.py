@@ -6,7 +6,7 @@ def getFileList(directory):
     for root, dirs, files in os.walk(directory):
         folderCount += len(dirs)
         for file in files:
-            f = os.path.join(root,file)
+            f = os.path.join(root, file)
             fileSize = fileSize + os.path.getsize(f)
             fileList.append(f)
     # Print to Check Data has been located correctly

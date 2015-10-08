@@ -27,6 +27,7 @@ datasets = {'imdb': (imdb.load_data, imdb.prepare_data)}
 SEED = 123
 numpy.random.seed(SEED)
 
+
 def numpy_floatX(data):
     return numpy.asarray(data, dtype=config.floatX)
 
@@ -395,7 +396,9 @@ def train_lstm(
     decay_c=0.,  # Weight decay for the classifier applied to the U weights.
     lrate=0.0001,  # Learning rate for sgd (not used for adadelta and rmsprop)
     n_words=10000,  # Vocabulary size
-    optimizer=adadelta,  # sgd, adadelta and rmsprop available, sgd very hard to use, not recommanded (probably need momentum and decaying learning rate).
+    # sgd, adadelta and rmsprop available, sgd very hard to use, not
+    # recommanded (probably need momentum and decaying learning rate).
+    optimizer=adadelta,
     encoder='lstm',  # TODO: can be removed must be lstm.
     saveto='lstm_model.npz',  # The best model will be saved there
     validFreq=370,  # Compute the validation error after this number of update.

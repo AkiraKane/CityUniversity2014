@@ -1,5 +1,5 @@
 # Import Spark API
-from pyspark import SparkContext 
+from pyspark import SparkContext
 from pyspark.conf import SparkConf
 # Import OS for Traversing Directories
 import os
@@ -20,15 +20,17 @@ from xml.dom import minidom
 ##########################################################
 
 # Function to Obtain a List of Files
+
+
 def getFileList(directory):
     fileList = []
     fileSize = 0
     folderCount = 0
-    # For Loop to Cycle Through Directories 
+    # For Loop to Cycle Through Directories
     for root, dirs, files in os.walk(directory):
         folderCount += len(dirs)
         for file in files:
-            f = os.path.join(root,file)
+            f = os.path.join(root, file)
             fileSize = fileSize + os.path.getsize(f)
             fileList.append(f)
     # Print to Check Data has been located correctly
@@ -40,20 +42,26 @@ def getFileList(directory):
     print('################################################\n')
     return fileList
 # Define function to extract XML
+
+
 def xmlExtract(files, table):
-    for direc in np.arange(0,len(files)):
+    for direc in np.arange(0, len(files)):
         # Read and Convert XML to String
-        file = open(files[direc],'r')
+        file = open(files[direc], 'r')
         data = file.read()
         file.close()
         # Ebook Number Retrieval
         ebook = minidom.parseString(data)
         ebook = ebook.getElementsByTagName('pgterms:ebook')[0].toxml()
-        ebook = ebook.replace('<pgterms:ebook>','').replace('</pgterms:ebook>','')
+        ebook = ebook.replace(
+            '<pgterms:ebook>',
+            '').replace(
+            '</pgterms:ebook>',
+            '')
         ebook = ebook[:ebook.find('>\n')]
-        ebook = (re.split('/',re.split('=',ebook)[1])[1]).replace('"','')
+        ebook = (re.split('/', re.split('=', ebook)[1])[1]).replace('"', '')
         # Read XML into an Object
-        xmldoc = minidom.parse(files[direc])    
+        xmldoc = minidom.parse(files[direc])
         # Navigate onto the Tree to Find the Ebook No.
         pgterms_ebook = xmldoc.getElementsByTagName('pgterms:ebook')[0]
         # Navigate to the Subjects Tree
@@ -61,7 +69,7 @@ def xmlExtract(files, table):
         # Print the Subjects values
         for lines in subjects:
             values = lines.getElementsByTagName('rdf:value')[0].firstChild.data
-            table.insert(direc,[ebook,values])
+            table.insert(direc, [ebook, values])
         # Return Table of Ebooks and Subjects
     return table
 
@@ -78,12 +86,12 @@ if __name__ == "__main__":
     # Start Spark
     config = SparkConf().setMaster("local[*]")
     sc = SparkContext(conf=config, appName="ACKF415-Coursework-1")
-    
+
     data = sc.parallelize(table) \
-                .map(lambda x: (x[1],1)) \
-                .reduceByKey(add) \
-                .sortBy(lambda x: x[1], ascending=False)
-    
+        .map(lambda x: (x[1], 1)) \
+        .reduceByKey(add) \
+        .sortBy(lambda x: x[1], ascending=False)
+
     for i in data.take(10):
         print i
     # Disconnect

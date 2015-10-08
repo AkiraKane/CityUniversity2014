@@ -10,14 +10,17 @@ you have to install MongoDB (see Instructor comments for link to installation in
 and uncomment the get_db function.
 """
 
+
 def add_city(db):
-    # Changes to this function will be reflected in the output. 
+    # Changes to this function will be reflected in the output.
     # All other functions are for local use only.
     # Try changing the name of the city to be inserted
-    db.cities.insert({"name" : "Chicago"})
-    
+    db.cities.insert({"name": "Chicago"})
+
+
 def get_city(db):
     return db.cities.find_one()
+
 
 def get_db():
     # For local use
@@ -29,6 +32,6 @@ def get_db():
 
 if __name__ == "__main__":
     # For local use
-    db = get_db() # uncomment this line if you want to run this locally
+    db = get_db()  # uncomment this line if you want to run this locally
     add_city(db)
     print get_city(db)

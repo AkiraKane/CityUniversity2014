@@ -6,7 +6,7 @@ This exercise shows some important concepts that you should be aware about:
 - using authentication with web APIs
 - using offset when accessing web APIs
 
-To run this code locally you have to register at the NYTimes developer site 
+To run this code locally you have to register at the NYTimes developer site
 and get your own API key. You will be able to complete this exercise in our UI without doing so,
 as we have provided a sample result.
 
@@ -24,8 +24,8 @@ import requests
 
 URL_MAIN = "http://api.nytimes.com/svc/"
 URL_POPULAR = URL_MAIN + "mostpopular/v2/"
-API_KEY = { "popular": "982d258593d92d60e7df9effea45ab85:8:72034825",
-            "article": "ef3294f40886b4f71cf6e28646f5fc33:9:72034825"}
+API_KEY = {"popular": "982d258593d92d60e7df9effea45ab85:8:72034825",
+           "article": "ef3294f40886b4f71cf6e28646f5fc33:9:72034825"}
 
 
 def get_from_file(kind, period):
@@ -36,10 +36,10 @@ def get_from_file(kind, period):
 
 def article_overview(kind, period):
     data = get_from_file(kind, period)
-    #data is a list of dictionaries
-    #pretty_print(data)
+    # data is a list of dictionaries
+    # pretty_print(data)
     titles = []
-    urls =[]
+    urls = []
     #- return a list of dictionaries, where the dictionary key is "section" and value is "title"
     for each_article in data:
         for (key, value) in each_article.items():
@@ -47,17 +47,20 @@ def article_overview(kind, period):
                 titles.append({each_article['section']: each_article['title']})
 
     #- return a list of URLs for all media entries with "format": "Standard Thumbnail"
-    #data is a list of dictionaries. Each dictionary is one article and its data
+    # data is a list of dictionaries. Each dictionary is one article and its
+    # data
     for each_article in data:
-        #each_article['media'] is a list of dictionaries. each dict is a list medias
+        # each_article['media'] is a list of dictionaries. each dict is a list
+        # medias
         for each_media in each_article['media']:
-            #each_media is a dictionary of medias. each dict is a medias data
-            #each media-metadata is a list of dictionaries. Each dict is the metadata info
+            # each_media is a dictionary of medias. each dict is a medias data
+            # each media-metadata is a list of dictionaries. Each dict is the
+            # metadata info
             for each_metadata in each_media['media-metadata']:
                 if each_metadata['format'] == "Standard Thumbnail":
                     urls.append(each_metadata['url'])
 
-    #print len(urls)
+    # print len(urls)
     # YOUR CODE HERE
 
     return (titles, urls)
@@ -73,7 +76,7 @@ def query_site(url, target, offset):
         print "See Intructor notes for information"
         return False
     params = {"api-key": API_KEY[target], "offset": offset}
-    r = requests.get(url, params = params)
+    r = requests.get(url, params=params)
 
     if r.status_code == requests.codes.ok:
         return r.json()
@@ -84,7 +87,7 @@ def query_site(url, target, offset):
 def get_popular(url, kind, days, section="all-sections", offset=0):
     # This function will construct the query according to the requirements of the site
     # and return the data, or print an error message if called incorrectly
-    if days not in [1,7,30]:
+    if days not in [1, 7, 30]:
         print "Time period can be 1,7, 30 days only"
         return False
     if kind not in ["viewed", "shared", "emailed"]:
@@ -104,21 +107,22 @@ def save_file(kind, period):
     num_results = data["num_results"]
     full_data = []
     with codecs.open("popular-{0}-{1}-full.json".format(kind, period), encoding='utf-8', mode='w') as v:
-        for offset in range(0, num_results, 20):        
+        for offset in range(0, num_results, 20):
             data = get_popular(URL_POPULAR, kind, period, offset=offset)
             full_data += data["results"]
-        
+
         v.write(json.dumps(full_data, indent=2))
 
 
 def test():
     titles, urls = article_overview("viewed", 1)
     print titles, urls
-    
+
     assert len(titles) == 20
     assert len(urls) == 30
     assert titles[2] == {'Opinion': 'Professors, We Need You!'}
-    assert urls[20] == 'http://graphics8.nytimes.com/images/2014/02/17/sports/ICEDANCE/ICEDANCE-thumbStandard.jpg'
+    assert urls[
+        20] == 'http://graphics8.nytimes.com/images/2014/02/17/sports/ICEDANCE/ICEDANCE-thumbStandard.jpg'
 
 
 if __name__ == "__main__":

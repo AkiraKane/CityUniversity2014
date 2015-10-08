@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-In this problem set you work with another type of infobox data, audit it, clean it, 
+In this problem set you work with another type of infobox data, audit it, clean it,
 come up with a data model, insert it into a MongoDB and then run some queries
 against your database. The set contains data about Arachnid class.
 The data is already in the database. But you have been given a task to also include
@@ -44,8 +44,8 @@ import pprint
 import re
 
 DATAFILE = 'arachnid.csv'
-FIELDS ={'rdf-schema#label': 'label',
-         'binomialAuthority_label': 'binomialAuthority'}
+FIELDS = {'rdf-schema#label': 'label',
+          'binomialAuthority_label': 'binomialAuthority'}
 
 
 def add_field(filename, fields):
@@ -63,7 +63,7 @@ def add_field(filename, fields):
                 # clean up the label
                 label = re.sub('\(.*?\)', '', line['rdf-schema#label']).strip()
                 value = line['binomialAuthority_label']
-                data[label] = value        
+                data[label] = value
     return data
 
 
@@ -72,7 +72,7 @@ def update_db(data, db):
     labels = data.keys()
     for item in labels:
         update = data[item]
-        arach = db.arachnid.find_one( { 'label' : item } )
+        arach = db.arachnid.find_one({'label': item})
         arach['classification']['binomialAuthority'] = update
         db.arachnid.save(arach)
 
@@ -82,7 +82,7 @@ def test():
     # Changes done to this function will not be taken into account
     # when doing a Test Run or Submit, they are just for your own reference
     # and as an example for running this code locally!
-    
+
     data = add_field(DATAFILE, FIELDS)
     from pymongo import MongoClient
     client = MongoClient("mongodb://localhost:27017")
@@ -93,7 +93,6 @@ def test():
     updated = db.arachnid.find_one({'label': 'Opisthoncana'})
     assert updated['classification']['binomialAuthority'] == 'Embrik Strand'
     pprint.pprint(data)
-
 
 
 if __name__ == "__main__":

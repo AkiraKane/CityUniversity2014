@@ -19,9 +19,9 @@ def extract_data(page):
     with open(page, "r") as html:
         # do something here to find the necessary values
         soup = BeautifulSoup(html.read())
-        eventValidation = soup.find('input',{'id': '__EVENTVALIDATION'})
+        eventValidation = soup.find('input', {'id': '__EVENTVALIDATION'})
         data['eventvalidation'] = eventValidation['value']
-        viewState = soup.find('input',{'id': '__VIEWSTATE'})
+        viewState = soup.find('input', {'id': '__VIEWSTATE'})
         data['viewstate'] = viewState['value']
 
     return data
@@ -32,14 +32,14 @@ def make_request(data):
     viewstate = data["viewstate"]
 
     r = requests.post("http://www.transtats.bts.gov/Data_Elements.aspx?Data=2",
-                    data={'AirportList': "BOS",
-                          'CarrierList': "VX",
-                          'Submit': 'Submit',
-                          "__EVENTTARGET": "",
-                          "__EVENTARGUMENT": "",
-                          "__EVENTVALIDATION": eventvalidation,
-                          "__VIEWSTATE": viewstate
-                    })
+                      data={'AirportList': "BOS",
+                            'CarrierList': "VX",
+                            'Submit': 'Submit',
+                            "__EVENTTARGET": "",
+                            "__EVENTARGUMENT": "",
+                            "__EVENTVALIDATION": eventvalidation,
+                            "__VIEWSTATE": viewstate
+                            })
 
     return r.text
 
@@ -50,5 +50,5 @@ def test():
     assert data["eventvalidation"].startswith("/wEWjAkCoIj1ng0")
     assert data["viewstate"].startswith("/wEPDwUKLTI")
 
-    
+
 test()

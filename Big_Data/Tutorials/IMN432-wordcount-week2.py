@@ -20,33 +20,158 @@ import os
 import sys
 import re
 from operator import add
-from pyspark import SparkContext 
+from pyspark import SparkContext
 
 # define new function
+
+
 def remPlural(x):
     word = x.lower()
     if word.endswith('s'):
-        return [word[:-1],1]
+        return [word[:-1], 1]
     else:
-        return [word,1]
+        return [word, 1]
 
 if __name__ == "__main__":
     # Spark Job Name
     sc = SparkContext(appName="PythonWordCount")
     # Import Files
     allFiles = sc.wholeTextFiles("/home/dan/Spark_Files/")
-        
+
     # Read Stop Word Files
-    stopwords = ['a',	'about',	'above',	'after',	'again',	'against',	'all',	'am',	'an',	'and',	'any',	'are',	'as',	'at',	'be',	'because',	'been',	'before',	'being',	'below',	'between',	'both',	'but',	'by',	'cannot',	'could',	'did',	'do',	'does',	'doing',	'down',	'during',	'each',	'few',	'for',	'from',	'further',	'had',	'has',	'have',	'having',	'he',	'her',	'here',	'hers',	'herself',	'him',	'himself',	'his',	'how',	'i',	'if',	'in',	'into',	'is',	'it',	'its',	'itself',	'me',	'more',	'most',	'my',	'myself',	'no',	'nor',	'not',	'of',	'off',	'on',	'once',	'only',	'or',	'other',	'ought',	'our',	'ours ',	'out',	'over',	'own',	'same',	'she',	'should',	'so',	'some',	'such',	'than',	'that',	'the',	'their',	'theirs',	'them',	'themselves',	'then',	'there',	'these',	'they',	'this',	'those',	'through',	'to',	'too',	'under',	'until',	'up',	'very',	'was',	'we',	'were',	'what',	'when',	'where',	'which',	'while',	'who',	'whom',	'why',	'with',	'would',	'you',	'your',	'yours',	'yourself',	'yourselves']
-    
+    stopwords = [
+        'a',
+        'about',
+        'above',
+        'after',
+        'again',
+        'against',
+        'all',
+        'am',
+        'an',
+        'and',
+        'any',
+        'are',
+        'as',
+        'at',
+        'be',
+        'because',
+        'been',
+        'before',
+        'being',
+        'below',
+        'between',
+        'both',
+        'but',
+        'by',
+        'cannot',
+        'could',
+        'did',
+        'do',
+        'does',
+        'doing',
+        'down',
+        'during',
+        'each',
+        'few',
+        'for',
+        'from',
+        'further',
+        'had',
+        'has',
+        'have',
+        'having',
+        'he',
+        'her',
+        'here',
+        'hers',
+        'herself',
+        'him',
+        'himself',
+        'his',
+        'how',
+        'i',
+        'if',
+        'in',
+        'into',
+        'is',
+        'it',
+        'its',
+        'itself',
+        'me',
+        'more',
+        'most',
+        'my',
+        'myself',
+        'no',
+        'nor',
+        'not',
+        'of',
+        'off',
+        'on',
+        'once',
+        'only',
+        'or',
+        'other',
+        'ought',
+        'our',
+        'ours ',
+        'out',
+        'over',
+        'own',
+        'same',
+        'she',
+        'should',
+        'so',
+        'some',
+        'such',
+        'than',
+        'that',
+        'the',
+        'their',
+        'theirs',
+        'them',
+        'themselves',
+        'then',
+        'there',
+        'these',
+        'they',
+        'this',
+        'those',
+        'through',
+        'to',
+        'too',
+        'under',
+        'until',
+        'up',
+        'very',
+        'was',
+        'we',
+        'were',
+        'what',
+        'when',
+        'where',
+        'which',
+        'while',
+        'who',
+        'whom',
+        'why',
+        'with',
+        'would',
+        'you',
+        'your',
+        'yours',
+        'yourself',
+        'yourselves']
+
     # All Files
-    Texts = allFiles.flatMap(lambda (f,x): [(f,w) for w in re.split('\W+',x.lower())]) \
-          .map(lambda x: (x,1)) \
-          .reduceByKey(add) \
-          .filter(lambda x: x[1] > 500)
- 
+    Texts = allFiles.flatMap(lambda f_x: [(f_x[0], w) for w in re.split('\W+', f_x[1].lower())]) \
+        .map(lambda x: (x, 1)) \
+        .reduceByKey(add) \
+        .filter(lambda x: x[1] > 500)
+
     Output = Texts.collect()
     for (word, count) in Output:
         print "Directory & Word: %s:    Frequency: %i" % (word, count)
-    
+
     sc.stop()

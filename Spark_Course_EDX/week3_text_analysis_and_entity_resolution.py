@@ -37,6 +37,7 @@
 import re
 DATAFILE_PATTERN = '^(.+),"(.+)",(.*),(.*),(.*)'
 
+
 def removeQuotes(s):
     """ Remove quotation marks from an input string
     Args:
@@ -44,7 +45,7 @@ def removeQuotes(s):
     Returns:
         str: a string without the quote characters
     """
-    return ''.join(i for i in s if i!='"')
+    return ''.join(i for i in s if i != '"')
 
 
 def parseDatafileLine(datafileLine):
@@ -82,6 +83,7 @@ AMAZON_SMALL_PATH = 'Amazon_small.csv'
 GOLD_STANDARD_PATH = 'Amazon_Google_perfectMapping.csv'
 STOPWORDS_PATH = 'stopwords.txt'
 
+
 def parseData(filename):
     """ Parse a data file
     Args:
@@ -93,6 +95,7 @@ def parseData(filename):
             .textFile(filename, 4, 0)
             .map(parseDatafileLine)
             .cache())
+
 
 def loadData(path):
     """ Load a data file
@@ -113,9 +116,9 @@ def loadData(path):
              .map(lambda s: s[0])
              .cache())
     print '%s - Read %d lines, successfully parsed %d lines, failed to parse %d lines' % (path,
-                                                                                        raw.count(),
-                                                                                        valid.count(),
-                                                                                        failed.count())
+                                                                                          raw.count(),
+                                                                                          valid.count(),
+                                                                                          failed.count())
     assert failed.count() == 0
     assert raw.count() == (valid.count() + 1)
     return valid
@@ -156,6 +159,7 @@ for line in amazonSmall.take(3):
 quickbrownfox = 'A quick brown fox jumps over the lazy dog.'
 split_regex = r'\W+'
 
+
 def simpleTokenize(string):
     """ A simple implementation of input string tokenization
     Args:
@@ -165,17 +169,22 @@ def simpleTokenize(string):
     """
     return filter(len, re.split(split_regex, string.lower().strip()))
 
-print simpleTokenize(quickbrownfox) # Should give ['a', 'quick', 'brown', ... ]
+# Should give ['a', 'quick', 'brown', ... ]
+print simpleTokenize(quickbrownfox)
 
 
 # In[5]:
 
 # TEST Tokenize a String (1a)
 Test.assertEquals(simpleTokenize(quickbrownfox),
-                  ['a','quick','brown','fox','jumps','over','the','lazy','dog'],
+                  ['a', 'quick', 'brown', 'fox', 'jumps',
+                      'over', 'the', 'lazy', 'dog'],
                   'simpleTokenize should handle sample text')
-Test.assertEquals(simpleTokenize(' '), [], 'simpleTokenize should handle empty string')
-Test.assertEquals(simpleTokenize('!!!!123A/456_B/789C.123A'), ['123a','456_b','789c','123a'],
+Test.assertEquals(
+    simpleTokenize(' '),
+    [],
+    'simpleTokenize should handle empty string')
+Test.assertEquals(simpleTokenize('!!!!123A/456_B/789C.123A'), ['123a', '456_b', '789c', '123a'],
                   'simpleTokenize should handle puntuations and lowercase result')
 Test.assertEquals(simpleTokenize('fox fox'), ['fox', 'fox'],
                   'simpleTokenize should not remove duplicates')
@@ -193,6 +202,7 @@ stopfile = os.path.join(baseDir, inputPath, STOPWORDS_PATH)
 stopwords = set(sc.textFile(stopfile).collect())
 print 'These are the stopwords: %s' % stopwords
 
+
 def tokenize(string):
     """ An implementation of input string tokenization that excludes stopwords
     Args:
@@ -202,16 +212,22 @@ def tokenize(string):
     """
     return filter(lambda x: x not in stopwords, simpleTokenize(string))
 
-print tokenize(quickbrownfox) # Should give ['quick', 'brown', ... ]
+print tokenize(quickbrownfox)  # Should give ['quick', 'brown', ... ]
 
 
 # In[7]:
 
 # TEST Removing stopwords (1b)
-Test.assertEquals(tokenize("Why a the?"), [], 'tokenize should remove all stopwords')
-Test.assertEquals(tokenize("Being at the_?"), ['the_'], 'tokenize should handle non-stopwords')
-Test.assertEquals(tokenize(quickbrownfox), ['quick','brown','fox','jumps','lazy','dog'],
-                    'tokenize should handle sample text')
+Test.assertEquals(
+    tokenize("Why a the?"),
+    [],
+    'tokenize should remove all stopwords')
+Test.assertEquals(
+    tokenize("Being at the_?"),
+    ['the_'],
+    'tokenize should handle non-stopwords')
+Test.assertEquals(tokenize(quickbrownfox), ['quick', 'brown', 'fox', 'jumps', 'lazy', 'dog'],
+                  'tokenize should handle sample text')
 
 
 # ### **(1c) Tokenizing the small datasets**
@@ -224,6 +240,7 @@ Test.assertEquals(tokenize(quickbrownfox), ['quick','brown','fox','jumps','lazy'
 amazonRecToToken = amazonSmall.map(lambda x: (x[0], tokenize(x[1])))
 googleRecToToken = googleSmall.map(lambda x: (x[0], tokenize(x[1])))
 
+
 def countTokens(vendorRDD):
     """ Count and return the number of tokens
     Args:
@@ -231,7 +248,7 @@ def countTokens(vendorRDD):
     Returns:
         count: count of all tokens
     """
-    return vendorRDD.map(lambda x: len(x[1])).reduce(lambda a,b: a+b)
+    return vendorRDD.map(lambda x: len(x[1])).reduce(lambda a, b: a + b)
 
 totalTokens = countTokens(amazonRecToToken) + countTokens(googleRecToToken)
 print 'There are %s tokens in the combined datasets' % totalTokens
@@ -267,8 +284,12 @@ print 'The Amazon record with ID "%s" has the most tokens (%s)' % (biggestRecord
 # In[11]:
 
 # TEST Amazon record with the most tokens (1d)
-Test.assertEquals(biggestRecordAmazon[0][0], 'b000o24l3q', 'incorrect biggestRecordAmazon')
-Test.assertEquals(len(biggestRecordAmazon[0][1]), 1547, 'incorrect len for biggestRecordAmazon')
+Test.assertEquals(
+    biggestRecordAmazon[0][0],
+    'b000o24l3q',
+    'incorrect biggestRecordAmazon')
+Test.assertEquals(
+    len(biggestRecordAmazon[0][1]), 1547, 'incorrect len for biggestRecordAmazon')
 
 
 # ### **Part 2: ER as Text Similarity - Weighted Bag-of-Words using TF-IDF**
@@ -303,13 +324,13 @@ def tf(tokens):
     Returns:
         dictionary: a dictionary of tokens to its TF values
     """
-    tokenCounts = {} 
-    for t in tokens: 
-        tokenCounts[t] = tokenCounts.get(t, 0) + (1.0/len(tokens))
-    
+    tokenCounts = {}
+    for t in tokens:
+        tokenCounts[t] = tokenCounts.get(t, 0) + (1.0 / len(tokens))
+
     return tokenCounts
 
-print tf(tokenize(quickbrownfox)) # Should give { 'quick': 0.1666 ... }
+print tf(tokenize(quickbrownfox))  # Should give { 'quick': 0.1666 ... }
 
 
 # In[13]:
@@ -317,12 +338,12 @@ print tf(tokenize(quickbrownfox)) # Should give { 'quick': 0.1666 ... }
 # TEST Implement a TF function (2a)
 tf_test = tf(tokenize(quickbrownfox))
 Test.assertEquals(tf_test, {'brown': 0.16666666666666666, 'lazy': 0.16666666666666666,
-                             'jumps': 0.16666666666666666, 'fox': 0.16666666666666666,
-                             'dog': 0.16666666666666666, 'quick': 0.16666666666666666},
-                    'incorrect result for tf on sample text')
+                            'jumps': 0.16666666666666666, 'fox': 0.16666666666666666,
+                            'dog': 0.16666666666666666, 'quick': 0.16666666666666666},
+                  'incorrect result for tf on sample text')
 tf_test2 = tf(tokenize('one_ one_ two!'))
 Test.assertEquals(tf_test2, {'one_': 0.6666666666666666, 'two': 0.3333333333333333},
-                    'incorrect result for tf test')
+                  'incorrect result for tf test')
 
 
 # ### **(2b) Create a corpus**
@@ -363,11 +384,11 @@ def idfs(corpus):
     Returns:
         RDD: a RDD of (token, IDF value)
     """
-    N = corpus.count() 
+    N = corpus.count()
     uniqueTokens = corpus.flatMap(lambda x: list(set(x[1])))
     tokenCountPairTuple = uniqueTokens.map(lambda x: (x, 1))
-    tokenSumPairTuple = tokenCountPairTuple.reduceByKey(lambda a,b: a+b)
-    return (tokenSumPairTuple.map(lambda x: (x[0], float(N)/x[1])))
+    tokenSumPairTuple = tokenCountPairTuple.reduceByKey(lambda a, b: a + b)
+    return (tokenSumPairTuple.map(lambda x: (x[0], float(N) / x[1])))
 
 idfsSmall = idfs(amazonRecToToken.union(googleRecToToken))
 uniqueTokenCount = idfsSmall.count()
@@ -380,7 +401,10 @@ print 'There are %s unique tokens in the small datasets.' % uniqueTokenCount
 # TEST Implement an IDFs function (2c)
 Test.assertEquals(uniqueTokenCount, 4772, 'incorrect uniqueTokenCount')
 tokenSmallestIdf = idfsSmall.takeOrdered(1, lambda s: s[1])[0]
-Test.assertEquals(tokenSmallestIdf[0], 'software', 'incorrect smallest IDF token')
+Test.assertEquals(
+    tokenSmallestIdf[0],
+    'software',
+    'incorrect smallest IDF token')
 Test.assertTrue(abs(tokenSmallestIdf[1] - 4.25531914894) < 0.0000000001,
                 'incorrect smallest IDF value')
 
@@ -403,7 +427,7 @@ print smallIDFTokens
 import matplotlib.pyplot as plt
 
 small_idf_values = idfsSmall.map(lambda s: s[1]).collect()
-fig = plt.figure(figsize=(8,3))
+fig = plt.figure(figsize=(8, 3))
 plt.hist(small_idf_values, 50, log=True)
 pass
 
@@ -427,10 +451,11 @@ def tfidf(tokens, idfs):
         dictionary: a dictionary of records to TF-IDF values
     """
     tfs = tf(tokens)
-    tfIdfDict = {k: v*idfs[k] for k, v in tfs.items()}
+    tfIdfDict = {k: v * idfs[k] for k, v in tfs.items()}
     return tfIdfDict
 
-recb000hkgj8k = amazonRecToToken.filter(lambda x: x[0] == 'b000hkgj8k').collect()[0][1]
+recb000hkgj8k = amazonRecToToken.filter(
+    lambda x: x[0] == 'b000hkgj8k').collect()[0][1]
 idfsSmallWeights = idfsSmall.collectAsMap()
 rec_b000hkgj8k_weights = tfidf(recb000hkgj8k, idfsSmallWeights)
 
@@ -441,10 +466,10 @@ print 'Amazon record "b000hkgj8k" has tokens and weights:\n%s' % rec_b000hkgj8k_
 
 # TEST Implement a TF-IDF function (2f)
 Test.assertEquals(rec_b000hkgj8k_weights,
-                   {'autocad': 33.33333333333333, 'autodesk': 8.333333333333332,
-                    'courseware': 66.66666666666666, 'psg': 33.33333333333333,
-                    '2007': 3.5087719298245617, 'customizing': 16.666666666666664,
-                    'interface': 3.0303030303030303}, 'incorrect rec_b000hkgj8k_weights')
+                  {'autocad': 33.33333333333333, 'autodesk': 8.333333333333332,
+                   'courseware': 66.66666666666666, 'psg': 33.33333333333333,
+                   '2007': 3.5087719298245617, 'customizing': 16.666666666666664,
+                   'interface': 3.0303030303030303}, 'incorrect rec_b000hkgj8k_weights')
 
 
 # ### **Part 3: ER as Text Similarity - Cosine Similarity**
@@ -471,6 +496,7 @@ Test.assertEquals(rec_b000hkgj8k_weights,
 # TODO: Replace <FILL IN> with appropriate code
 import math
 
+
 def dotprod(a, b):
     """ Compute dot product
     Args:
@@ -479,7 +505,8 @@ def dotprod(a, b):
     Returns:
         dotProd: result of the dot product with the two input dictionaries
     """
-    return sum([a[k]*b[k] for k in a if k in b])
+    return sum([a[k] * b[k] for k in a if k in b])
+
 
 def norm(a):
     """ Compute square root of the dot product
@@ -488,7 +515,8 @@ def norm(a):
     Returns:
         norm: a dictionary of tokens to its TF values
     """
-    return math.sqrt(dotprod(a, a) )
+    return math.sqrt(dotprod(a, a))
+
 
 def cossim(a, b):
     """ Compute cosine similarity
@@ -501,8 +529,8 @@ def cossim(a, b):
     """
     return dotprod(a, b) / (norm(a) * norm(b))
 
-testVec1 = {'foo': 2, 'bar': 3, 'baz': 5 }
-testVec2 = {'foo': 1, 'bar': 0, 'baz': 20 }
+testVec1 = {'foo': 2, 'bar': 3, 'baz': 5}
+testVec2 = {'foo': 1, 'bar': 0, 'baz': 20}
 dp = dotprod(testVec1, testVec2)
 nm = norm(testVec1)
 print dp, nm
@@ -533,7 +561,7 @@ def cosineSimilarity(string1, string2, idfsDictionary):
     Returns:
         cossim: cosine similarity value
     """
-    w1 = tfidf(tokenize(string1), idfsDictionary) 
+    w1 = tfidf(tokenize(string1), idfsDictionary)
     w2 = tfidf(tokenize(string2), idfsDictionary)
     return cossim(w1, w2)
 
@@ -547,7 +575,8 @@ print cossimAdobe
 # In[25]:
 
 # TEST Implement a cosineSimilarity function (3b)
-Test.assertTrue(abs(cossimAdobe - 0.0577243382163) < 0.0000001, 'incorrect cossimAdobe')
+Test.assertTrue(abs(cossimAdobe - 0.0577243382163) <
+                0.0000001, 'incorrect cossimAdobe')
 
 
 # ### **(3c) Perform Entity Resolution**
@@ -564,11 +593,12 @@ Test.assertTrue(abs(cossimAdobe - 0.0577243382163) < 0.0000001, 'incorrect cossi
 
 # TODO: Replace <FILL IN> with appropriate code
 crossSmall = (googleSmall
-#             .<FILL IN>
-              .map(lambda (k,v): (1, (k,v)))
-              .join(amazonSmall.map(lambda(k,v):(1,(k,v))))
-              .map(lambda (k,v): v)
+              #             .<FILL IN>
+              .map(lambda k_v1: (1, (k_v1[0], k_v1[1])))
+              .join(amazonSmall.map(lambda k_v: (1, (k_v[0], k_v[1]))))
+              .map(lambda k_v2: k_v2[1])
               .cache())
+
 
 def computeSimilarity(record):
     """ Compute similarity on a combination record
@@ -577,30 +607,31 @@ def computeSimilarity(record):
     Returns:
         pair: a pair, (google URL, amazon ID, cosine similarity value)
     """
-    
+
     googleRec = record[0]
     amazonRec = record[1]
     # googleURL = <FILL IN>
     googleURL = googleRec[0]
-    
+
     # amazonID = <FILL IN>
     amazonID = amazonRec[0]
-    
+
     # googleValue = <FILL IN>
     googleValue = googleRec[1]
-    
+
     # amazonValue = <FILL IN>
     amazonValue = amazonRec[1]
-    
+
     # cs = cosineSimilarity(<FILL IN>, idfsSmallWeights)
     cs = cosineSimilarity(googleValue, amazonValue, idfsSmallWeights)
-    
+
     return (googleURL, amazonID, cs)
 
 similarities = (crossSmall
-#                .<FILL IN>
+                #                .<FILL IN>
                 .map(computeSimilarity)
                 .cache())
+
 
 def similar(amazonID, googleURL):
     """ Return similarity value
@@ -610,12 +641,14 @@ def similar(amazonID, googleURL):
     Returns:
         similar: cosine similarity value
     """
-    
+
     return (similarities
             .filter(lambda record: (record[0] == googleURL and record[1] == amazonID))
             .collect()[0][2])
 
-similarityAmazonGoogle = similar('b000o24l3q', 'http://www.google.com/base/feeds/snippets/17242822440574356561')
+similarityAmazonGoogle = similar(
+    'b000o24l3q',
+    'http://www.google.com/base/feeds/snippets/17242822440574356561')
 print 'Requested similarity is %s.' % similarityAmazonGoogle
 
 
@@ -646,29 +679,30 @@ def computeSimilarityBroadcast(record):
     """
     googleRec = record[0]
     amazonRec = record[1]
-    
+
     # googleURL = <FILL IN>
     googleURL = googleRec[0]
-    
+
     # amazonID = <FILL IN>
     amazonID = amazonRec[0]
-    
+
     # googleValue = <FILL IN>
     googleValue = googleRec[1]
-    
+
     # amazonValue = <FILL IN>
     amazonValue = amazonRec[1]
-    
+
     # cs = cosineSimilarity(<FILL IN>, idfsSmallBroadcast.value)
-    cs = cosineSimilarity(googleValue,amazonValue,idfsSmallBroadcast.value)
-    
+    cs = cosineSimilarity(googleValue, amazonValue, idfsSmallBroadcast.value)
+
     return (googleURL, amazonID, cs)
 
 idfsSmallBroadcast = sc.broadcast(idfsSmallWeights)
 similaritiesBroadcast = (crossSmall
-#                         .<FILL IN>
+                         #                         .<FILL IN>
                          .map(computeSimilarityBroadcast)
                          .cache())
+
 
 def similarBroadcast(amazonID, googleURL):
     """ Return similarity value, computed using Broadcast variable
@@ -682,7 +716,8 @@ def similarBroadcast(amazonID, googleURL):
             .filter(lambda record: (record[0] == googleURL and record[1] == amazonID))
             .collect()[0][2])
 
-similarityAmazonGoogleBroadcast = similarBroadcast('b000o24l3q', 'http://www.google.com/base/feeds/snippets/17242822440574356561')
+similarityAmazonGoogleBroadcast = similarBroadcast(
+    'b000o24l3q', 'http://www.google.com/base/feeds/snippets/17242822440574356561')
 print 'Requested similarity is %s.' % similarityAmazonGoogleBroadcast
 
 
@@ -690,8 +725,13 @@ print 'Requested similarity is %s.' % similarityAmazonGoogleBroadcast
 
 # TEST Perform Entity Resolution with Broadcast Variables (3d)
 from pyspark import Broadcast
-Test.assertTrue(isinstance(idfsSmallBroadcast, Broadcast), 'incorrect idfsSmallBroadcast')
-Test.assertEquals(len(idfsSmallBroadcast.value), 4772, 'incorrect idfsSmallBroadcast value')
+Test.assertTrue(
+    isinstance(
+        idfsSmallBroadcast,
+        Broadcast),
+    'incorrect idfsSmallBroadcast')
+Test.assertEquals(len(idfsSmallBroadcast.value), 4772,
+                  'incorrect idfsSmallBroadcast value')
 Test.assertTrue(abs(similarityAmazonGoogleBroadcast - 0.000303171940451) < 0.0000001,
                 'incorrect similarityAmazonGoogle')
 
@@ -703,7 +743,10 @@ Test.assertTrue(abs(similarityAmazonGoogleBroadcast - 0.000303171940451) < 0.000
 
 GOLDFILE_PATTERN = '^(.+),(.+)'
 
-# Parse each line of a data file useing the specified regular expression pattern
+# Parse each line of a data file useing the specified regular expression
+# pattern
+
+
 def parse_goldfile_line(goldfile_line):
     """ Parse a line from the 'golden standard' data file
     Args:
@@ -719,7 +762,8 @@ def parse_goldfile_line(goldfile_line):
         print 'Header datafile line: %s' % goldfile_line
         return (goldfile_line, 0)
     else:
-        key = '%s %s' % (removeQuotes(match.group(1)), removeQuotes(match.group(2)))
+        key = '%s %s' % (removeQuotes(match.group(1)),
+                         removeQuotes(match.group(2)))
         return ((key, 'gold'), 1)
 
 goldfile = os.path.join(baseDir, inputPath, GOLD_STANDARD_PATH)
@@ -761,20 +805,31 @@ assert (gsRaw.count() == (goldStandard.count() + 1))
 # In[36]:
 
 # TODO: Replace <FILL IN> with appropriate code
-sims = similaritiesBroadcast.map(lambda (google,amazon,cosine): (amazon+' '+google ,cosine))
+sims = similaritiesBroadcast.map(
+    lambda google_amazon_cosine: (
+        google_amazon_cosine[1] +
+        ' ' +
+        google_amazon_cosine[0],
+        google_amazon_cosine[2]))
 
 trueDupsRDD = (sims
                .join(goldStandard))
 
 trueDupsCount = trueDupsRDD.count()
 
-avgSimDups = trueDupsRDD.map(lambda (k,v): v[0]).reduce(lambda v1, v2: v1+v2)/trueDupsCount
+avgSimDups = trueDupsRDD.map(
+    lambda k_v3: k_v3[1][0]).reduce(
+        lambda v1,
+    v2: v1 + v2) / trueDupsCount
 
 nonDupsRDD = (sims
               .leftOuterJoin(goldStandard)
-              .filter(lambda (k, v): v[1]==None))
+              .filter(lambda k_v4: k_v4[1][1] == None))
 
-avgSimNon = nonDupsRDD.map(lambda (k,v): v[0]).reduce(lambda v1, v2: v1+v2)/nonDupsRDD.count()
+avgSimNon = nonDupsRDD.map(
+    lambda k_v5: k_v5[1][0]).reduce(
+        lambda v1,
+    v2: v1 + v2) / nonDupsRDD.count()
 
 print 'There are %s true duplicates.' % trueDupsCount
 print 'The average similarity of true duplicates is %s.' % avgSimDups
@@ -785,8 +840,10 @@ print 'And for non duplicates, it is %s.' % avgSimNon
 
 # TEST Perform a Gold Standard evaluation (3e)
 Test.assertEquals(trueDupsCount, 146, 'incorrect trueDupsCount')
-Test.assertTrue(abs(avgSimDups - 0.264332573435) < 0.0000001, 'incorrect avgSimDups')
-Test.assertTrue(abs(avgSimNon - 0.00123476304656) < 0.0000001, 'incorrect avgSimNon')
+Test.assertTrue(abs(avgSimDups - 0.264332573435) <
+                0.0000001, 'incorrect avgSimDups')
+Test.assertTrue(abs(avgSimNon - 0.00123476304656)
+                < 0.0000001, 'incorrect avgSimNon')
 
 
 # ### **Part 4: Scalable ER**
@@ -805,19 +862,21 @@ Test.assertTrue(abs(avgSimNon - 0.00123476304656) < 0.0000001, 'incorrect avgSim
 # In[38]:
 
 # TODO: Replace <FILL IN> with appropriate code
-amazonFullRecToToken = amazon.map(lambda (k, v): (k, tokenize(v)))
+amazonFullRecToToken = amazon.map(lambda k_v6: (k_v6[0], tokenize(k_v6[1])))
 
-googleFullRecToToken = google.map(lambda (k, v): (k, tokenize(v)))
+googleFullRecToToken = google.map(lambda k_v7: (k_v7[0], tokenize(k_v7[1])))
 
 print 'Amazon full dataset is %s products, Google full dataset is %s products' % (amazonFullRecToToken.count(),
-                                                                                    googleFullRecToToken.count())
+                                                                                  googleFullRecToToken.count())
 
 
 # In[39]:
 
 # TEST Tokenize the full dataset (4a)
-Test.assertEquals(amazonFullRecToToken.count(), 1363, 'incorrect amazonFullRecToToken.count()')
-Test.assertEquals(googleFullRecToToken.count(), 3226, 'incorrect googleFullRecToToken.count()')
+Test.assertEquals(amazonFullRecToToken.count(), 1363,
+                  'incorrect amazonFullRecToToken.count()')
+Test.assertEquals(googleFullRecToToken.count(), 3226,
+                  'incorrect googleFullRecToToken.count()')
 
 
 # ### **(4b) Compute IDFs and TF-IDFs for the full datasets**
@@ -843,10 +902,12 @@ idfsFullWeights = idfsFull.collectAsMap()
 idfsFullBroadcast = sc.broadcast(idfsFullWeights)
 
 # Pre-compute TF-IDF weights.  Build mappings from record ID weight vector.
-amazonWeightsRDD = amazonFullRecToToken.map(lambda (k,v): (k, tfidf(v, idfsFullBroadcast.value)))
+amazonWeightsRDD = amazonFullRecToToken.map(
+    lambda k_v8: (k_v8[0], tfidf(k_v8[1], idfsFullBroadcast.value)))
 
 # googleWeightsRDD = <FILL IN>
-googleWeightsRDD = googleFullRecToToken.map(lambda (k,v): (k, tfidf(v, idfsFullBroadcast.value)))
+googleWeightsRDD = googleFullRecToToken.map(
+    lambda k_v9: (k_v9[0], tfidf(k_v9[1], idfsFullBroadcast.value)))
 
 print 'There are %s Amazon weights and %s Google weights.' % (amazonWeightsRDD.count(),
                                                               googleWeightsRDD.count())
@@ -856,8 +917,10 @@ print 'There are %s Amazon weights and %s Google weights.' % (amazonWeightsRDD.c
 
 # TEST Compute IDFs and TF-IDFs for the full datasets (4b)
 Test.assertEquals(idfsFullCount, 17078, 'incorrect idfsFullCount')
-Test.assertEquals(amazonWeightsRDD.count(), 1363, 'incorrect amazonWeightsRDD.count()')
-Test.assertEquals(googleWeightsRDD.count(), 3226, 'incorrect googleWeightsRDD.count()')
+Test.assertEquals(amazonWeightsRDD.count(), 1363,
+                  'incorrect amazonWeightsRDD.count()')
+Test.assertEquals(googleWeightsRDD.count(), 3226,
+                  'incorrect googleWeightsRDD.count()')
 
 
 # ### **(4c) Compute Norms for the weights from the full datasets**
@@ -869,19 +932,29 @@ Test.assertEquals(googleWeightsRDD.count(), 3226, 'incorrect googleWeightsRDD.co
 # In[42]:
 
 # TODO: Replace <FILL IN> with appropriate code
-amazonNorms = amazonWeightsRDD.map(lambda (k, v): (k, norm(v)))
+amazonNorms = amazonWeightsRDD.map(lambda k_v10: (k_v10[0], norm(k_v10[1])))
 amazonNormsBroadcast = sc.broadcast(amazonNorms.collectAsMap())
-googleNorms = googleWeightsRDD.map(lambda (k, v): (k, norm(v)))
+googleNorms = googleWeightsRDD.map(lambda k_v11: (k_v11[0], norm(k_v11[1])))
 googleNormsBroadcast = sc.broadcast(googleNorms.collectAsMap())
 
 
 # In[43]:
 
 # TEST Compute Norms for the weights from the full datasets (4c)
-Test.assertTrue(isinstance(amazonNormsBroadcast, Broadcast), 'incorrect amazonNormsBroadcast')
-Test.assertEquals(len(amazonNormsBroadcast.value), 1363, 'incorrect amazonNormsBroadcast.value')
-Test.assertTrue(isinstance(googleNormsBroadcast, Broadcast), 'incorrect googleNormsBroadcast')
-Test.assertEquals(len(googleNormsBroadcast.value), 3226, 'incorrect googleNormsBroadcast.value')
+Test.assertTrue(
+    isinstance(
+        amazonNormsBroadcast,
+        Broadcast),
+    'incorrect amazonNormsBroadcast')
+Test.assertEquals(len(amazonNormsBroadcast.value), 1363,
+                  'incorrect amazonNormsBroadcast.value')
+Test.assertTrue(
+    isinstance(
+        googleNormsBroadcast,
+        Broadcast),
+    'incorrect googleNormsBroadcast')
+Test.assertEquals(len(googleNormsBroadcast.value), 3226,
+                  'incorrect googleNormsBroadcast.value')
 
 
 # ### **(4d) Create inverted indicies from the full datasets**
@@ -904,16 +977,16 @@ def invert(record):
     pairs = []
     for item in record[1].keys():
         pairs.append((item, id))
-    
+
     return (pairs)
 
 amazonInvPairsRDD = (amazonWeightsRDD
-                    .flatMap(invert)
-                    .cache())
+                     .flatMap(invert)
+                     .cache())
 
 googleInvPairsRDD = (googleWeightsRDD
-                    .flatMap(invert)
-                    .cache())
+                     .flatMap(invert)
+                     .cache())
 
 print 'There are %s Amazon inverted pairs and %s Google inverted pairs.' % (amazonInvPairsRDD.count(),
                                                                             googleInvPairsRDD.count())
@@ -924,8 +997,10 @@ print 'There are %s Amazon inverted pairs and %s Google inverted pairs.' % (amaz
 # TEST Create inverted indicies from the full datasets (4d)
 invertedPair = invert((1, {'foo': 2}))
 Test.assertEquals(invertedPair[0][1], 1, 'incorrect invert result')
-Test.assertEquals(amazonInvPairsRDD.count(), 111387, 'incorrect amazonInvPairsRDD.count()')
-Test.assertEquals(googleInvPairsRDD.count(), 77678, 'incorrect googleInvPairsRDD.count()')
+Test.assertEquals(amazonInvPairsRDD.count(), 111387,
+                  'incorrect amazonInvPairsRDD.count()')
+Test.assertEquals(googleInvPairsRDD.count(), 77678,
+                  'incorrect googleInvPairsRDD.count()')
 
 
 # ### **(4e) Identify common tokens from the full dataset**
@@ -945,9 +1020,9 @@ def swap(record):
         pair: ((ID, URL), token)
     """
     token = record[0]
-    
+
     keys = record[1]
-    
+
     return (keys, token)
 
 commonTokens = (amazonInvPairsRDD
@@ -962,7 +1037,10 @@ print 'Found %d common tokens' % commonTokens.count()
 # In[47]:
 
 # TEST Identify common tokens from the full dataset (4e)
-Test.assertEquals(commonTokens.count(), 2441100, 'incorrect commonTokens.count()')
+Test.assertEquals(
+    commonTokens.count(),
+    2441100,
+    'incorrect commonTokens.count()')
 
 
 # ### **(4f) Identify common tokens from the full dataset**
@@ -978,6 +1056,7 @@ Test.assertEquals(commonTokens.count(), 2441100, 'incorrect commonTokens.count()
 amazonWeightsBroadcast = sc.broadcast(amazonWeightsRDD.collectAsMap())
 googleWeightsBroadcast = sc.broadcast(googleWeightsRDD.collectAsMap())
 
+
 def fastCosineSimilarity(record):
     """ Compute Cosine Similarity using Broadcast variables
     Args:
@@ -986,17 +1065,21 @@ def fastCosineSimilarity(record):
         pair: ((ID, URL), cosine similarity value)
     """
     amazonRec = record[0][0]
-    
+
     googleRec = record[0][1]
 
     tokens = record[1]
-       
-    s = sum(amazonWeightsBroadcast.value[amazonRec][item] * googleWeightsBroadcast.value[googleRec][item] for item in tokens)
-    
-    value = s/(amazonNormsBroadcast.value[amazonRec] * googleNormsBroadcast.value[googleRec])
+
+    s = sum(
+        amazonWeightsBroadcast.value[amazonRec][item] *
+        googleWeightsBroadcast.value[googleRec][item] for item in tokens)
+
+    value = s / \
+        (amazonNormsBroadcast.value[amazonRec]
+         * googleNormsBroadcast.value[googleRec])
 
     key = (amazonRec, googleRec)
-    
+
     return (key, value)
 
 
@@ -1010,10 +1093,13 @@ print similaritiesFullRDD.count()
 # In[49]:
 
 # TEST Identify common tokens from the full dataset (4f)
-similarityTest = similaritiesFullRDD.filter(lambda ((aID, gURL), cs): aID == 'b00005lzly' and gURL == 'http://www.google.com/base/feeds/snippets/13823221823254120257').collect()
+similarityTest = similaritiesFullRDD.filter(lambda aID_gURL_cs: aID_gURL_cs[0][0] == 'b00005lzly' and aID_gURL_cs[
+                                            0][1] == 'http://www.google.com/base/feeds/snippets/13823221823254120257').collect()
 Test.assertEquals(len(similarityTest), 1, 'incorrect len(similarityTest)')
-Test.assertTrue(abs(similarityTest[0][1] - 4.286548414e-06) < 0.000000000001, 'incorrect similarityTest fastCosineSimilarity')
-Test.assertEquals(similaritiesFullRDD.count(), 2441100, 'incorrect similaritiesFullRDD.count()')
+Test.assertTrue(abs(similarityTest[0][1] - 4.286548414e-06) <
+                0.000000000001, 'incorrect similarityTest fastCosineSimilarity')
+Test.assertEquals(similaritiesFullRDD.count(), 2441100,
+                  'incorrect similaritiesFullRDD.count()')
 
 
 # ### **Part 5: Analysis**
@@ -1033,7 +1119,10 @@ Test.assertEquals(similaritiesFullRDD.count(), 2441100, 'incorrect similaritiesF
 # In[50]:
 
 # Create an RDD of ((Amazon ID, Google URL), similarity score)
-simsFullRDD = similaritiesFullRDD.map(lambda x: ("%s %s" % (x[0][0], x[0][1]), x[1]))
+simsFullRDD = similaritiesFullRDD.map(
+    lambda x: (
+        "%s %s" %
+        (x[0][0], x[0][1]), x[1]))
 assert (simsFullRDD.count() == 2441100)
 
 # Create an RDD of just the similarity scores
@@ -1044,14 +1133,20 @@ assert (simsFullValuesRDD.count() == 2441100)
 
 # Look up all similarity scores for true duplicates
 
-# This helper function will return the similarity score for records that are in the gold standard and the simsFullRDD (True positives), and will return 0 for records that are in the gold standard but not in simsFullRDD (False Negatives).
+# This helper function will return the similarity score for records that
+# are in the gold standard and the simsFullRDD (True positives), and will
+# return 0 for records that are in the gold standard but not in
+# simsFullRDD (False Negatives).
+
+
 def gs_value(record):
     if (record[1][1] is None):
         return 0
     else:
         return record[1][1]
 
-# Join the gold standard and simsFullRDD, and then extract the similarities scores using the helper function
+# Join the gold standard and simsFullRDD, and then extract the
+# similarities scores using the helper function
 trueDupSimsRDD = (goldStandard
                   .leftOuterJoin(simsFullRDD)
                   .map(gs_value)
@@ -1070,8 +1165,11 @@ assert(trueDupSimsRDD.count() == 1300)
 # In[51]:
 
 from pyspark.accumulators import AccumulatorParam
+
+
 class VectorAccumulatorParam(AccumulatorParam):
     # Initialize the VectorAccumulator to 0
+
     def zero(self, value):
         return [0] * len(value)
 
@@ -1082,6 +1180,8 @@ class VectorAccumulatorParam(AccumulatorParam):
         return val1
 
 # Return a list with entry x set to value and all other entries set to 0
+
+
 def set_bit(x, value, length):
     bits = []
     for y in xrange(length):
@@ -1094,12 +1194,16 @@ def set_bit(x, value, length):
 # Pre-bin counts of false positives for different threshold ranges
 BINS = 101
 nthresholds = 100
+
+
 def bin(similarity):
     return int(similarity * nthresholds)
 
-# fpCounts[i] = number of entries (possible false positives) where bin(similarity) == i
+# fpCounts[i] = number of entries (possible false positives) where
+# bin(similarity) == i
 zeros = [0] * BINS
 fpCounts = sc.accumulator(zeros, VectorAccumulatorParam())
+
 
 def add_element(score):
     global fpCounts
@@ -1109,6 +1213,8 @@ def add_element(score):
 simsFullValuesRDD.foreach(add_element)
 
 # Remove true positives from FP counts
+
+
 def sub_element(score):
     global fpCounts
     b = bin(score)
@@ -1116,12 +1222,16 @@ def sub_element(score):
 
 trueDupSimsRDD.foreach(sub_element)
 
+
 def falsepos(threshold):
     fpList = fpCounts.value
-    return sum([fpList[b] for b in range(0, BINS) if float(b) / nthresholds >= threshold])
+    return sum([fpList[b] for b in range(0, BINS)
+                if float(b) / nthresholds >= threshold])
+
 
 def falseneg(threshold):
     return trueDupSimsRDD.filter(lambda x: x < threshold).count()
+
 
 def truepos(threshold):
     return trueDupSimsRDD.count() - falsenegDict[threshold]
@@ -1145,9 +1255,11 @@ def precision(threshold):
     tp = trueposDict[threshold]
     return float(tp) / (tp + falseposDict[threshold])
 
+
 def recall(threshold):
     tp = trueposDict[threshold]
     return float(tp) / (tp + falsenegDict[threshold])
+
 
 def fmeasure(threshold):
     r = recall(threshold)
@@ -1190,6 +1302,3 @@ pass
 # #### * Using different similarity functions
 
 # In[ ]:
-
-
-

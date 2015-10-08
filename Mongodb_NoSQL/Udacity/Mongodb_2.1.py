@@ -12,10 +12,11 @@ client = MongoClient("mongodb://localhost:27017")
 
 db = client.examples
 
+
 def find():
     autos = db.autos.find(
-        { "manufacturer" : "Toyota",
-          "class" : "mid-size car"})
+        {"manufacturer": "Toyota",
+         "class": "mid-size car"})
     for a in autos:
         pprint.pprint(a)
 

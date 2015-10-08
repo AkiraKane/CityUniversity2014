@@ -12,6 +12,7 @@ the following link:
 https://www.udacity.com/wiki/ud032
 """
 
+
 def porsche_query():
     # Please fill in the query to find all autos manuafactured by Porsche.
     query = {}
@@ -26,6 +27,7 @@ def get_db(db_name):
     client = MongoClient('localhost:27017')
     db = client[db_name]
     return db
+
 
 def find_porsche(db, query):
     # For local use

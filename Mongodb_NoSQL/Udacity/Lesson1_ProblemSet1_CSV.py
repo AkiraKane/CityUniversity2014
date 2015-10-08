@@ -25,7 +25,7 @@ def parse_file(datafile):
     data = []
     rownum = 0
     # Open the file
-    with open(datafile,'rb') as f:
+    with open(datafile, 'rb') as f:
         reader = csv.reader(f)
         # Iterate through each row of the Dataframe
         for row in reader:
@@ -44,7 +44,7 @@ def parse_file(datafile):
 def test1():
     datafile = os.path.join(DATADIR, DATAFILE)
     name, data = parse_file(datafile)
-    
+
     print data
     print name
 

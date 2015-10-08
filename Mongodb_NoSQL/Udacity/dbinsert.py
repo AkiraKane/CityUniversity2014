@@ -1,5 +1,6 @@
 import json
 
+
 def insert_data(data, db):
     # insert data in MongoDB into a collection called 'arachnid'
     for entry in data:
@@ -7,7 +8,7 @@ def insert_data(data, db):
 
 
 if __name__ == "__main__":
-    
+
     from pymongo import MongoClient
     client = MongoClient("mongodb://localhost:27017")
     db = client.examples

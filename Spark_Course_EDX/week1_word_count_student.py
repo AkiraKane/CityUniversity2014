@@ -67,7 +67,10 @@ print makePlural('cat')
 # Make sure to rerun any cell you change before trying the test again
 from test_helper import Test
 # TEST Pluralize and test (1b)
-Test.assertEquals(makePlural('rat'), 'rats', 'incorrect result: makePlural does not add an s')
+Test.assertEquals(
+    makePlural('rat'),
+    'rats',
+    'incorrect result: makePlural does not add an s')
 
 
 # #### ** (1c) Apply `makePlural` to the base RDD **
@@ -151,7 +154,7 @@ Test.assertEquals(wordPairs.collect(),
 # #### An approach you might first consider (we'll see shortly that there are better ways) is based on using the [groupByKey()](http://spark.apache.org/docs/latest/api/python/pyspark.html#pyspark.RDD.groupByKey) transformation. As the name implies, the `groupByKey()` transformation groups all the elements of the RDD with the same key into a single list in one of the partitions. There are two problems with using `groupByKey()`:
 #   + #### The operation requires a lot of data movement to move all the values into the appropriate partitions.
 #   + #### The lists can be very large. Consider a word count of English Wikipedia: the lists for common words (e.g., the, a, etc.) would be huge and could exhaust the available memory in a worker.
-#  
+#
 # #### Use `groupByKey()` to generate a pair RDD of type `('word', iterator)`.
 
 # In[14]:
@@ -178,7 +181,7 @@ Test.assertEquals(sorted(wordsGrouped.mapValues(lambda x: list(x)).collect()),
 # In[24]:
 
 # TODO: Replace <FILL IN> with appropriate code
-wordCountsGrouped = wordsGrouped.map(lambda (x,y): (x,sum(y)))
+wordCountsGrouped = wordsGrouped.map(lambda x_y2: (x_y2[0], sum(x_y2[1])))
 print wordCountsGrouped.collect()
 
 
@@ -196,7 +199,8 @@ Test.assertEquals(sorted(wordCountsGrouped.collect()),
 # In[28]:
 
 # TODO: Replace <FILL IN> with appropriate code
-# Note that reduceByKey takes in a function that accepts two values and returns a single value
+# Note that reduceByKey takes in a function that accepts two values and
+# returns a single value
 from operator import add
 wordCounts = wordPairs.reduceByKey(add)
 print wordCounts.collect()
@@ -216,7 +220,7 @@ Test.assertEquals(sorted(wordCounts.collect()), [('cat', 2), ('elephant', 1), ('
 
 # TODO: Replace <FILL IN> with appropriate code
 wordCountsCollected = (wordsRDD
-                       .map(lambda x: (x,1))
+                       .map(lambda x: (x, 1))
                        .reduceByKey(add)
                        .collect())
 print wordCountsCollected
@@ -256,7 +260,7 @@ Test.assertEquals(uniqueWords, 3, 'incorrect count of uniqueWords')
 # TODO: Replace <FILL IN> with appropriate code
 from operator import add
 totalCount = (wordCounts
-              .map(lambda (x,y): (y))
+              .map(lambda x_y1: (x_y1[1]))
               .reduce(add))
 average = totalCount / float(uniqueWords)
 print totalCount
@@ -294,7 +298,7 @@ def wordCount(wordListRDD):
         RDD of (str, int): An RDD consisting of (word, count) tuples.
     """
     wordsRDDcount = (wordListRDD
-                     .map(lambda x: (x,1))
+                     .map(lambda x: (x, 1))
                      .reduceByKey(add))
     return wordsRDDcount
 print wordCount(wordsRDD).collect()
@@ -313,13 +317,15 @@ Test.assertEquals(sorted(wordCount(wordsRDD).collect()),
 #   + #### Words should be counted independent of their capitialization (e.g., Spark and spark should be counted as the same word).
 #   + #### All punctuation should be removed.
 #   + #### Any leading or trailing spaces on a line should be removed.
-#  
+#
 # #### Define the function `removePunctuation` that converts all text to lower case, removes any punctuation, and removes leading and trailing spaces.  Use the Python [re](https://docs.python.org/2/library/re.html) module to remove any text that is not a letter, number, or space. Reading `help(re.sub)` might be useful.
 
 # In[51]:
 
 # TODO: Replace <FILL IN> with appropriate code
 import re
+
+
 def removePunctuation(text):
     """Removes punctuation, changes to lower case, and strips leading and trailing spaces.
 
@@ -335,7 +341,7 @@ def removePunctuation(text):
         str: The cleaned up string.
     """
     # remove punctuation
-    text = re.sub(r'[^\w\s]','',text)
+    text = re.sub(r'[^\w\s]', '', text)
     text = text.lower()
     text = text.strip()
     return text
@@ -367,7 +373,8 @@ shakespeareRDD = (sc
                   .map(removePunctuation))
 print '\n'.join(shakespeareRDD
                 .zipWithIndex()  # to (line, lineNum)
-                .map(lambda (l, num): '{0}: {1}'.format(num, l))  # to 'lineNum: line'
+                # to 'lineNum: line'
+                .map(lambda l_num: '{0}: {1}'.format(l_num[1], l_num[0]))
                 .take(15))
 
 
@@ -375,7 +382,7 @@ print '\n'.join(shakespeareRDD
 # #### Before we can use the `wordcount()` function, we have to address two issues with the format of the RDD:
 #   + #### The first issue is that  that we need to split each line by its spaces.
 #   + #### The second issue is we need to filter out empty lines.
-#  
+#
 # #### Apply a transformation that will split each element of the RDD by its spaces. For each element of the RDD, you should apply Python's string [split()](https://docs.python.org/2/library/string.html#string.split) function. You might think that a `map()` transformation is the way to do this, but think about what the result of the `split()` function will be.
 
 # In[79]:
@@ -424,8 +431,9 @@ Test.assertEquals(shakeWordCount, 882996, 'incorrect value for shakeWordCount')
 # In[89]:
 
 # TODO: Replace <FILL IN> with appropriate code
-top15WordsAndCounts = wordCount(shakeWordsRDD).takeOrdered(15, key=lambda (x,y): -y)
-print '\n'.join(map(lambda (w, c): '{0}: {1}'.format(w, c), top15WordsAndCounts))
+top15WordsAndCounts = wordCount(
+    shakeWordsRDD).takeOrdered(15, key=lambda x_y: -x_y[1])
+print '\n'.join(map(lambda w_c: '{0}: {1}'.format(w_c[0], w_c[1]), top15WordsAndCounts))
 
 
 # In[90]:
@@ -433,12 +441,10 @@ print '\n'.join(map(lambda (w, c): '{0}: {1}'.format(w, c), top15WordsAndCounts)
 # TEST Count the words (4f)
 Test.assertEquals(top15WordsAndCounts,
                   [(u'the', 27361), (u'and', 26028), (u'i', 20681), (u'to', 19150), (u'of', 17463),
-                   (u'a', 14593), (u'you', 13615), (u'my', 12481), (u'in', 10956), (u'that', 10890),
+                   (u'a', 14593), (u'you', 13615), (u'my',
+                                                    12481), (u'in', 10956), (u'that', 10890),
                    (u'is', 9134), (u'not', 8497), (u'with', 7771), (u'me', 7769), (u'it', 7678)],
                   'incorrect value for top15WordsAndCounts')
 
 
 # In[ ]:
-
-
-

@@ -4,15 +4,17 @@ import os
 import numpy as np
 
 # Function to Obtain a List of Files
+
+
 def getFileList(directory):
     fileList = []
     fileSize = 0
     folderCount = 0
-    # For Loop to Cycle Through Directories 
+    # For Loop to Cycle Through Directories
     for root, dirs, files in os.walk(directory):
         folderCount += len(dirs)
         for file in files:
-            f = os.path.join(root,file)
+            f = os.path.join(root, file)
             fileSize = fileSize + os.path.getsize(f)
             fileList.append(f)
     # Print to Check Data has been located correctly
@@ -37,36 +39,40 @@ from xml.dom.minidom import parseString
 import re
 
 table = []
-for direc in np.arange(0,numFiles):
-    
+for direc in np.arange(0, numFiles):
+
     # Read and Convert XML to String
-    file = open(files[direc],'r')
+    file = open(files[direc], 'r')
     data = file.read()
     file.close()
-    
+
     # Ebook Number Retrieval
     ebook = parseString(data)
     ebook = ebook.getElementsByTagName('pgterms:ebook')[0].toxml()
-    ebook = ebook.replace('<pgterms:ebook>','').replace('</pgterms:ebook>','')
+    ebook = ebook.replace(
+        '<pgterms:ebook>',
+        '').replace(
+        '</pgterms:ebook>',
+        '')
     ebook = ebook[:ebook.find('>\n')]
-    ebook = str(re.split('/',re.split('=',ebook)[1])[1]).replace('"','')
-    
+    ebook = str(re.split('/', re.split('=', ebook)[1])[1]).replace('"', '')
+
     # Read XML into an Object
-    xmldoc = minidom.parse(files[direc])    
-    
+    xmldoc = minidom.parse(files[direc])
+
     # Navigate onto the Tree to Find the Ebook No.
     pgterms_ebook = xmldoc.getElementsByTagName('pgterms:ebook')[0]
-    
+
     # Navigate to the Subjects Tree
     subjects = pgterms_ebook.getElementsByTagName('dcterms:subject')
 
     # Print the Subjects values
     for lines in subjects:
         values = lines.getElementsByTagName('rdf:value')[0].firstChild.data
-        table.append([ebook,str(values)])
+        table.append([ebook, str(values)])
 
-f = open('Ebook_Subject.txt', 'w')  
-for i in np.arange(0,len(table)):
+f = open('Ebook_Subject.txt', 'w')
+for i in np.arange(0, len(table)):
     f.write("%s\n" % table[i])
-    
+
 f.close()
