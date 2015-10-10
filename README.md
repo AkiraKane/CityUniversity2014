@@ -38,7 +38,7 @@ Item | Link
 ------------- | -------------
 [Spark EDX Course](https://www.edx.org/course/introduction-big-data-apache-spark-uc-berkeleyx-cs100-1x) | [Click Here](https://github.com/dandxy89/CityUniversity2014/tree/master/Spark_Course_EDX)
 [Udactiy MongoDB Course](https://www.udacity.com/course/data-wrangling-with-mongodb--ud032) | [Click Here](https://github.com/dandxy89/CityUniversity2014/tree/master/Mongodb_NoSQL/Udacity)
-Spark SQL Experimentation | [Click Here](https://github.com/dandxy89/CityUniversity2014/tree/master/Spark_SQL)
-Torch7 Deep Learning Experimentation | [Click Here](https://github.com/dandxy89/CityUniversity2014/tree/master/Torch_7_Learning)
-NLP (Natural Language Processing) | [Click Here](https://github.com/dandxy89/CityUniversity2014/tree/master/NLP)
-[Coursera Machine Learning Course (Stanford)[Started 9/10/2015]](https://www.asp.org/education/EffectivePresentations.pdf) | [Click Here]()
+[Spark SQL](http://spark.apache.org/sql/) Experimentation | [Click Here](https://github.com/dandxy89/CityUniversity2014/tree/master/Spark_SQL)
+[Torch7](http://torch.ch/) Deep Learning Experimentation | [Click Here](https://github.com/dandxy89/CityUniversity2014/tree/master/Torch_7_Learning)
+Natural Language Processing (NLP) | [Click Here](https://github.com/dandxy89/CityUniversity2014/tree/master/NLP)
+[Coursera Machine Learning Course (Stanford)[Started 9/10/2015]](https://www.asp.org/education/EffectivePresentations.pdf) | [Click Here](https://github.com/dandxy89/CityUniversity2014/tree/master/Machine_Learning)
