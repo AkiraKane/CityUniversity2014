@@ -66,6 +66,14 @@ You are asked to compare two machine learning algorithms in practice, when appli
 
 **References/Papers**
 
+*Keywords*
+
+* Gradient Decent
+* Cross-validation
+* Supervised learning
+
+*References*
+
 1. Snoek, J., Larochelle, H., Adams, R.P., 2012. Practical Bayesian optimization of machine learning algorithms, in: Advances in Neural Information Processing Systems. pp. 2951–2959.
 2. Nonlinear Regression Analysis and Its Applications - http://onlinelibrary.wiley.com/book/10.1002/9780470316757
 3. Rasmussen, C.E., 2006. Gaussian processes for machine learning. MIT Press.
