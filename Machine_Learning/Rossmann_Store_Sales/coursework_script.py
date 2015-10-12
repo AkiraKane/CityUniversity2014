@@ -5,6 +5,9 @@
 # Dan Dixey
 # Machine Learning Coursework
 
+# Bayes Optimisation Reference: http://goo.gl/PCvRTV
+# Working Example of Decision Tree using the IRIS Dataset: https://goo.gl/M8pqgc
+
 import pandas as pd
 import numpy as np
 from time import time
