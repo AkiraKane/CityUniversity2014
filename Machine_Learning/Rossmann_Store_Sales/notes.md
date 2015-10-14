@@ -47,6 +47,20 @@ You are asked to compare two machine learning algorithms in practice, when appli
     * [Typical Metrics](http://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics)
     * Graphical Representation ([Seaborn](http://stanford.edu/~mwaskom/software/seaborn/))
 
+*Feature Engineering Ideas*
+
+1. Features Created
+    * Mean Sales per Month & Year (*t-statistic* validation)
+    * Means Sales per Month & Year & Ration to Store (*t-statistic* validation)
+    * Mean On/Off Promotion & Ratio (*t-statistic* validation)
+    * Mean On/Off School Holiday & Ratio to Store (*t-statistic* validation)
+    * Mean On/Off State Holiday & Ratio to Store (*t-statistic* validation)
+    * Mean On/Off Weekend & Ratio for Store (*t-statistic* validation)
+2. Relationships Explored
+    * Each Variables to Predictor
+    * Feature importance
+    * Principal Component Analysis (PCA)
+
 **Poster**
 
 *Marking*:
