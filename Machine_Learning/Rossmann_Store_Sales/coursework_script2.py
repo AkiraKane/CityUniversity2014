@@ -411,7 +411,9 @@ def main():
     # Save Trial data to MongoDB
     savingTrialData(trials1, trials2)
     # Fit and Predict using the top Models
-    bestML1, bestML2 = changeParams(bestML1, bestML2)
+    bestML1 = changeParams(bestML1)
+    bestML2 = changeParams(bestML2)
+    # Refit and Predict Result from the Testing Set
     output1 = fit_predict(X, y, X_test, bestML1, 1)
     output2 = fit_predict(X, y, X_test, bestML2, 2)
     # Join with IDs, label and remove unwanted columns
