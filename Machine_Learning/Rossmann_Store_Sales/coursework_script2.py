@@ -18,8 +18,8 @@ from hyperopt import fmin, tpe, hp
 import hyperopt.pyll.stochastic
 from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
 from sklearn.preprocessing import normalize, scale
-from sklearn.tree import DecisionTreeRegressor  # ML Algo 1
-from sklearn.linear_model import BayesianRidge  # ML Algo 2
+from sklearn.ensemble import RandomForestRegressor  # ML Algo 1
+from sklearn.ensemble import GradientBoostingRegressor  # ML Algo 2
 from sklearn.cross_validation import cross_val_score
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -52,18 +52,22 @@ def cross_validation(params):
     X_ = X
     y_ = y.values.ravel()
     if 'normalize' in params:
-        if params['normalize'] == 2:
+        if params['normalize'] == 1:
             for col in scaleNorm:
-                X_[col] = normalize(X_[col])
+                X_[col] = normalize(X_[col]).T
         del params['normalize']
     if 'scale' in params:
         if params['scale'] == 1:
             for col in scaleNorm:
-                X_[col] = normalize(X_[col])
+                X_[col] = scale(X_[col]).T
         del params['scale']
+    if 'log_y' in params:
+        if params['log_y'] == 1:
+            y_ = np.log(y_)
+        del params['log_y']
     # Convery to Numpy Arrays
     X_ = X_.values
-    clf = DecisionTreeRegressor(**params)
+    clf = RandomForestRegressor(**params)
     # Using Stratified Sampling, 5 folds, Scoring criteria = MSE
     data = cross_val_score(clf, X_, y_, cv=5, n_jobs=-1,
                            scoring='mean_absolute_error')
@@ -74,7 +78,7 @@ def results(params):
     ''' Intermediate step to return a dictionary of the loss/metric
     '''
     acc = cross_validation(params)
-    return {'loss': acc[0], 'std': acc[1], 'status': STATUS_OK}
+    return {'loss': -acc[0], 'std': acc[1], 'status': STATUS_OK}
 
 
 def cross_validation2(params):
@@ -85,18 +89,22 @@ def cross_validation2(params):
     X_ = X
     y_ = y.values.ravel()
     if 'normalize' in params:
-        if params['normalize'] == 2:
+        if params['normalize'] == 1:
             for col in scaleNorm:
-                X_[col] = normalize(X_[col])
+                X_[col] = normalize(X_[col]).T
         del params['normalize']
     if 'scale' in params:
         if params['scale'] == 1:
             for col in scaleNorm:
-                X_[col] = scale(X_[col])
+                X_[col] = scale(X_[col]).T
         del params['scale']
+    if 'log_y' in params:
+        if params['log_y'] == 1:
+            y_ = np.log(y_)
+        del params['log_y']
     # Convery to Numpy Arrays
     X_ = X_.values
-    clf = BayesianRidge(**params)
+    clf = GradientBoostingRegressor(**params)
     # Using Stratified Sampling, 5 folds, Scoring criteria = MSE
     data = cross_val_score(clf, X_, y_, cv=5, n_jobs=-1,
                            scoring='mean_absolute_error')
@@ -107,7 +115,7 @@ def results2(params):
     ''' Intermediate step to return a dictionary of the loss/metric
     '''
     acc = cross_validation2(params)
-    return {'loss': acc[0], 'std': acc[1], 'status': STATUS_OK}
+    return {'loss': -acc[0], 'std': acc[1], 'status': STATUS_OK}
 
 
 def preproc_dataset(dataframe, floatList, deleteCols, delOpen):
@@ -142,6 +150,7 @@ def preproc_dataset(dataframe, floatList, deleteCols, delOpen):
     # Use only Store that are Open '1' as predictors
     if delOpen:
         dataframe = dataframe[dataframe.Open == 1]
+        dataframe = dataframe[dataframe.Sales != 0]
     # Remove Unwanted Columns
     dataframe = dataframe[dataframe.columns - deleteCols]
     return dataframe
@@ -154,7 +163,7 @@ def plot_data(parameters, trials, name):
     f, axes = plt.subplots(nrows=1, ncols=cols, figsize=(18, 5), sharey=True)
     for i, val in enumerate(parameters):
         xs = np.array([t['misc']['vals'][val] for t in trials.trials]).ravel()
-        ys = [-t['result']['loss'] for t in trials.trials]
+        ys = [t['result']['loss'] for t in trials.trials]
         cs = normalize(ys)
         temp = np.array(sorted(zip(xs, ys)))
         xs, ys = temp[:, 0], temp[:, 1]
@@ -175,7 +184,7 @@ def plot_data(parameters, trials, name):
     f, ax = plt.subplots(1)
     xs = [t['tid'] for t in trials.trials]
     ys = [np.abs(t['result']['loss']) for t in trials.trials]
-    ys = [-t['result']['loss'] for t in trials.trials]
+    ys = [t['result']['loss'] for t in trials.trials]
     cs = normalize(ys)
     ax.set_xlim(xs[0] - 10, xs[-1] + 10)
     ax.scatter(xs, ys, c=cs, s=40,
@@ -206,17 +215,21 @@ def fit_predict(X, y, X_test, params, model):
     X_test_ = X_test
     y_ = y.values.ravel()
     if 'normalize' in params:
-        if params['normalize'] == 2:
+        if params['normalize'] == 1:
             for col in scaleNorm:
-                X_[col] = normalize(X_[col])
-                X_test_[col] = normalize(X_test_[col])
+                X_[col] = normalize(X_[col]).T
+                X_test_[col] = normalize(X_test_[col]).T
         del params['normalize']
     if 'scale' in params:
         if params['scale'] == 1:
             for col in scaleNorm:
-                X_[col] = scale(X_[col])
-                X_test_[col] = scale(X_test_[col])
+                X_[col] = scale(X_[col]).T
+                X_test_[col] = scale(X_test_[col]).T
         del params['scale']
+    if 'log_y' in params:
+        if params['log_y'] == 1:
+            y_ = np.log(y_)
+        del params['log_y']
     # Convery to Numpy Arrays
     X_ = X_.values
     X_test_ = X_test_.values
@@ -229,16 +242,32 @@ def fit_predict(X, y, X_test, params, model):
     return clf.predict(X_test_)
 
 
-def changeParams(bestML1, bestML2):
-    if bestML1['criterion'] == 0:
-        bestML1['criterion'] = "mse"
-    else:
-        bestML1['criterion'] = "mse"
-    if bestML2['fit_intercept'] == 0:
-        bestML2['fit_intercept'] = True
-    else:
-        bestML2['fit_intercept'] = False
-    return bestML1, bestML2
+def changeParams(settings):
+    # Criterion
+    if 'criterion' in settings:
+        settings['criterion'] = [
+            "mse", "friedman_mse"][
+            settings['criterion'][0]]
+    if 'max_depth' in settings:
+        settings['max_depth'] = range(100, 500)[settings['max_depth'][0]]
+    if 'max_features' in settings:
+        settings['max_features'] = range(1, 12)[settings['max_features'][0]]
+    if 'normalize' in settings:
+        settings['normalize'] = [0, 1][settings['normalize'][0]]
+    if 'n_estimators' in settings:
+        settings['n_estimators'] = range(100, 800)[settings['n_estimators'][0]]
+    if 'scale' in settings:
+        settings['scale'] = [0, 1][settings['scale'][0]]
+    if 'log_y' in settings:
+        settings['log_y'] = [0, 1][settings['log_y'][0]]
+    if 'loss' in settings:
+        settings['loss'] = [
+            'ls', 'lad', 'huber', 'quantile'][
+            settings['loss'][0]]
+    if 'learning_rate' in settings:
+        settings['learning_rate'] = np.arange(0.00000000001, 0.6, 0.000001)[
+            settings['learning_rate'][0]]
+    return settings
 
 
 def main():
@@ -304,7 +333,7 @@ def main():
     # REMEMBER: Open Stores are only included, need to merge with 0 zero data
     testDF = preproc_dataset(testDF, scaleNorm, removeCols, False)
     # Feature Engineering - Pre - Training
-    trainingDF = trainingDF[trainingDF.Open == 1]
+    # TO DO
     # Sampling, Setting up Cross Validation - Make X and Y Global (for reuse)
     global X, y
     X = trainingDF[trainingDF.columns - removeCols - ['Sales']]
@@ -320,24 +349,36 @@ def main():
     hypParameters1 = dict(
         max_depth=hp.choice(
             'max_depth', range(
-                1, 50)), max_features=hp.choice(
+                100, 500)), max_features=hp.choice(
             'max_features', range(
                 1, 12)), criterion=hp.choice(
             'criterion', [
                 "mse", "friedman_mse"]), normalize=hp.choice(
             'normalize', [
+                0, 1]), n_estimators=hp.choice(
+            'n_estimators', [
+                1, 800]), scale=hp.choice(
+            'scale', [
+                0, 1]), log_y=hp.choice(
+            'log_y', [
                 0, 1]))
     # Machine Learning Algorithm #2 - Define Hyperparameters
     # Bayesian Ridge Regression - http://goo.gl/mcNhvN
     hypParameters2 = dict(
-        n_iter=hp.choice(
-            'n_iter', range(
-                20, 600)), fit_intercept=hp.choice(
-            'fit_intercept', [
-                True, False]), normalize=hp.choice(
+        loss=hp.choice(
+            'loss', [
+                'ls', 'lad', 'huber', 'quantile']), learning_rate=hp.choice(
+            'learning_rate', np.arange(
+                0.00001, 0.5, 0.0001)), normalize=hp.choice(
             'normalize', [
                 0, 1]), scale=hp.choice(
             'scale', [
+                0, 1]), max_depth=hp.choice(
+            'max_depth', range(
+                100, 500)), n_estimators=hp.choice(
+            'n_estimators', range(
+                1, 800)), log_y=hp.choice(
+            'log_y', [
                 0, 1]))
     # Recording Trial Results
     trials1 = Trials()
@@ -347,7 +388,7 @@ def main():
         results,
         hypParameters1,
         algo=tpe.suggest,
-        max_evals=1000,
+        max_evals=10,
         trials=trials1)
     print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML1,
                                                                            np.abs(trials1.best_trial['result']['loss']),
@@ -357,7 +398,7 @@ def main():
         results2,
         hypParameters2,
         algo=tpe.suggest,
-        max_evals=1000,
+        max_evals=10,
         trials=trials2)
     print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML2,
                                                                            np.abs(trials2.best_trial['result']['loss']),
@@ -365,8 +406,8 @@ def main():
     # Feature Engineering - Post
     # Evaluate Models - Graphical and Tabular Results - Plot Trial Data
     # Save Plots!!!
-    plot_data(hypParameters1.keys(), trials1, 'DecisionTree')
-    plot_data(hypParameters2.keys(), trials2, 'BayesianRidgeRegression')
+    plot_data(hypParameters1.keys(), trials1, 'RandomForestRegressor')
+    plot_data(hypParameters2.keys(), trials2, 'GradientBoostingRegressor')
     # Save Trial data to MongoDB
     savingTrialData(trials1, trials2)
     # Fit and Predict using the top Models
@@ -381,7 +422,7 @@ def main():
     submission = submission.merge(Submission, on='Id', how='left'). \
         drop(['Sales'], axis=1)
     # Save output for Submission to Kaggle
-    submission.to_csv('submission_x.csv', sep=',', index=False)
+    submission.to_csv('submission_xF.csv', sep=',', index=False)
     # Print Final Statement
     print('Total time to Load, Optimise and Present Details: {} seconds').format(
         time() - startT)

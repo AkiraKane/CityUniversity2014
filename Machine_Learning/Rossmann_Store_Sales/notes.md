@@ -56,6 +56,7 @@ You are asked to compare two machine learning algorithms in practice, when appli
     * Mean On/Off School Holiday & Ratio to Store (*t-statistic* validation)
     * Mean On/Off State Holiday & Ratio to Store (*t-statistic* validation)
     * Mean On/Off Weekend & Ratio for Store (*t-statistic* validation)
+    * Log Sales
 2. Relationships Explored
     * Each Variables to Predictor
     * Feature importance
