@@ -249,7 +249,7 @@ def changeParams(settings):
             "mse", "friedman_mse"][
             settings['criterion'][0]]
     if 'max_depth' in settings:
-        settings['max_depth'] = range(100, 500)[settings['max_depth'][0]]
+        settings['max_depth'] = range(50, 150)[settings['max_depth'][0]]
     if 'max_features' in settings:
         settings['max_features'] = range(1, 12)[settings['max_features'][0]]
     if 'normalize' in settings:
@@ -349,7 +349,7 @@ def main():
     hypParameters1 = dict(
         max_depth=hp.choice(
             'max_depth', range(
-                100, 500)), max_features=hp.choice(
+                50, 150)), max_features=hp.choice(
             'max_features', range(
                 1, 12)), criterion=hp.choice(
             'criterion', [
@@ -375,7 +375,7 @@ def main():
             'scale', [
                 0, 1]), max_depth=hp.choice(
             'max_depth', range(
-                100, 500)), n_estimators=hp.choice(
+                50, 150)), n_estimators=hp.choice(
             'n_estimators', range(
                 1, 800)), log_y=hp.choice(
             'log_y', [
@@ -384,22 +384,12 @@ def main():
     trials1 = Trials()
     trials2 = Trials()
     # Optimisation of Machine Learning Algorithm #1 = Decision Tree
-    bestML1 = fmin(
-        results,
-        hypParameters1,
-        algo=tpe.suggest,
-        max_evals=10,
-        trials=trials1)
+    bestML1 = fmin(results, hypParameters1, algo=tpe.suggest, max_evals=100, trials=trials1)
     print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML1,
                                                                            np.abs(trials1.best_trial['result']['loss']),
                                                                            np.abs(trials1.best_trial['result']['std'])))
     # Optimisation of Machine Learning Algorithm #2 = Bayesian Ridge Regression
-    bestML2 = fmin(
-        results2,
-        hypParameters2,
-        algo=tpe.suggest,
-        max_evals=10,
-        trials=trials2)
+    bestML2 = fmin(results2, hypParameters2, algo=tpe.suggest, max_evals=100, trials=trials2)
     print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML2,
                                                                            np.abs(trials2.best_trial['result']['loss']),
                                                                            np.abs(trials2.best_trial['result']['std'])))
