@@ -26,6 +26,7 @@ import seaborn as sns
 import matplotlib as mpl
 from datetime import datetime
 from pymongo import MongoClient
+from sklearn.cross_validation import KFold
 
 
 # Seaborn Parameters
@@ -35,6 +36,18 @@ sns.set(style="whitegrid")
 # Scikit uses Numpy for Random Number Generation, setting a random seed value
 # ensures that the result can be repeated without worry of lossing analysis
 np.random.seed(1989)
+
+
+def ToWeight(y):
+    w = np.zeros(y.shape, dtype=float)
+    ind = y != 0
+    w[ind] = 1./(y[ind]**2)
+    return w
+
+def rmspe(yhat, y):
+    w = ToWeight(y)
+    rmspe = np.sqrt(np.mean( w * (y - yhat)**2 ))
+    return rmspe
 
 
 def importData(name):
@@ -68,9 +81,17 @@ def cross_validation(params):
     # Convery to Numpy Arrays
     X_ = X_.values
     clf = RandomForestRegressor(**params)
-    # Using Stratified Sampling, 5 folds, Scoring criteria = MSE
-    data = cross_val_score(clf, X_, y_, cv=5, n_jobs=-1,
-                           scoring='mean_absolute_error')
+    # Using k-fold Cross Validation(5 folds), Scoring criteria = RMSPE
+    crossVal = KFold(X_.shape[0], n_folds=5)
+    data = []
+    for train, test in crossVal:
+        X_train = X_[train]
+        y_train = y_[train]
+        clf.fit(X_train, y_train)
+        yhat_ = clf.predict(X_train)
+        data.append(rmspe(yhat_, y_train))
+    # Save Data as a Array
+    data = np.array(data)
     return [data.mean(), data.std()]
 
 
@@ -105,9 +126,17 @@ def cross_validation2(params):
     # Convery to Numpy Arrays
     X_ = X_.values
     clf = GradientBoostingRegressor(**params)
-    # Using Stratified Sampling, 5 folds, Scoring criteria = MSE
-    data = cross_val_score(clf, X_, y_, cv=5, n_jobs=-1,
-                           scoring='mean_absolute_error')
+    # Using k-fold Cross Validation(5 folds), Scoring criteria = RMSPE
+    crossVal = KFold(X_.shape[0], n_folds=5)
+    data = []
+    for train, test in crossVal:
+        X_train = X_[train]
+        y_train = y_[train]
+        clf.fit(X_train, y_train)
+        yhat_ = clf.predict(X_train)
+        data.append(rmspe(yhat_, y_train))
+    # Save Data as a Array
+    data = np.array(data)
     return [data.mean(), data.std()]
 
 
@@ -270,157 +299,151 @@ def changeParams(settings):
     return settings
 
 
-def main():
-    # Start Stopwatch
-    print(datetime.now())
-    startT = time()
-    # Import the Data
-    trainingDF = importData('train.csv')
-    testDF = importData('test.csv')
-    storesDF = importData('store.csv')
-    submission = importData('sample_submission.csv')
-    # Data Preparation
-    # Joins, seperate columns
-    trainingDF = pd.merge(trainingDF, storesDF, on='Store')
-    testDF = pd.merge(testDF, storesDF, on='Store')
-    # Identifying Columns to datatype
-    numericalCols = ['Sales', 'Customers', 'CompetitionDistance']
-    categorCols = ['Assortment', 'StoreType']
-    dateCols = ['CompetitionOpenSinceYear', 'Date']
-    binaryCols = list(
-        trainingDF.columns -
-        numericalCols -
-        categorCols -
-        dateCols)
-    print('{} Binary Columns, {} Numerical Columns, {} Date Columns, {} Catgorical Columns'). \
-        format(len(binaryCols), len(numericalCols), len(dateCols), len(categorCols))
-    # Basic Statistics
-    # Missing Data - Table + Chart
-    missingData = []
-    for col in trainingDF:
-        value = float(trainingDF[col].isnull().sum()) / trainingDF.shape[0]
-        missingData.append(np.float(format(value * 100, '.3f')))
-    missingData = pd.DataFrame(missingData,
-                               index=trainingDF.columns,
-                               columns=['PercentageMissing'])
-    # Removing the following columns as to much is missing
-    removeCols = ['PromoInterval', 'Promo2SinceYear', 'Promo2SinceWeek']
-    # Column Statistics - Table + Chart
-    summary = pd.DataFrame(trainingDF.describe().T)
-    summary = summary.drop(['count'], axis=1)
-    # Data dictionary
-    # TODO
-    # Removing Spurious Data
-    noCompetition = trainingDF[
-        trainingDF.CompetitionDistance.isnull()].Store.unique()
-    print('Number of Stores with "NO" Competition: {}').format(len(noCompetition))
-    # Compeition Opening Since not known?
-    nStores = trainingDF[
-        trainingDF.CompetitionOpenSinceMonth.isnull()].Store.unique()
-    print('Number of Stores with "NO KNOWLEDGE" of when Compeitiors Opened: {}'). \
-        format((len(nStores) - len(noCompetition)))
-    removeCols.extend(['CompetitionOpenSinceYear',
-                       'CompetitionOpenSinceMonth',
-                       'Date',
-                       'Customers',
-                       'Open'])
-    # Columns that can be Scaled or Normalised as they are Continuous
-    global scaleNorm
-    scaleNorm = ['CompetitionDistance']
-    # Preprocessing Steps
-    trainingDF = preproc_dataset(trainingDF, scaleNorm, removeCols, True)
-    removeCols.remove('Customers')
-    # REMEMBER: Open Stores are only included, need to merge with 0 zero data
-    testDF = preproc_dataset(testDF, scaleNorm, removeCols, False)
-    # Feature Engineering - Pre - Training
-    # TO DO
-    # Sampling, Setting up Cross Validation - Make X and Y Global (for reuse)
-    global X, y
-    X = trainingDF[trainingDF.columns - removeCols - ['Sales']]
-    y = trainingDF[['Sales']]
-    ID_Data = testDF['Id']
-    X_test = testDF[testDF.columns - ['Id']]
-    print('Size of Training Set: Columns = {}, Rows = {}'). \
-        format(X.shape[1], X.shape[0])
-    print('Size of Test Set: Columns = {}, Rows = {}'). \
-        format(testDF.shape[1], testDF.shape[0])
-    # Machine Learning Algorithm #1 - Define Hyperparameters
-    # DecisionTreeRegressor - http://goo.gl/ksZgRb
-    hypParameters1 = dict(
-        max_depth=hp.choice(
-            'max_depth', range(
-                50, 150)), max_features=hp.choice(
-            'max_features', range(
-                1, 12)), criterion=hp.choice(
-            'criterion', [
-                "mse", "friedman_mse"]), normalize=hp.choice(
-            'normalize', [
-                0, 1]), n_estimators=hp.choice(
-            'n_estimators', [
-                1, 800]), scale=hp.choice(
-            'scale', [
-                0, 1]), log_y=hp.choice(
-            'log_y', [
-                0, 1]))
-    # Machine Learning Algorithm #2 - Define Hyperparameters
-    # Bayesian Ridge Regression - http://goo.gl/mcNhvN
-    hypParameters2 = dict(
-        loss=hp.choice(
-            'loss', [
-                'ls', 'lad', 'huber', 'quantile']), learning_rate=hp.choice(
-            'learning_rate', np.arange(
-                0.00001, 0.5, 0.0001)), normalize=hp.choice(
-            'normalize', [
-                0, 1]), scale=hp.choice(
-            'scale', [
-                0, 1]), max_depth=hp.choice(
-            'max_depth', range(
-                50, 150)), n_estimators=hp.choice(
-            'n_estimators', range(
-                1, 800)), log_y=hp.choice(
-            'log_y', [
-                0, 1]))
-    # Recording Trial Results
-    trials1 = Trials()
-    trials2 = Trials()
-    # Optimisation of Machine Learning Algorithm #1 = Decision Tree
-    bestML1 = fmin(results, hypParameters1, algo=tpe.suggest, max_evals=100, trials=trials1)
-    print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML1,
-                                                                           np.abs(trials1.best_trial['result']['loss']),
-                                                                           np.abs(trials1.best_trial['result']['std'])))
-    # Optimisation of Machine Learning Algorithm #2 = Bayesian Ridge Regression
-    bestML2 = fmin(results2, hypParameters2, algo=tpe.suggest, max_evals=100, trials=trials2)
-    print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML2,
-                                                                           np.abs(trials2.best_trial['result']['loss']),
-                                                                           np.abs(trials2.best_trial['result']['std'])))
-    # Feature Engineering - Post
-    # Evaluate Models - Graphical and Tabular Results - Plot Trial Data
-    # Save Plots!!!
-    plot_data(hypParameters1.keys(), trials1, 'RandomForestRegressor')
-    plot_data(hypParameters2.keys(), trials2, 'GradientBoostingRegressor')
-    # Save Trial data to MongoDB
-    savingTrialData(trials1, trials2)
-    # Fit and Predict using the top Models
-    bestML1 = changeParams(bestML1)
-    bestML2 = changeParams(bestML2)
-    # Refit and Predict Result from the Testing Set
-    output1 = fit_predict(X, y, X_test, bestML1, 1)
-    output2 = fit_predict(X, y, X_test, bestML2, 2)
-    # Join with IDs, label and remove unwanted columns
-    Submission = pd.DataFrame(data=[ID_Data.values,
-                                    output1.tolist(),
-                                    output2.tolist()]).T
-    Submission.columns = ['Id', 'ML1', 'ML2']
-    submission = submission.merge(Submission, on='Id', how='left'). \
-        drop(['Sales'], axis=1)
-    # Save output for Submission to Kaggle
-    submission.to_csv('submission_xF.csv', sep=',', index=False)
-    # Print Final Statement
-    print('Total time to Load, Optimise and Present Details: {} seconds').format(
-        time() - startT)
-    print(datetime.now())
-    return
-
-
-if __name__ == "main":
-    main()
+# Start Stopwatch
+print(datetime.now())
+startT = time()
+# Import the Data
+trainingDF = importData('train.csv')
+testDF = importData('test.csv')
+storesDF = importData('store.csv')
+submission = importData('sample_submission.csv')
+# Data Preparation
+# Joins, seperate columns
+trainingDF = pd.merge(trainingDF, storesDF, on='Store')
+testDF = pd.merge(testDF, storesDF, on='Store')
+# Identifying Columns to datatype
+numericalCols = ['Sales', 'Customers', 'CompetitionDistance']
+categorCols = ['Assortment', 'StoreType']
+dateCols = ['CompetitionOpenSinceYear', 'Date']
+binaryCols = list(
+    trainingDF.columns -
+    numericalCols -
+    categorCols -
+    dateCols)
+print('{} Binary Columns, {} Numerical Columns, {} Date Columns, {} Catgorical Columns'). \
+    format(len(binaryCols), len(numericalCols), len(dateCols), len(categorCols))
+# Basic Statistics
+# Missing Data - Table + Chart
+missingData = []
+for col in trainingDF:
+    value = float(trainingDF[col].isnull().sum()) / trainingDF.shape[0]
+    missingData.append(np.float(format(value * 100, '.3f')))
+missingData = pd.DataFrame(missingData,
+                           index=trainingDF.columns,
+                           columns=['PercentageMissing'])
+# Removing the following columns as to much is missing
+removeCols = ['PromoInterval', 'Promo2SinceYear', 'Promo2SinceWeek']
+# Column Statistics - Table + Chart
+summary = pd.DataFrame(trainingDF.describe().T)
+summary = summary.drop(['count'], axis=1)
+# Data dictionary
+# TODO
+# Removing Spurious Data
+noCompetition = trainingDF[
+    trainingDF.CompetitionDistance.isnull()].Store.unique()
+print('Number of Stores with "NO" Competition: {}').format(len(noCompetition))
+# Compeition Opening Since not known?
+nStores = trainingDF[
+    trainingDF.CompetitionOpenSinceMonth.isnull()].Store.unique()
+print('Number of Stores with "NO KNOWLEDGE" of when Compeitiors Opened: {}'). \
+    format((len(nStores) - len(noCompetition)))
+removeCols.extend(['CompetitionOpenSinceYear',
+                   'CompetitionOpenSinceMonth',
+                   'Date',
+                   'Customers',
+                   'Open'])
+# Columns that can be Scaled or Normalised as they are Continuous
+global scaleNorm
+scaleNorm = ['CompetitionDistance']
+# Preprocessing Steps
+trainingDF = preproc_dataset(trainingDF, scaleNorm, removeCols, True)
+removeCols.remove('Customers')
+# REMEMBER: Open Stores are only included, need to merge with 0 zero data
+testDF = preproc_dataset(testDF, scaleNorm, removeCols, False)
+# Feature Engineering - Pre - Training
+# TO DO
+# Sampling, Setting up Cross Validation - Make X and Y Global (for reuse)
+global X, y
+X = trainingDF[trainingDF.columns - removeCols - ['Sales']]
+y = trainingDF[['Sales']]
+ID_Data = testDF['Id']
+X_test = testDF[testDF.columns - ['Id']]
+print('Size of Training Set: Columns = {}, Rows = {}'). \
+    format(X.shape[1], X.shape[0])
+print('Size of Test Set: Columns = {}, Rows = {}'). \
+    format(testDF.shape[1], testDF.shape[0])
+# Machine Learning Algorithm #1 - Define Hyperparameters
+# DecisionTreeRegressor - http://goo.gl/ksZgRb
+hypParameters1 = dict(
+    max_depth=hp.choice(
+        'max_depth', range(
+            50, 150)), max_features=hp.choice(
+        'max_features', range(
+            1, 12)), criterion=hp.choice(
+        'criterion', [
+            "mse", "friedman_mse"]), normalize=hp.choice(
+        'normalize', [
+            0, 1]), n_estimators=hp.choice(
+        'n_estimators', [
+            1, 800]), scale=hp.choice(
+        'scale', [
+            0, 1]), log_y=hp.choice(
+        'log_y', [
+            0, 1]))
+# Machine Learning Algorithm #2 - Define Hyperparameters
+# Bayesian Ridge Regression - http://goo.gl/mcNhvN
+hypParameters2 = dict(
+    loss=hp.choice(
+        'loss', [
+            'ls', 'lad', 'huber', 'quantile']), learning_rate=hp.choice(
+        'learning_rate', np.arange(
+            0.00001, 0.5, 0.0001)), normalize=hp.choice(
+        'normalize', [
+            0, 1]), scale=hp.choice(
+        'scale', [
+            0, 1]), max_depth=hp.choice(
+        'max_depth', range(
+            50, 150)), n_estimators=hp.choice(
+        'n_estimators', range(
+            1, 800)), log_y=hp.choice(
+        'log_y', [
+            0, 1]))
+# Recording Trial Results
+trials1 = Trials()
+trials2 = Trials()
+# Optimisation of Machine Learning Algorithm #1 = Decision Tree
+bestML1 = fmin(results, hypParameters1, algo=tpe.suggest, max_evals=100, trials=trials1)
+print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML1,
+                                                                       np.abs(trials1.best_trial['result']['loss']),
+                                                                       np.abs(trials1.best_trial['result']['std'])))
+# Optimisation of Machine Learning Algorithm #2 = Bayesian Ridge Regression
+bestML2 = fmin(results2, hypParameters2, algo=tpe.suggest, max_evals=100, trials=trials2)
+print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML2,
+                                                                       np.abs(trials2.best_trial['result']['loss']),
+                                                                       np.abs(trials2.best_trial['result']['std'])))
+# Feature Engineering - Post
+# Evaluate Models - Graphical and Tabular Results - Plot Trial Data
+# Save Plots!!!
+plot_data(hypParameters1.keys(), trials1, 'RandomForestRegressor')
+plot_data(hypParameters2.keys(), trials2, 'GradientBoostingRegressor')
+# Save Trial data to MongoDB
+savingTrialData(trials1, trials2)
+# Fit and Predict using the top Models
+bestML1 = changeParams(bestML1)
+bestML2 = changeParams(bestML2)
+# Refit and Predict Result from the Testing Set
+output1 = fit_predict(X, y, X_test, bestML1, 1)
+output2 = fit_predict(X, y, X_test, bestML2, 2)
+# Join with IDs, label and remove unwanted columns
+Submission = pd.DataFrame(data=[ID_Data.values,
+                                output1.tolist(),
+                                output2.tolist()]).T
+Submission.columns = ['Id', 'ML1', 'ML2']
+submission = submission.merge(Submission, on='Id', how='left'). \
+    drop(['Sales'], axis=1)
+# Save output for Submission to Kaggle
+submission.to_csv('submission_xF.csv', sep=',', index=False)
+# Print Final Statement
+print('Total time to Load, Optimise and Present Details: {} seconds').format(
+    time() - startT)
+print(datetime.now())
