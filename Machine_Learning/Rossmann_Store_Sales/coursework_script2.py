@@ -41,12 +41,13 @@ np.random.seed(1989)
 def ToWeight(y):
     w = np.zeros(y.shape, dtype=float)
     ind = y != 0
-    w[ind] = 1./(y[ind]**2)
+    w[ind] = 1. / (y[ind]**2)
     return w
+
 
 def rmspe(yhat, y):
     w = ToWeight(y)
-    rmspe = np.sqrt(np.mean( w * (y - yhat)**2 ))
+    rmspe = np.sqrt(np.mean(w * (y - yhat)**2))
     return rmspe
 
 
@@ -279,15 +280,17 @@ def changeParams(settings):
     if 'criterion' in settings:
         settings['criterion'] = [
             "mse", "friedman_mse"][int(
-            settings['criterion'][0])]
+                settings['criterion'][0])]
     if 'max_depth' in settings:
-        settings['max_depth'] = range(20, 150)[int(settings['max_depth'][0])]
+        settings['max_depth'] = range(40, 150)[int(settings['max_depth'][0])]
     if 'max_features' in settings:
-        settings['max_features'] = range(1, 12)[int(settings['max_features'][0])]
+        settings['max_features'] = range(
+            1, 12)[int(settings['max_features'][0])]
     if 'normalize' in settings:
         settings['normalize'] = [0, 1][int(settings['normalize'][0])]
     if 'n_estimators' in settings:
-        settings['n_estimators'] = range(1, 50)[int(settings['n_estimators'][0])]
+        settings['n_estimators'] = range(
+            50, 100)[int(settings['n_estimators'][0])]
     if 'scale' in settings:
         settings['scale'] = [0, 1][int(settings['scale'][0])]
     if 'log_y' in settings:
@@ -295,9 +298,9 @@ def changeParams(settings):
     if 'loss' in settings:
         settings['loss'] = [
             'ls', 'lad', 'huber', 'quantile'][int(
-            settings['loss'][0])]
+                settings['loss'][0])]
     if 'learning_rate' in settings:
-        settings['learning_rate'] = np.arange(0.00000000001, 0.6, 0.000001)[
+        settings['learning_rate'] = np.arange(0.000001, 0.6, 0.0001)[
             int(settings['learning_rate'][0])]
     return settings
 
@@ -379,7 +382,7 @@ print('Size of Test Set: Columns = {}, Rows = {}'). \
 hypParameters1 = dict(
     max_depth=hp.choice(
         'max_depth', range(
-            20, 150)), max_features=hp.choice(
+            40, 150)), max_features=hp.choice(
         'max_features', range(
             1, 12)), criterion=hp.choice(
         'criterion', [
@@ -387,7 +390,7 @@ hypParameters1 = dict(
         'normalize', [
             0, 1]), n_estimators=hp.choice(
         'n_estimators', [
-            10, 50]), scale=hp.choice(
+            50, 50]), scale=hp.choice(
         'scale', [
             0, 1]), log_y=hp.choice(
         'log_y', [
@@ -398,27 +401,37 @@ hypParameters2 = dict(
         'loss', [
             'ls', 'lad', 'huber', 'quantile']), learning_rate=hp.choice(
         'learning_rate', np.arange(
-            0.00001, 0.5, 0.0001)), normalize=hp.choice(
+            0.000001, 0.6, 0.0001)), normalize=hp.choice(
         'normalize', [
             0, 1]), scale=hp.choice(
         'scale', [
             0, 1]), max_depth=hp.choice(
         'max_depth', range(
-            20, 150)), n_estimators=hp.choice(
+            40, 150)), n_estimators=hp.choice(
         'n_estimators', range(
-            10, 50)), log_y=hp.choice(
+            50, 100)), log_y=hp.choice(
         'log_y', [
             0, 1]))
 # Recording Trial Results
 trials1 = Trials()
 trials2 = Trials()
 # Optimisation of Machine Learning Algorithm #1 = RandomForestRegressor
-bestML1 = fmin(results, hypParameters1, algo=tpe.suggest, max_evals=1, trials=trials1)
+bestML1 = fmin(
+    results,
+    hypParameters1,
+    algo=tpe.suggest,
+    max_evals=40,
+    trials=trials1)
 print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML1,
                                                                        np.abs(trials1.best_trial['result']['loss']),
                                                                        np.abs(trials1.best_trial['result']['std'])))
 # Optimisation of Machine Learning Algorithm #2 = GradientBoostingRegressor
-bestML2 = fmin(results2, hypParameters2, algo=tpe.suggest, max_evals=1, trials=trials2)
+bestML2 = fmin(
+    results2,
+    hypParameters2,
+    algo=tpe.suggest,
+    max_evals=1,
+    trials=trials2)
 print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML2,
                                                                        np.abs(trials2.best_trial['result']['loss']),
                                                                        np.abs(trials2.best_trial['result']['std'])))
