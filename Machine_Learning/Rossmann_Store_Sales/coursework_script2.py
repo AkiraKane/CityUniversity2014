@@ -82,6 +82,7 @@ def cross_validation(params):
         if params['log_y'] == 1:
             y_ = np.log(y_)
         del params['log_y']
+    params['n_jobs'] = -1
     # Convery to Numpy Arrays
     X_ = X_.values
     clf = RandomForestRegressor(**params)
@@ -168,8 +169,6 @@ def preproc_dataset(dataframe, floatList, deleteCols, delOpen):
     dataframe.loc[dataframe['StateHoliday'] == 'b', 'StateHoliday'] = '2'
     dataframe.loc[dataframe['StateHoliday'] == 'c', 'StateHoliday'] = '3'
     dataframe['StateHoliday'] = dataframe['StateHoliday'].astype(float)
-    # Store Open if Closed
-    dataframe.fillna(1, inplace=True)
     # Splitting out the dates
     dataframe['year'] = dataframe.Date.apply(lambda x: x.split('-')[0])
     dataframe['year'] = dataframe['year'].astype(float)
@@ -177,6 +176,16 @@ def preproc_dataset(dataframe, floatList, deleteCols, delOpen):
     dataframe['month'] = dataframe['month'].astype(float)
     dataframe['day'] = dataframe.Date.apply(lambda x: x.split('-')[2])
     dataframe['day'] = dataframe['day'].astype(float)
+    # Boolean Flag if there is Compeition or Not
+    dataframe.loc[
+        dataframe['CompetitionDistance'] > 0,
+        'CompetitionDistance'] = '1'
+    dataframe.loc[
+        dataframe['CompetitionDistance'] <= 0,
+        'CompetitionDistance'] = '0'
+    dataframe.CompetitionDistance.fillna(0, inplace=True)
+    dataframe['CompetitionDistance'] = dataframe[
+        'CompetitionDistance'].astype(float)
     # For each col in floatList covert integers to type = float
     for item in floatList:
         dataframe[item] = dataframe[item].astype(float)
@@ -270,8 +279,10 @@ def fit_predict(X, y, X_test, params, model):
         clf = RandomForestRegressor(**params)
     else:
         clf = GradientBoostingRegressor(**params)
-    # Fit the Model to the Training Data
     clf.fit(X_, y_)
+    yhat_ = clf.predict(X_)
+    print(rmspe(yhat_, y_))
+    # Return the predicted results
     return clf.predict(X_test_)
 
 
@@ -313,6 +324,7 @@ trainingDF = importData('train.csv')
 testDF = importData('test.csv')
 storesDF = importData('store.csv')
 submission = importData('sample_submission.csv')
+testDF = testDF.sort_index(axis=1).set_index('Id')
 # Data Preparation
 # Joins, seperate columns
 trainingDF = pd.merge(trainingDF, storesDF, on='Store')
@@ -365,6 +377,7 @@ scaleNorm = ['CompetitionDistance']
 trainingDF = preproc_dataset(trainingDF, scaleNorm, removeCols, True)
 removeCols.remove('Customers')
 # REMEMBER: Open Stores are only included, need to merge with 0 zero data
+OpenStores = testDF.Open.values
 testDF = preproc_dataset(testDF, scaleNorm, removeCols, False)
 # Feature Engineering - Pre - Training
 # TO DO
@@ -372,6 +385,7 @@ testDF = preproc_dataset(testDF, scaleNorm, removeCols, False)
 global X, y
 X = trainingDF[trainingDF.columns - removeCols - ['Sales']]
 y = trainingDF[['Sales']]
+testDF = testDF.sort_index(axis=1).set_index('Id')
 ID_Data = testDF['Id']
 X_test = testDF[testDF.columns - ['Id']]
 print('Size of Training Set: Columns = {}, Rows = {}'). \
@@ -420,7 +434,7 @@ bestML1 = fmin(
     results,
     hypParameters1,
     algo=tpe.suggest,
-    max_evals=40,
+    max_evals=1,
     trials=trials1)
 print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML1,
                                                                        np.abs(trials1.best_trial['result']['loss']),
@@ -435,9 +449,8 @@ bestML2 = fmin(
 print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML2,
                                                                        np.abs(trials2.best_trial['result']['loss']),
                                                                        np.abs(trials2.best_trial['result']['std'])))
-# Feature Engineering - Post
+# Feature Engineering - Post - Recommendations
 # Evaluate Models - Graphical and Tabular Results - Plot Trial Data
-# Save Plots!!!
 plot_data(hypParameters1.keys(), trials1, 'RandomForestRegressor')
 plot_data(hypParameters2.keys(), trials2, 'GradientBoostingRegressor')
 # Save Trial data to MongoDB
@@ -449,15 +462,14 @@ bestML2 = changeParams(trials2.best_trial['misc']['vals'])
 output1 = fit_predict(X, y, X_test, bestML1, 1)
 output2 = fit_predict(X, y, X_test, bestML2, 2)
 # Join with IDs, label and remove unwanted columns
-Submission = pd.DataFrame(data=[ID_Data.values,
-                                output1.tolist(),
-                                output2.tolist()]).T
-Submission.columns = ['Id', 'ML1', 'ML2']
-submission = submission.merge(Submission, on='Id', how='left'). \
-    drop(['Sales'], axis=1)
+Submission = pd.DataFrame(data=[np.arange(1, len(output1) + 1),
+                                output1,
+                                output2]).T
+Submission.columns = ['Id', 'Sales', 'ML2']
 # Save output for Submission to Kaggle
-submission.to_csv('submission_xF.csv', sep=',', index=False)
+Submission.to_csv('submission_xF.csv', sep=',', index=False)
 # Print Final Statement
 print('Total time to Load, Optimise and Present Details: {} seconds').format(
     time() - startT)
 print(datetime.now())
+#params = {'normalize': 1, 'scale': 0, 'n_estimators': 0, 'criterion': 0, 'max_features': 0, 'log_y': 0, 'max_depth': 44}
