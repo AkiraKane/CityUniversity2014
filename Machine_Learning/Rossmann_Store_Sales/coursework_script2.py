@@ -1,12 +1,11 @@
 #!/usr/bin/python
 
 # Created: 11/10/2015
-# Last Modified: 11/10/2015
+# Last Modified: 16/10/2015
 # Dan Dixey
 # Machine Learning Coursework
 
 # Bayes Optimisation Reference Paper: http://goo.gl/PCvRTV
-# Working Example of Decision Tree using the IRIS Dataset and hyperopt: https://goo.gl/M8pqgc
 # Scoring Parameter: http://goo.gl/khqrqO
 # Scoring: http://arxiv.org/pdf/1209.5111v1.pdf
 
@@ -20,7 +19,6 @@ from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
 from sklearn.preprocessing import normalize, scale
 from sklearn.ensemble import RandomForestRegressor  # ML Algo 1
 from sklearn.tree import DecisionTreeRegressor  # ML Algo 2
-from sklearn.cross_validation import cross_val_score
 import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib as mpl
@@ -29,7 +27,7 @@ from pymongo import MongoClient
 from sklearn.cross_validation import KFold
 
 
-# Seaborn Parameters
+# Seaborn Parameters - Plotting Library
 sns.set(style="whitegrid")
 
 
@@ -46,16 +44,20 @@ def ToWeight(y):
 
 
 def rmspe(yhat, y):
+    ''' Calculates the RMSPE as defined: https://goo.gl/gD3JKe
+    '''
     w = ToWeight(y)
     rmspe = np.sqrt(np.mean(w * (y - yhat)**2))
     return rmspe
 
 
 def importData(name):
+    ''' Import the data into a Pandas Dataframe
+    '''
     assert isinstance(name, str), 'Enter the NAME of the File to be imported!'
-    # Windows
+    # Windows - Resolves the issue with the direction of backslashes
     #fileName = "\\".join([os.getcwd(), name])
-    # Linux
+    # Linux - Resolves the issue with the direction of backslashes
     fileName = "/".join([os.getcwd(), name])
     print "Importing '{}' as a Dataframe".format(name)
     return pd.read_csv(fileName, low_memory=False)
@@ -149,6 +151,9 @@ def results2(params):
 
 
 def preproc_dataset(dataframe, floatList, deleteCols, delOpen):
+    ''' Converting the Dictionary of parameters from the trials data back
+    into a format such that the Machine Learning Algorithms can process.
+    '''
     # Categorical to Integer Representation - StoreType
     dataframe.loc[dataframe['StoreType'] == 'a', 'StoreType'] = '1'
     dataframe.loc[dataframe['StoreType'] == 'b', 'StoreType'] = '2'
@@ -196,7 +201,7 @@ def preproc_dataset(dataframe, floatList, deleteCols, delOpen):
 
 def plot_data(parameters, trials, name):
     # First Plot
-    print('Plotting Parameters by Loss')
+    print('Plotting each Parameter by Cost Function')
     cols = len(parameters)
     f, axes = plt.subplots(nrows=1, ncols=cols, figsize=(18, 5), sharey=True)
     for i, val in enumerate(parameters):
@@ -218,7 +223,7 @@ def plot_data(parameters, trials, name):
     plt.savefig(name + '_Paramenters.png', bbox_inches='tight')
     plt.close()
     # Second Plot
-    print('Plotting Trial by Loss')
+    print('Plotting the Trial number by Cost Function')
     f, ax = plt.subplots(1)
     xs = [t['tid'] for t in trials.trials]
     ys = [np.abs(t['result']['loss']) for t in trials.trials]
@@ -367,14 +372,13 @@ removeCols.extend(['CompetitionOpenSinceYear',
 # Columns that can be Scaled or Normalised as they are Continuous
 global scaleNorm
 scaleNorm = ['CompetitionDistance']
-# Preprocessing Steps
+# Preprocessing Steps - Refer to the function above
 trainingDF = preproc_dataset(trainingDF, scaleNorm, removeCols, True)
 removeCols.remove('Customers')
-# REMEMBER: Open Stores are only included, need to merge with 0 zero data
-OpenStores = testDF.Open.values
+# Pre-processing the Test Dataset with the same preprocessing steps
 testDF = preproc_dataset(testDF, scaleNorm, removeCols, False)
 # Feature Engineering - Pre - Training
-# TO DO
+# Ideas for 'feature enginerring' in Notes.md File within directory
 # Sampling, Setting up Cross Validation - Make X and Y Global (for reuse)
 global X, y
 X = trainingDF[trainingDF.columns - removeCols - ['Sales']]
@@ -386,7 +390,7 @@ print('Size of Training Set: Columns = {}, Rows = {}'). \
     format(X.shape[1], X.shape[0])
 print('Size of Test Set: Columns = {}, Rows = {}'). \
     format(testDF.shape[1], testDF.shape[0])
-# Machine Learning Algorithm #1 - Define Hyperparameters
+# Machine Learning Algorithm #1 - Define ranges of Hyperparameters
 hypParameters1 = dict(
     max_depth=hp.choice(
         'max_depth', range(
@@ -403,7 +407,7 @@ hypParameters1 = dict(
             0, 1]), log_y=hp.choice(
         'log_y', [
             0, 1]))
-# Machine Learning Algorithm #2 - Define Hyperparameters
+# Machine Learning Algorithm #2 - Define ranges of Hyperparameters
 hypParameters2 = dict(
     max_depth=hp.choice(
         'max_depth', range(
@@ -418,7 +422,7 @@ hypParameters2 = dict(
             0, 1]), scale=hp.choice(
         'scale', [
             0, 1]))
-# Recording Trial Results
+# Recording Trial Results in a Trials Object
 trials1 = Trials()
 trials2 = Trials()
 # Optimisation of Machine Learning Algorithm #1 = RandomForestRegressor
@@ -442,6 +446,7 @@ print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML2,
                                                                        np.abs(trials2.best_trial['result']['loss']),
                                                                        np.abs(trials2.best_trial['result']['std'])))
 # Feature Engineering - Post - Recommendations
+# Investigate - Feature Importance
 # Evaluate Models - Graphical and Tabular Results - Plot Trial Data
 plot_data(hypParameters1.keys(), trials1, 'RandomForestRegressor')
 plot_data(hypParameters2.keys(), trials2, 'GradientBoostingRegressor')
@@ -457,11 +462,10 @@ output2 = fit_predict(X, y, X_test, bestML2, 2)
 Submission = pd.DataFrame(data=[np.arange(1, len(output1) + 1),
                                 output1,
                                 output2]).T
-Submission.columns = ['Id', 'Sales', 'ML2']
+Submission.columns = ['Id', 'ML1', 'ML2']
 # Save output for Submission to Kaggle
 Submission.to_csv('submission_xF.csv', sep=',', index=False)
-# Print Final Statement
+# Print Final Statement - Time to Train
 print('Total time to Load, Optimise and Present Details: {} seconds').format(
     time() - startT)
 print(datetime.now())
-#params = {'normalize': 1, 'scale': 0, 'n_estimators': 0, 'criterion': 0, 'max_features': 0, 'log_y': 0, 'max_depth': 44}

@@ -1,3 +1,6 @@
+---
+output: pdf_document
+---
 ### Notes for Machine Learning Coursework
 
 *Overview*
