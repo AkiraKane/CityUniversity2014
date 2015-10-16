@@ -19,7 +19,7 @@ import hyperopt.pyll.stochastic
 from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
 from sklearn.preprocessing import normalize, scale
 from sklearn.ensemble import RandomForestRegressor  # ML Algo 1
-from sklearn.ensemble import GradientBoostingRegressor  # ML Algo 2
+from sklearn.tree import DecisionTreeRegressor  # ML Algo 2
 from sklearn.cross_validation import cross_val_score
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -90,11 +90,9 @@ def cross_validation(params):
     crossVal = KFold(X_.shape[0], n_folds=5)
     data = []
     for train, test in crossVal:
-        X_train = X_[train]
-        y_train = y_[train]
-        clf.fit(X_train, y_train)
-        yhat_ = clf.predict(X_train)
-        data.append(rmspe(yhat_, y_train))
+        clf.fit(X_[train], y_[train])
+        yhat_ = clf.predict(X_[test])
+        data.append(rmspe(yhat_, y_[test]))
     # Save Data as a Array
     data = np.array(data)
     return [data.mean(), data.std()]
@@ -130,16 +128,14 @@ def cross_validation2(params):
         del params['log_y']
     # Convery to Numpy Arrays
     X_ = X_.values
-    clf = GradientBoostingRegressor(**params)
+    clf = DecisionTreeRegressor(**params)
     # Using k-fold Cross Validation(5 folds), Scoring criteria = RMSPE
     crossVal = KFold(X_.shape[0], n_folds=5)
     data = []
     for train, test in crossVal:
-        X_train = X_[train]
-        y_train = y_[train]
-        clf.fit(X_train, y_train)
-        yhat_ = clf.predict(X_train)
-        data.append(rmspe(yhat_, y_train))
+        clf.fit(X_[train], y_[train])
+        yhat_ = clf.predict(X_[test])
+        data.append(rmspe(yhat_, y_[test]))
     # Save Data as a Array
     data = np.array(data)
     return [data.mean(), data.std()]
@@ -278,10 +274,8 @@ def fit_predict(X, y, X_test, params, model):
     if model == 1:
         clf = RandomForestRegressor(**params)
     else:
-        clf = GradientBoostingRegressor(**params)
+        clf = DecisionTreeRegressor(**params)
     clf.fit(X_, y_)
-    yhat_ = clf.predict(X_)
-    print(rmspe(yhat_, y_))
     # Return the predicted results
     return clf.predict(X_test_)
 
@@ -411,20 +405,18 @@ hypParameters1 = dict(
             0, 1]))
 # Machine Learning Algorithm #2 - Define Hyperparameters
 hypParameters2 = dict(
-    loss=hp.choice(
-        'loss', [
-            'ls', 'lad', 'huber', 'quantile']), learning_rate=hp.choice(
-        'learning_rate', np.arange(
-            0.000001, 0.6, 0.0001)), normalize=hp.choice(
+    max_depth=hp.choice(
+        'max_depth', range(
+            40, 150)), max_features=hp.choice(
+        'max_features', range(
+            1, 12)), criterion=hp.choice(
+        'criterion', [
+            "mse", "friedman_mse"]), normalize=hp.choice(
         'normalize', [
+            0, 1]), log_y=hp.choice(
+        'log_y', [
             0, 1]), scale=hp.choice(
         'scale', [
-            0, 1]), max_depth=hp.choice(
-        'max_depth', range(
-            40, 150)), n_estimators=hp.choice(
-        'n_estimators', range(
-            50, 100)), log_y=hp.choice(
-        'log_y', [
             0, 1]))
 # Recording Trial Results
 trials1 = Trials()
@@ -434,17 +426,17 @@ bestML1 = fmin(
     results,
     hypParameters1,
     algo=tpe.suggest,
-    max_evals=1,
+    max_evals=50,
     trials=trials1)
 print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML1,
                                                                        np.abs(trials1.best_trial['result']['loss']),
                                                                        np.abs(trials1.best_trial['result']['std'])))
-# Optimisation of Machine Learning Algorithm #2 = GradientBoostingRegressor
+# Optimisation of Machine Learning Algorithm #2 = DecisionTreeRegressor
 bestML2 = fmin(
     results2,
     hypParameters2,
     algo=tpe.suggest,
-    max_evals=1,
+    max_evals=50,
     trials=trials2)
 print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML2,
                                                                        np.abs(trials2.best_trial['result']['loss']),
