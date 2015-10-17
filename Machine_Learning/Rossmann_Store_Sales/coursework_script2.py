@@ -292,15 +292,15 @@ def changeParams(settings):
             "mse", "friedman_mse"][int(
                 settings['criterion'][0])]
     if 'max_depth' in settings:
-        settings['max_depth'] = range(40, 500)[int(settings['max_depth'][0])]
+        settings['max_depth'] = np.flipud(np.arange(40,500))[int(settings['max_depth'][0])]
     if 'max_features' in settings:
-        settings['max_features'] = range(
-            1, 12)[int(settings['max_features'][0])]
+        settings['max_features'] = np.flipud(
+            np.arange(1,12))[int(settings['max_features'][0])]
     if 'normalize' in settings:
         settings['normalize'] = [0, 1][int(settings['normalize'][0])]
     if 'n_estimators' in settings:
-        settings['n_estimators'] = range(
-            50, 500)[int(settings['n_estimators'][0])]
+        settings['n_estimators'] = np.flipud(
+            np.arange(50,500))[int(settings['n_estimators'][0])]
     if 'scale' in settings:
         settings['scale'] = [0, 1][int(settings['scale'][0])]
     if 'log_y' in settings:
@@ -393,16 +393,16 @@ print('Size of Test Set: Columns = {}, Rows = {}'). \
 # Machine Learning Algorithm #1 - Define ranges of Hyperparameters
 hypParameters1 = dict(
     max_depth=hp.choice(
-        'max_depth', range(
-            40, 500)), max_features=hp.choice(
-        'max_features', range(
-            1, 12)), criterion=hp.choice(
+        'max_depth', np.flipud(
+            np.arange(40,500))), max_features=hp.choice(
+        'max_features', np.flipud(
+            np.arange(1,12))), criterion=hp.choice(
         'criterion', [
             "mse", "friedman_mse"]), normalize=hp.choice(
         'normalize', [
             0, 1]), n_estimators=hp.choice(
-        'n_estimators', [
-            50, 500]), scale=hp.choice(
+        'n_estimators', np.flipud(
+            np.arange(50,500))), scale=hp.choice(
         'scale', [
             0, 1]), log_y=hp.choice(
         'log_y', [
@@ -410,10 +410,10 @@ hypParameters1 = dict(
 # Machine Learning Algorithm #2 - Define ranges of Hyperparameters
 hypParameters2 = dict(
     max_depth=hp.choice(
-        'max_depth', range(
-            40, 500)), max_features=hp.choice(
-        'max_features', range(
-            1, 12)), criterion=hp.choice(
+        'max_depth', np.flipud(
+            np.arange(40,500))), max_features=hp.choice(
+        'max_features', np.flipud(
+            np.arange(1,12))), criterion=hp.choice(
         'criterion', [
             "mse", "friedman_mse"]), normalize=hp.choice(
         'normalize', [
