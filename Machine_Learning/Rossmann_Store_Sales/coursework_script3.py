@@ -9,8 +9,6 @@
 # Bayes Optimisaion Module: https://goo.gl/Miyb4B
 # Scoring Parameter: http://goo.gl/khqrqO
 # Scoring: http://arxiv.org/pdf/1209.5111v1.pdf
-# Feature Importance Plot -
-# http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
 
 import pandas as pd
 import numpy as np
@@ -234,7 +232,7 @@ def plot_data(parameters, results, name):
         axes[i].set_title(val)
         # axes[i].set_ylim([0.8,1])
     plt.savefig(name + '_Paramenters.png', bbox_inches='tight')
-    plt.show()
+    plt.close()
     # Second Plot
     print('Plotting the Trial number by Cost Function')
     f, ax = plt.subplots(1)
@@ -249,7 +247,7 @@ def plot_data(parameters, results, name):
     ax.set_xlabel('Trial Number', fontsize=16)
     ax.set_ylabel('Model Loss', fontsize=16)
     plt.savefig(name + '_Trial.png', bbox_inches='tight')
-    plt.show()
+    plt.close()
 
 
 def fit_predict(X, y, X_test, params, model):
@@ -401,9 +399,9 @@ ML2_BO.explore({'max_depth': [200],
                 'scaleV': [0],
                 'log_y': [1]})
 # Optimisation of Machine Learning Algorithm #1 = RandomForestRegressor
-ML1_BO.maximize(init_points=300, n_iter=1)
+ML1_BO.maximize(init_points=1, n_iter=1)
 # Optimisation of Machine Learning Algorithm #2 = DecisionTreeRegressor
-ML2_BO.maximize(init_points=300, n_iter=1)
+ML2_BO.maximize(init_points=1, n_iter=1)
 # Feature Engineering - Post - Recommendations
 # Investigate - Feature Importance
 # Evaluate Models - Graphical and Tabular Results - Plot Trial Data
