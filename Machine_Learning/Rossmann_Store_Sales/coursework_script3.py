@@ -399,9 +399,9 @@ ML2_BO.explore({'max_depth': [200],
                 'scaleV': [0],
                 'log_y': [1]})
 # Optimisation of Machine Learning Algorithm #1 = RandomForestRegressor
-ML1_BO.maximize(init_points=1, n_iter=1)
+ML1_BO.maximize(init_points=250, n_iter=1)
 # Optimisation of Machine Learning Algorithm #2 = DecisionTreeRegressor
-ML2_BO.maximize(init_points=1, n_iter=1)
+ML2_BO.maximize(init_points=250, n_iter=1)
 # Feature Engineering - Post - Recommendations
 # Investigate - Feature Importance
 # Evaluate Models - Graphical and Tabular Results - Plot Trial Data
