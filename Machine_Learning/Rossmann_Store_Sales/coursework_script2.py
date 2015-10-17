@@ -449,7 +449,7 @@ print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML2,
 # Investigate - Feature Importance
 # Evaluate Models - Graphical and Tabular Results - Plot Trial Data
 plot_data(hypParameters1.keys(), trials1, 'RandomForestRegressor')
-plot_data(hypParameters2.keys(), trials2, 'GradientBoostingRegressor')
+plot_data(hypParameters2.keys(), trials2, 'DecisionTreeRegressor')
 # Save Trial data to MongoDB
 savingTrialData(trials1, trials2)
 # Fit and Predict using the top Models
