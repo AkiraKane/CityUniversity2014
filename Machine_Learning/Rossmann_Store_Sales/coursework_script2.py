@@ -9,6 +9,9 @@
 # Scoring Parameter: http://goo.gl/khqrqO
 # Scoring: http://arxiv.org/pdf/1209.5111v1.pdf
 
+# DAT TO DO - Replace: Hyperopt with https://goo.gl/Miyb4B
+# Pure Bayesian Optimisation
+
 import pandas as pd
 import numpy as np
 from time import time
@@ -300,7 +303,7 @@ def changeParams(settings):
         settings['normalize'] = [0, 1][int(settings['normalize'][0])]
     if 'n_estimators' in settings:
         settings['n_estimators'] = np.flipud(
-            np.arange(50,500))[int(settings['n_estimators'][0])]
+            np.arange(10,200))[int(settings['n_estimators'][0])]
     if 'scale' in settings:
         settings['scale'] = [0, 1][int(settings['scale'][0])]
     if 'log_y' in settings:
@@ -402,7 +405,7 @@ hypParameters1 = dict(
         'normalize', [
             0, 1]), n_estimators=hp.choice(
         'n_estimators', np.flipud(
-            np.arange(50,500))), scale=hp.choice(
+            np.arange(10,200))), scale=hp.choice(
         'scale', [
             0, 1]), log_y=hp.choice(
         'log_y', [
