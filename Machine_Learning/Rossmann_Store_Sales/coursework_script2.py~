@@ -226,6 +226,7 @@ def plot_data(parameters, trials, name):
     print('Plotting the Trial number by Cost Function')
     f, ax = plt.subplots(1)
     xs = [t['tid'] for t in trials.trials]
+    ys = [np.abs(t['result']['loss']) for t in trials.trials]
     ys = [t['result']['loss'] for t in trials.trials]
     cs = normalize(ys)
     ax.set_xlim(xs[0] - 10, xs[-1] + 10)
