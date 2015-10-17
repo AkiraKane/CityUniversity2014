@@ -1,16 +1,16 @@
 #!/usr/bin/python
 
 # Created: 11/10/2015
-# Last Modified: 16/10/2015
+# Last Modified: 18/10/2015
 # Dan Dixey
 # Machine Learning Coursework
 
 # Bayes Optimisation Reference Paper: http://goo.gl/PCvRTV
+# Bayes Optimisaion Module: https://goo.gl/Miyb4B
 # Scoring Parameter: http://goo.gl/khqrqO
 # Scoring: http://arxiv.org/pdf/1209.5111v1.pdf
-
-# DAT TO DO - Replace: Hyperopt with https://goo.gl/Miyb4B
-# Pure Bayesian Optimisation
+# Feature Importance Plot -
+# http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
 
 import pandas as pd
 import numpy as np
@@ -79,27 +79,27 @@ def cross_validation(
     X_ = X
     y_ = y.values.ravel()
     # Normalization
-    if int(normV) == 1:
+    if int(np.round(normV)) == 1:
         for col in scaleNorm:
             X_[col] = normalize(X_[col]).T
     # Scaling
-    if int(scaleV) == 1:
+    if int(np.round(scaleV)) == 1:
         for col in scaleNorm:
             X_[col] = scale(X_[col]).T
     # Log the Class Variable
 
-    if int(log_y) == 1:
+    if int(np.round(log_y)) == 1:
         y_ = np.log(y_)
     # Machine Learning Criteria
-    if int(criterion) == 0:
+    if int(np.round(criterion)) == 0:
         criterion = 'mse'
     else:
         criterion = 'friedman_mse'
     # Convery to Numpy Arrays
     X_ = X_.values
     clf = RandomForestRegressor(
-        max_depth=int(max_depth),
-        max_features=int(max_features),
+        max_depth=int(np.round(max_depth)),
+        max_features=int(np.round(max_features)),
         n_jobs=-1,
         criterion=criterion)
     # Using k-fold Cross Validation(5 folds), Scoring criteria = RMSPE
@@ -128,26 +128,28 @@ def cross_validation2(
     X_ = X
     y_ = y.values.ravel()
     # Normalization
-    if int(normV) == 1:
+    # Normalization
+    if int(np.round(normV)) == 1:
         for col in scaleNorm:
             X_[col] = normalize(X_[col]).T
     # Scaling
-    if int(scaleV) == 1:
+    if int(np.round(scaleV)) == 1:
         for col in scaleNorm:
             X_[col] = scale(X_[col]).T
     # Log the Class Variable
-    if int(log_y) == 1:
+
+    if int(np.round(log_y)) == 1:
         y_ = np.log(y_)
     # Machine Learning Criteria
-    if int(criterion) == 0:
+    if int(np.round(criterion)) == 0:
         criterion = 'mse'
     else:
         criterion = 'friedman_mse'
     # Convery to Numpy Arrays
     X_ = X_.values
     clf = DecisionTreeRegressor(
-        max_depth=int(max_depth),
-        max_features=int(max_features))
+        max_depth=int(np.round(max_depth)),
+        max_features=int(np.round(max_features)))
     # Using k-fold Cross Validation(5 folds), Scoring criteria = RMSPE
     crossVal = KFold(X_.shape[0], n_folds=5)
     data = []
@@ -157,7 +159,7 @@ def cross_validation2(
         data.append(RMSPE(yhat_, y_[test]))
     # Save Data as a Array
     data = np.array(data)
-    return data.mean()
+    return -data.mean()
 
 
 def preproc_dataset(dataframe, floatList, deleteCols, delOpen):
@@ -215,7 +217,8 @@ def plot_data(parameters, results, name):
     cols = len(parameters)
     f, axes = plt.subplots(nrows=1, ncols=cols, figsize=(18, 5), sharey=True)
     for i, val in enumerate(parameters):
-        xs = np.array([int(item[val]) for item in results['params']]).ravel()
+        xs = np.array([int(np.round(item[val]))
+                       for item in results['params']]).ravel()
         ys = [-value for value in results['values']]
         cs = normalize(ys)
         temp = np.array(sorted(zip(xs, ys)))
@@ -254,31 +257,31 @@ def fit_predict(X, y, X_test, params, model):
     X_ = X
     X_test_ = X_test
     y_ = y.values.ravel()
+    # Floats to Int Transform
+    for k, v in params.iteritems():
+        params[k] = int(np.round(v))
     # Normalization Transform
     if 'normV' in params:
-        if params['normV'] == 1:
+        if int(np.round(params['normV'])) == 1:
             for col in scaleNorm:
                 X_[col] = normalize(X_[col]).T
                 X_test_[col] = normalize(X_test_[col]).T
         del params['normV']
     # Scale Transformation
     if 'scaleV' in params:
-        if params['scaleV'] == 1:
+        if int(np.round(params['scaleV'])) == 1:
             for col in scaleNorm:
                 X_[col] = scale(X_[col]).T
                 X_test_[col] = scale(X_test_[col]).T
         del params['scaleV']
     # Log y transformation
     if 'log_y' in params:
-        if params['log_y'] == 1:
+        if int(np.round(params['log_y'])) == 1:
             y_ = np.log(y_)
         del params['log_y']
-    # Floats to Int Transform
-    for k, v in params.iteritems():
-        params[k] = int(v)
     # Machine Learning Criteria
     if 'criterion' in params:
-        if params['criterion'] == 1:
+        if int(np.round(params['criterion'])) == 0:
             params['criterion'] = 'mse'
         else:
             params['criterion'] = 'friedman_mse'
@@ -292,37 +295,6 @@ def fit_predict(X, y, X_test, params, model):
     clf.fit(X_, y_)
     # Return the predicted results
     return clf.predict(X_test_)
-
-
-def changeParams(settings):
-    # Criterion
-    if 'criterion' in settings:
-        settings['criterion'] = [
-            "mse", "friedman_mse"][int(
-                settings['criterion'][0])]
-    if 'max_depth' in settings:
-        settings['max_depth'] = np.flipud(np.arange(40, 500))[
-            int(settings['max_depth'][0])]
-    if 'max_features' in settings:
-        settings['max_features'] = np.flipud(
-            np.arange(1, 12))[int(settings['max_features'][0])]
-    if 'normalize' in settings:
-        settings['normalize'] = [0, 1][int(settings['normalize'][0])]
-    if 'n_estimators' in settings:
-        settings['n_estimators'] = np.flipud(
-            np.arange(10, 200))[int(settings['n_estimators'][0])]
-    if 'scale' in settings:
-        settings['scale'] = [0, 1][int(settings['scale'][0])]
-    if 'log_y' in settings:
-        settings['log_y'] = [0, 1][int(settings['log_y'][0])]
-    if 'loss' in settings:
-        settings['loss'] = [
-            'ls', 'lad', 'huber', 'quantile'][int(
-                settings['loss'][0])]
-    if 'learning_rate' in settings:
-        settings['learning_rate'] = np.arange(0.000001, 0.6, 0.0001)[
-            int(settings['learning_rate'][0])]
-    return settings
 
 
 # Start Stopwatch
@@ -429,9 +401,9 @@ ML2_BO.explore({'max_depth': [200],
                 'scaleV': [0],
                 'log_y': [1]})
 # Optimisation of Machine Learning Algorithm #1 = RandomForestRegressor
-ML1_BO.maximize(init_points=1, n_iter=1)
+ML1_BO.maximize(init_points=300, n_iter=1)
 # Optimisation of Machine Learning Algorithm #2 = DecisionTreeRegressor
-ML2_BO.maximize(init_points=1, n_iter=1)
+ML2_BO.maximize(init_points=300, n_iter=1)
 # Feature Engineering - Post - Recommendations
 # Investigate - Feature Importance
 # Evaluate Models - Graphical and Tabular Results - Plot Trial Data
