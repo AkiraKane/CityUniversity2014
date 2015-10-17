@@ -25,6 +25,7 @@ import matplotlib as mpl
 from datetime import datetime
 from pymongo import MongoClient
 from sklearn.cross_validation import KFold
+import json
 
 
 # Seaborn Parameters - Plotting Library
@@ -291,7 +292,7 @@ def changeParams(settings):
             "mse", "friedman_mse"][int(
                 settings['criterion'][0])]
     if 'max_depth' in settings:
-        settings['max_depth'] = range(40, 150)[int(settings['max_depth'][0])]
+        settings['max_depth'] = range(40, 500)[int(settings['max_depth'][0])]
     if 'max_features' in settings:
         settings['max_features'] = range(
             1, 12)[int(settings['max_features'][0])]
@@ -299,7 +300,7 @@ def changeParams(settings):
         settings['normalize'] = [0, 1][int(settings['normalize'][0])]
     if 'n_estimators' in settings:
         settings['n_estimators'] = range(
-            50, 100)[int(settings['n_estimators'][0])]
+            50, 500)[int(settings['n_estimators'][0])]
     if 'scale' in settings:
         settings['scale'] = [0, 1][int(settings['scale'][0])]
     if 'log_y' in settings:
@@ -393,7 +394,7 @@ print('Size of Test Set: Columns = {}, Rows = {}'). \
 hypParameters1 = dict(
     max_depth=hp.choice(
         'max_depth', range(
-            40, 150)), max_features=hp.choice(
+            40, 500)), max_features=hp.choice(
         'max_features', range(
             1, 12)), criterion=hp.choice(
         'criterion', [
@@ -401,7 +402,7 @@ hypParameters1 = dict(
         'normalize', [
             0, 1]), n_estimators=hp.choice(
         'n_estimators', [
-            50, 50]), scale=hp.choice(
+            50, 500]), scale=hp.choice(
         'scale', [
             0, 1]), log_y=hp.choice(
         'log_y', [
@@ -410,7 +411,7 @@ hypParameters1 = dict(
 hypParameters2 = dict(
     max_depth=hp.choice(
         'max_depth', range(
-            40, 150)), max_features=hp.choice(
+            40, 500)), max_features=hp.choice(
         'max_features', range(
             1, 12)), criterion=hp.choice(
         'criterion', [
@@ -429,7 +430,7 @@ bestML1 = fmin(
     results,
     hypParameters1,
     algo=tpe.suggest,
-    max_evals=50,
+    max_evals=1000,
     trials=trials1)
 print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML1,
                                                                        np.abs(trials1.best_trial['result']['loss']),
@@ -439,7 +440,7 @@ bestML2 = fmin(
     results2,
     hypParameters2,
     algo=tpe.suggest,
-    max_evals=50,
+    max_evals=1000,
     trials=trials2)
 print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML2,
                                                                        np.abs(trials2.best_trial['result']['loss']),
@@ -464,6 +465,13 @@ Submission = pd.DataFrame(data=[np.arange(1, len(output1) + 1),
 Submission.columns = ['Id', 'ML1', 'ML2']
 # Save output for Submission to Kaggle
 Submission.to_csv('submission_xF.csv', sep=',', index=False)
+# Save Parameters
+with open('data.json', 'w') as f:
+    bestML1 = changeParams(trials1.best_trial['misc']['vals'])
+    bestML2 = changeParams(trials2.best_trial['misc']['vals'])
+    bestML1['result'] = np.abs(trials1.best_trial['result']['loss'])
+    bestML1['result'] = np.abs(trials2.best_trial['result']['loss'])
+    json.dump([bestML1,bestML2], f, ensure_ascii=False)
 # Print Final Statement - Time to Train
 print('Total time to Load, Optimise and Present Details: {} seconds').format(
     time() - startT)
