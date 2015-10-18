@@ -85,7 +85,6 @@ def cross_validation(
         for col in scaleNorm:
             X_[col] = scale(X_[col]).T
     # Log the Class Variable
-
     if int(np.round(log_y)) == 1:
         y_ = np.log(y_)
     # Machine Learning Criteria
@@ -105,7 +104,10 @@ def cross_validation(
     data = []
     for train, test in crossVal:
         clf.fit(X_[train], y_[train])
-        yhat_ = clf.predict(X_[test])
+        if int(np.round(log_y)) == 1:
+            yhat_ = np.exp(clf.predict(X_[test]))
+        else:
+            yhat_ = clf.predict(X_[test])
         data.append(RMSPE(yhat_, y_[test]))
     # Save Data as a Array
     data = np.array(data)
@@ -153,7 +155,10 @@ def cross_validation2(
     data = []
     for train, test in crossVal:
         clf.fit(X_[train], y_[train])
-        yhat_ = clf.predict(X_[test])
+        if int(np.round(log_y)) == 1:
+            yhat_ = np.exp(clf.predict(X_[test]))
+        else:
+            yhat_ = clf.predict(X_[test])
         data.append(RMSPE(yhat_, y_[test]))
     # Save Data as a Array
     data = np.array(data)
@@ -275,6 +280,7 @@ def fit_predict(X, y, X_test, params, model):
     # Log y transformation
     if 'log_y' in params:
         if int(np.round(params['log_y'])) == 1:
+            logValues = 1
             y_ = np.log(y_)
         del params['log_y']
     # Machine Learning Criteria
@@ -292,7 +298,10 @@ def fit_predict(X, y, X_test, params, model):
         clf = DecisionTreeRegressor(**params)
     clf.fit(X_, y_)
     # Return the predicted results
-    return clf.predict(X_test_)
+    if logValues == 1:
+        return np.exp(clf.predict(X_test_))
+    else:
+        clf.predict(X_test_)
 
 
 # Start Stopwatch
