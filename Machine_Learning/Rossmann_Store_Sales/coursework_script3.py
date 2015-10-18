@@ -105,10 +105,9 @@ def cross_validation(
     for train, test in crossVal:
         clf.fit(X_[train], y_[train])
         if int(np.round(log_y)) == 1:
-            yhat_ = np.exp(clf.predict(X_[test]))
+            data.append(RMSPE(clf.predict(X_[test]), np.log(y_[test])))
         else:
-            yhat_ = clf.predict(X_[test])
-        data.append(RMSPE(yhat_, y_[test]))
+            data.append(RMSPE(clf.predict(X_[test]), y_[test]))
     # Save Data as a Array
     data = np.array(data)
     return -data.mean()
@@ -156,10 +155,9 @@ def cross_validation2(
     for train, test in crossVal:
         clf.fit(X_[train], y_[train])
         if int(np.round(log_y)) == 1:
-            yhat_ = np.exp(clf.predict(X_[test]))
+            data.append(RMSPE(clf.predict(X_[test]), np.log(y_[test])))
         else:
-            yhat_ = clf.predict(X_[test])
-        data.append(RMSPE(yhat_, y_[test]))
+            data.append(RMSPE(clf.predict(X_[test]), y_[test]))
     # Save Data as a Array
     data = np.array(data)
     return -data.mean()
@@ -408,9 +406,9 @@ ML2_BO.explore({'max_depth': [200],
                 'scaleV': [0],
                 'log_y': [1]})
 # Optimisation of Machine Learning Algorithm #1 = RandomForestRegressor
-ML1_BO.maximize(init_points=250, n_iter=1)
+ML1_BO.maximize(init_points=150, n_iter=1)
 # Optimisation of Machine Learning Algorithm #2 = DecisionTreeRegressor
-ML2_BO.maximize(init_points=250, n_iter=1)
+ML2_BO.maximize(init_points=150, n_iter=1)
 # Feature Engineering - Post - Recommendations
 # Investigate - Feature Importance
 # Evaluate Models - Graphical and Tabular Results - Plot Trial Data
