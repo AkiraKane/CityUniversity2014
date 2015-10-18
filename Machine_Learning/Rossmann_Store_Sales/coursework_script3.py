@@ -104,10 +104,7 @@ def cross_validation(
     data = []
     for train, test in crossVal:
         clf.fit(X_[train], y_[train])
-        if int(np.round(log_y)) == 1:
-            data.append(RMSPE(clf.predict(X_[test]), np.log(y_[test])))
-        else:
-            data.append(RMSPE(clf.predict(X_[test]), y_[test]))
+        data.append(RMSPE(clf.predict(X_[test]), y_[test]))
     # Save Data as a Array
     data = np.array(data)
     return -data.mean()
@@ -154,10 +151,7 @@ def cross_validation2(
     data = []
     for train, test in crossVal:
         clf.fit(X_[train], y_[train])
-        if int(np.round(log_y)) == 1:
-            data.append(RMSPE(clf.predict(X_[test]), np.log(y_[test])))
-        else:
-            data.append(RMSPE(clf.predict(X_[test]), y_[test]))
+        data.append(RMSPE(clf.predict(X_[test]), y_[test]))
     # Save Data as a Array
     data = np.array(data)
     return -data.mean()
