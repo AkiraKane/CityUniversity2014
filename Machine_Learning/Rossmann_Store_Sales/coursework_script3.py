@@ -318,7 +318,7 @@ binaryCols = list(
     numericalCols -
     categorCols -
     dateCols)
-print('{} Binary Columns, {} Numerical Columns, {} Date Columns, {} Catgorical Columns'). \
+print('{} Binary Columns, {} Numerical Columns, {} Date Columns, {} Categorical Columns'). \
     format(len(binaryCols), len(numericalCols), len(dateCols), len(categorCols))
 # Basic Statistics
 # Missing Data - Table + Chart
