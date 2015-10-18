@@ -410,9 +410,16 @@ plot_data(ML1_BO.res['all']['params'][0].keys(),
           ML1_BO.res['all'], 'RandomForestRegressor')
 plot_data(ML2_BO.res['all']['params'][0].keys(),
           ML2_BO.res['all'], 'DecisionTreeRegressor')
+# Get the Parameters of the 'Best' Result
+for i, val in enumerate(ML1_BO.res['all']['values']):
+    if val == ML1_BO.res['max']['max_val']:
+        loc1 = i
+for i, val in enumerate(ML2_BO.res['all']['values']):
+    if val == ML2_BO.res['max']['max_val']:
+        loc2 = i
 # Refit and Predict Result from the Testing Set
-output1 = fit_predict(X, y, X_test, ML1_BO.res['max']['max_params'], 1)
-output2 = fit_predict(X, y, X_test, ML2_BO.res['max']['max_params'], 2)
+output1 = fit_predict(X, y, X_test, ML1_BO.res['all']['params'][loc1], 1)
+output2 = fit_predict(X, y, X_test, ML2_BO.res['all']['params'][loc2], 2)
 # Join with IDs, label and remove unwanted columns
 Submission = pd.DataFrame(data=[np.arange(1, len(output1) + 1),
                                 output1,

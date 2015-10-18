@@ -96,3 +96,7 @@ You are asked to compare two machine learning algorithms in practice, when appli
 2. Nonlinear Regression Analysis and Its Applications - http://onlinelibrary.wiley.com/book/10.1002/9780470316757
 3. Rasmussen, C.E., 2006. Gaussian processes for machine learning. MIT Press.
 4. Sun, Z.-L., Choi, T.-M., Au, K.-F., Yu, Y., 2008. Sales forecasting using extreme learning machine with applications in fashion retailing. Decision Support Systems 46, 411 – 419. doi:http://dx.doi.org/10.1016/j.dss.2008.07.009
+5.  http://papers.nips.cc/paper/4522-practical-bayesian-optimization-of-machine-learning-algorithms.pdf
+6. http://arxiv.org/pdf/1012.2599v1.pdf
+7. http://www.gaussianprocess.org/gpml/
+8. https://www.youtube.com/watch?v=vz3D36VXefI&index=10&list=PLE6Wd9FR--EdyJ5lbFl8UuGjecvVw66F6
