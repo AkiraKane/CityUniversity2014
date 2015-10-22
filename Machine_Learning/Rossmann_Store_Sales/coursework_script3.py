@@ -6,24 +6,32 @@
 # Machine Learning Coursework
 
 # Bayes Optimisation Reference Paper: http://goo.gl/PCvRTV
-# Bayes Optimisaion Module: https://goo.gl/Miyb4B
+# Bayes Optimisation Module: https://goo.gl/Miyb4B
+# Applied Use of Bayes Optimisation: http://bit.ly/1aRpyYE
 # Scoring Parameter: http://goo.gl/khqrqO
 # Scoring: http://arxiv.org/pdf/1209.5111v1.pdf
 
-import pandas as pd
-import numpy as np
 from time import time
+
 import os
-from bayes_opt import BayesianOptimization
-from sklearn.preprocessing import normalize, scale
-from sklearn.ensemble import RandomForestRegressor  # ML Algo 1
-from sklearn.tree import DecisionTreeRegressor  # ML Algo 2
 import matplotlib.pyplot as plt
-import seaborn as sns
 import matplotlib as mpl
 from datetime import datetime
-from sklearn.cross_validation import KFold
 import json
+from math import sqrt
+
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import normalize
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.tree import DecisionTreeRegressor
+import seaborn as sns
+from sklearn.cross_validation import KFold
+
+from sklearn.preprocessing import LabelEncoder
+
+import xgboost as xgb
+from bayes_opt import BayesianOptimization
 
 
 # Seaborn Parameters - Plotting Library
@@ -31,80 +39,118 @@ sns.set(style="whitegrid")
 
 
 # Scikit uses Numpy for Random Number Generation, setting a random seed value
-# ensures that the result can be repeated without worry of lossing analysis
+# ensures that the result can be repeated without worry of loosing analysis
 np.random.seed(1989)
 
 
-def ToWeight(y):
-    w = np.zeros(y.shape, dtype=float)
-    ind = y != 0
-    w[ind] = 1. / (y[ind]**2)
-    return w
+def get_optimal(ml1_bo, ml2_bo, ml3_bo):
+    loc1, loc2, loc3 = None, None, None
+    for i, val in enumerate(ml1_bo.res['all']['values']):
+        if val == ml1_bo.res['max']['max_val']:
+            loc1 = i
+    for i, val in enumerate(ml2_bo.res['all']['values']):
+        if val == ml2_bo.res['max']['max_val']:
+            loc2 = i
+    for i, val in enumerate(ml3_bo.res['all']['values']):
+        if val == ml3_bo.res['max']['max_val']:
+            loc3 = i
+    return loc1, loc2, loc3
 
 
-def RMSPE(yhat, y):
-    ''' Calculates the RMSPE as defined: https://goo.gl/gD3JKe
-    '''
-    w = ToWeight(y)
-    rmspe = np.sqrt(np.mean(w * (y - yhat)**2))
-    return rmspe
+def RMSPE(labels, predictions):
+    """
+    Calculates the Root Mean Squared Percentage Error
+    :rtype : Float
+    """
+    if len(predictions) != len(labels):
+        raise Exception("Labels and predictions must be of same length")
+    # Remove pairs where label == 0
+    labels, predictions = tuple(
+        zip(*filter(lambda x: x[0] != 0, zip(labels, predictions)))
+    )
+    labels = np.array(labels, dtype=float)
+    predictions = np.array(predictions, dtype=float)
+    return sqrt(np.power((labels - predictions) /
+                         labels, 2.0).sum() / len(labels))
 
 
-def importData(name):
+def import_data(name):
     ''' Import the data into a Pandas Dataframe
+    :rtype : Pandas Dataframe
     '''
     assert isinstance(name, str), 'Enter the NAME of the File to be imported!'
-    # Windows - Resolves the issue with the direction of backslashes
-    #fileName = "\\".join([os.getcwd(), name])
     # Linux - Resolves the issue with the direction of backslashes
-    fileName = "/".join([os.getcwd(), name])
+    filename = "/".join([os.getcwd(), name])
     print "Importing '{}' as a Dataframe".format(name)
-    return pd.read_csv(fileName, low_memory=False)
+    # Merge with Stores Data - Complementary
+    stores_df = pd.read_csv("/".join([os.getcwd(), 'store.csv']))
+    stores_df = stores_df.fillna(-1)
+    stores_df['StoreType'] = LabelEncoder(
+    ).fit_transform(stores_df['StoreType'])
+    stores_df['Assortment'] = LabelEncoder(
+    ).fit_transform(stores_df['Assortment'])
+    stores_df = stores_df.drop('PromoInterval', axis=1)
+    # Import the Dataset Requested
+    master_df = pd.read_csv(
+        filename, parse_dates=['Date'], dtype={
+            'StateHoliday': object})
+    master_df = master_df.drop('StateHoliday', axis=1)
+    # Date Conversion
+    (
+        master_df['DayInt'],
+        master_df['Weekend'],
+        master_df['Day'],
+        master_df['Month'],
+        master_df['Year']
+    ) = zip(*master_df['Date'].map(process_dates))
+    # Post Processing - Remove the Date Columns
+    master_df = master_df.drop('Date', axis=1)
+    # Fill NAs with -1 to avoid Confusion
+    master_df = master_df.fillna(-1)
+    # Merging Data with the stores data
+    return pd.merge(master_df, stores_df, on='Store', how='inner', sort=False)
 
 
 def cross_validation(
-        max_depth,
         max_features,
         criterion,
-        normV,
+        normv,
         n_estimators,
-        scaleV,
         log_y):
     ''' Run the model and return the 'score', where 'score' in this case
     is model 'RMSPE'
+    :rtype : Float
     '''
     # Get Data for Testing
     X_ = X
-    y_ = y.values.ravel()
+    y_ = y
     # Normalization
-    if int(np.round(normV)) == 1:
+    if int(np.round(normv)) == 1:
         for col in scaleNorm:
-            X_[col] = normalize(X_[col]).T
-    # Scaling
-    if int(np.round(scaleV)) == 1:
-        for col in scaleNorm:
-            X_[col] = scale(X_[col]).T
+            X_[col] = normalize(X_[col].values).T
     # Log the Class Variable
     if int(np.round(log_y)) == 1:
-        y_ = np.log(y_)
+        y_ = y_['Sales'].apply(lambda x: np.log(x + 1))
     # Machine Learning Criteria
     if int(np.round(criterion)) == 0:
-        criterion = 'mse'
+        metric = 'mse'
     else:
-        criterion = 'friedman_mse'
-    # Convery to Numpy Arrays
+        metric = 'friedman_mse'
+    # Using k-fold Cross Validation(5 folds)
+    KFolds = KFold(X.shape[0], 5, random_state=191989)
     X_ = X_.values
-    clf = RandomForestRegressor(
-        max_depth=int(np.round(max_depth)),
-        max_features=int(np.round(max_features)),
-        n_jobs=-1,
-        criterion=criterion)
-    # Using k-fold Cross Validation(5 folds), Scoring criteria = RMSPE
-    crossVal = KFold(X_.shape[0], n_folds=5)
+    y_ = y_.values.ravel()
     data = []
-    for train, test in crossVal:
-        clf.fit(X_[train], y_[train])
-        data.append(RMSPE(clf.predict(X_[test]), y_[test]))
+    for train, test in KFolds:
+        model = RandomForestRegressor(
+                                max_features=1 / max_features,
+                                random_state=191989,
+                                n_estimators=int(n_estimators),
+                                n_jobs=-1,
+                                criterion=metric)
+        model.fit(X=X_[train], y=y_[train])
+        # Scoring criteria = RMSPE
+        data.append(RMSPE(y_[test], model.predict(X_[test])))
     # Save Data as a Array
     data = np.array(data)
     return -data.mean()
@@ -114,96 +160,95 @@ def cross_validation2(
         max_depth,
         max_features,
         criterion,
-        normV,
-        scaleV,
+        normv,
         log_y):
-    ''' Run the model and return the 'score', where 'score' in this case
+    """ Run the model and return the 'score', where 'score' in this case
     is model 'RMSPE'
-    '''
+    :rtype : Float
+    """
     # Get Data for Testing
     X_ = X
-    y_ = y.values.ravel()
+    y_ = y
     # Normalization
-    # Normalization
-    if int(np.round(normV)) == 1:
+    if int(np.round(normv)) == 1:
         for col in scaleNorm:
-            X_[col] = normalize(X_[col]).T
-    # Scaling
-    if int(np.round(scaleV)) == 1:
-        for col in scaleNorm:
-            X_[col] = scale(X_[col]).T
+            X_[col] = normalize(X_[col].values).T
     # Log the Class Variable
-
     if int(np.round(log_y)) == 1:
-        y_ = np.log(y_)
+        y_ = y_['Sales'].apply(lambda x: np.log(x + 1))
     # Machine Learning Criteria
     if int(np.round(criterion)) == 0:
-        criterion = 'mse'
+        metric = 'mse'
     else:
-        criterion = 'friedman_mse'
-    # Convery to Numpy Arrays
+        metric = 'friedman_mse'
+    # Convert to Numpy Arrays
     X_ = X_.values
-    clf = DecisionTreeRegressor(
-        max_depth=int(np.round(max_depth)),
-        max_features=int(np.round(max_features)))
-    # Using k-fold Cross Validation(5 folds), Scoring criteria = RMSPE
-    crossVal = KFold(X_.shape[0], n_folds=5)
+    y_= y_.values.ravel()
+    # Using k-fold Cross Validation(5 folds)
+    KFolds = KFold(X.shape[0], 5, random_state=191989)
     data = []
-    for train, test in crossVal:
-        clf.fit(X_[train], y_[train])
-        data.append(RMSPE(clf.predict(X_[test]), y_[test]))
+    for train, test in KFolds:
+        model = DecisionTreeRegressor(
+                                max_depth=int(np.round(max_depth)),
+                                max_features=1 / max_features)
+        model.fit(X_[train], y_[train])
+        # Scoring criteria = RMSPE
+        data.append(RMSPE(model.predict(X_[test]), y_[test]))
     # Save Data as a Array
     data = np.array(data)
     return -data.mean()
 
 
-def preproc_dataset(dataframe, floatList, deleteCols, delOpen):
-    ''' Converting the Dictionary of parameters from the trials data back
-    into a format such that the Machine Learning Algorithms can process.
-    '''
-    # Categorical to Integer Representation - StoreType
-    dataframe.loc[dataframe['StoreType'] == 'a', 'StoreType'] = '1'
-    dataframe.loc[dataframe['StoreType'] == 'b', 'StoreType'] = '2'
-    dataframe.loc[dataframe['StoreType'] == 'c', 'StoreType'] = '3'
-    dataframe.loc[dataframe['StoreType'] == 'd', 'StoreType'] = '4'
-    dataframe['StoreType'] = dataframe['StoreType'].astype(float)
-    # Categorical to Integer Representation - Assortment
-    dataframe.loc[dataframe['Assortment'] == 'a', 'Assortment'] = '1'
-    dataframe.loc[dataframe['Assortment'] == 'b', 'Assortment'] = '2'
-    dataframe.loc[dataframe['Assortment'] == 'c', 'Assortment'] = '3'
-    dataframe['Assortment'] = dataframe['Assortment'].astype(float)
-    # Categorical to Integer Representation - StateHoliday
-    dataframe.loc[dataframe['StateHoliday'] == 'a', 'StateHoliday'] = '1'
-    dataframe.loc[dataframe['StateHoliday'] == 'b', 'StateHoliday'] = '2'
-    dataframe.loc[dataframe['StateHoliday'] == 'c', 'StateHoliday'] = '3'
-    dataframe['StateHoliday'] = dataframe['StateHoliday'].astype(float)
-    # Splitting out the dates
-    dataframe['year'] = dataframe.Date.apply(lambda x: x.split('-')[0])
-    dataframe['year'] = dataframe['year'].astype(float)
-    dataframe['month'] = dataframe.Date.apply(lambda x: x.split('-')[1])
-    dataframe['month'] = dataframe['month'].astype(float)
-    dataframe['day'] = dataframe.Date.apply(lambda x: x.split('-')[2])
-    dataframe['day'] = dataframe['day'].astype(float)
-    # Boolean Flag if there is Compeition or Not
-    dataframe.loc[
-        dataframe['CompetitionDistance'] > 0,
-        'CompetitionDistance'] = '1'
-    dataframe.loc[
-        dataframe['CompetitionDistance'] <= 0,
-        'CompetitionDistance'] = '0'
-    dataframe.CompetitionDistance.fillna(0, inplace=True)
-    dataframe['CompetitionDistance'] = dataframe[
-        'CompetitionDistance'].astype(float)
-    # For each col in floatList covert integers to type = float
-    for item in floatList:
-        dataframe[item] = dataframe[item].astype(float)
-    # Use only Store that are Open '1' as predictors
-    if delOpen:
-        dataframe = dataframe[dataframe.Open == 1]
-        dataframe = dataframe[dataframe.Sales != 0]
-    # Remove Unwanted Columns
-    dataframe = dataframe[dataframe.columns - deleteCols]
-    return dataframe
+def cross_validation3(
+        l_rate,
+        n_estimators,
+        max_depth,
+        normv,
+        log_y):
+    """ Run the model and return the 'score', where 'score' in this case
+    is model 'RMSPE'
+    :rtype : Float
+    """
+    # Get Data for Testing
+    X_ = X
+    y_ = y
+    # Normalization
+    if int(np.round(normv)) == 1:
+        for col in scaleNorm:
+            X_[col] = normalize(X_[col].values).T
+    # Log the Class Variable
+    if int(np.round(log_y)) == 1:
+        y_ = y_['Sales'].apply(lambda x: np.log(x + 1))
+    # Convert to Numpy Arrays
+    X_ = X_.values
+    y_= y_.values.ravel()
+    # Using k-fold Cross Validation(5 folds)
+    KFolds = KFold(X.shape[0], 5, random_state=191989)
+    data = []
+    for train, test in KFolds:
+        gbm = xgb.XGBRegressor(max_depth=int(max_depth),
+                                n_estimators=int(n_estimators),
+                                learning_rate=l_rate).fit(X_[train], y_[train])
+        # Scoring criteria = RMSPE
+        data.append(RMSPE(y_[test], gbm.predict(X_[test])))
+    # Save Data as a Array
+    data = np.array(data)
+    return -data.mean()
+
+
+def process_dates(dt):
+    """
+    :param dt: Datetime
+    :return: Various Metrics Derived from the input Date
+    """
+    weekday = dt.weekday()
+    return (
+        weekday,
+        1 if weekday >= 5 else 0,
+        dt.day,
+        dt.month,
+        dt.year,
+    )
 
 
 def plot_data(parameters, results, name):
@@ -227,8 +272,7 @@ def plot_data(parameters, results, name):
             c=cs,
             cmap=mpl.colors.ListedColormap(sns.color_palette("hls", 8)))
         axes[i].set_title(val)
-        # axes[i].set_ylim([0.8,1])
-    plt.savefig(name + '_Paramenters.png', bbox_inches='tight')
+    plt.savefig(name + '_Parameters.png', bbox_inches='tight')
     plt.close()
     # Second Plot
     print('Plotting the Trial number by Cost Function')
@@ -248,32 +292,28 @@ def plot_data(parameters, results, name):
 
 
 def fit_predict(X, y, X_test, params, model):
-    # Get Data for Testing
+    """
+    # Get Final Predictions using the Best Result from the Bayesian Optimisation
+    :rtype : Numpy Array
+    """
     X_ = X
     X_test_ = X_test
-    y_ = y.values.ravel()
+    y_ = y
     # Floats to Int Transform
     for k, v in params.iteritems():
         params[k] = int(np.round(v))
     # Normalization Transform
-    if 'normV' in params:
-        if int(np.round(params['normV'])) == 1:
+    if 'normv' in params:
+        if int(np.round(params['normv'])) == 1:
             for col in scaleNorm:
-                X_[col] = normalize(X_[col]).T
-                X_test_[col] = normalize(X_test_[col]).T
-        del params['normV']
-    # Scale Transformation
-    if 'scaleV' in params:
-        if int(np.round(params['scaleV'])) == 1:
-            for col in scaleNorm:
-                X_[col] = scale(X_[col]).T
-                X_test_[col] = scale(X_test_[col]).T
-        del params['scaleV']
+                X_[col] = normalize(X_[col].values).T
+                X_test_[col] = normalize(X_test_[col].values).T
+        del params['normv']
     # Log y transformation
     if 'log_y' in params:
         if int(np.round(params['log_y'])) == 1:
             logValues = 1
-            y_ = np.log(y_)
+            y_ = y_['Sales'].apply(lambda x: np.log(x + 1))
         del params['log_y']
     # Machine Learning Criteria
     if 'criterion' in params:
@@ -281,155 +321,174 @@ def fit_predict(X, y, X_test, params, model):
             params['criterion'] = 'mse'
         else:
             params['criterion'] = 'friedman_mse'
-    # Convery to Numpy Arrays
+    # Convert to Numpy Arrays
     X_ = X_.values
     X_test_ = X_test_.values
+    y_ = y_.values.ravel()
     if model == 1:
-        clf = RandomForestRegressor(**params)
+        model = RandomForestRegressor(**params)
+        model.fit(X_, y_)
+        # Feature Importance
+        print "Feature Importances:"
+        pairs = zip(X.columns, model.feature_importances_)
+        pairs.sort(key=lambda x: -x[1])
+        for column, importance in pairs:
+            print " ", column, importance
+    elif model == 2:
+        model = DecisionTreeRegressor(**params)
+        model.fit(X_, y_)
     else:
-        clf = DecisionTreeRegressor(**params)
-    clf.fit(X_, y_)
+        model = xgb.XGBRegressor(max_depth=params['max_depth'],
+                                n_estimators=params['n_estimators'],
+                                learning_rate=params['l_rate']).fit(X_, y_)
     # Return the predicted results
-    if logValues == 1:
-        return np.exp(clf.predict(X_test_))
-    else:
-        clf.predict(X_test_)
+    if 'log_y' in params:
+        if int(np.round(params['log_y'])) == 1:
+            return np.exp(model.predict(X_test_)) - 1
+        else:
+            return model.predict(X_test_)
 
 
 # Start Stopwatch
 print(datetime.now())
 startT = time()
 # Import the Data
-trainingDF = importData('train.csv')
-testDF = importData('test.csv')
-storesDF = importData('store.csv')
-submission = importData('sample_submission.csv')
-testDF = testDF.sort_index(axis=1).set_index('Id')
-# Data Preparation
-# Joins, seperate columns
-trainingDF = pd.merge(trainingDF, storesDF, on='Store')
-testDF = pd.merge(testDF, storesDF, on='Store')
-# Identifying Columns to datatype
-numericalCols = ['Sales', 'Customers', 'CompetitionDistance']
-categorCols = ['Assortment', 'StoreType']
-dateCols = ['CompetitionOpenSinceYear', 'Date']
-binaryCols = list(
-    trainingDF.columns -
-    numericalCols -
-    categorCols -
-    dateCols)
-print('{} Binary Columns, {} Numerical Columns, {} Date Columns, {} Categorical Columns'). \
-    format(len(binaryCols), len(numericalCols), len(dateCols), len(categorCols))
+trainingDF = import_data('train.csv')
+testDF = import_data('test.csv')
+# Identifying Columns by DType - Manual
+numCols = [
+    'Sales',
+    'Customers',
+    'CompetitionDistance',
+    'CompetitionOpenSinceMonth']
+catCols = [
+    'Assortment',
+    'StoreType',
+    'Store',
+    'CompetitionOpenSinceYear',
+    'CompetitionOpenSinceMonth',
+    'Promo2SinceWeek',
+    'Promo2SinceYear']
+dtCols = [
+    'CompetitionOpenSinceYear',
+    'DayOfWeek',
+    'DayInt',
+    'Day',
+    'Month',
+    'Year']
+binCols = trainingDF.columns.difference(
+    numCols).difference(catCols).difference(dtCols)
+print('{} Total Columns, {} Binary Columns, {} Numerical Columns, {} Date Columns, {} Categorical Columns'). \
+    format(len(trainingDF.columns), len(binCols),
+           len(numCols), len(dtCols), len(catCols))
 # Basic Statistics
-# Missing Data - Table + Chart
-missingData = []
-for col in trainingDF:
-    value = float(trainingDF[col].isnull().sum()) / trainingDF.shape[0]
-    missingData.append(np.float(format(value * 100, '.3f')))
-missingData = pd.DataFrame(missingData,
-                           index=trainingDF.columns,
-                           columns=['PercentageMissing'])
-# Removing the following columns as to much is missing
-removeCols = ['PromoInterval', 'Promo2SinceYear', 'Promo2SinceWeek']
-# Column Statistics - Table + Chart
 summary = pd.DataFrame(trainingDF.describe().T)
 summary = summary.drop(['count'], axis=1)
 # Data dictionary
-# TODO
+dataDict = trainingDF.info()
 # Removing Spurious Data
 noCompetition = trainingDF[
-    trainingDF.CompetitionDistance.isnull()].Store.unique()
+    trainingDF.CompetitionDistance == -1].Store.unique()
 print('Number of Stores with "NO" Competition: {}').format(len(noCompetition))
-# Compeition Opening Since not known?
+# Competition Opening Since not known?
 nStores = trainingDF[
-    trainingDF.CompetitionOpenSinceMonth.isnull()].Store.unique()
-print('Number of Stores with "NO KNOWLEDGE" of when Compeitiors Opened: {}'). \
+    trainingDF.CompetitionOpenSinceMonth == -1].Store.unique()
+print('Number of Stores with "NO KNOWLEDGE" of when Competitors Opened: {}'). \
     format((len(nStores) - len(noCompetition)))
-removeCols.extend(['CompetitionOpenSinceYear',
-                   'CompetitionOpenSinceMonth',
-                   'Date',
-                   'Customers',
-                   'Open'])
 # Columns that can be Scaled or Normalised as they are Continuous
 global scaleNorm
 scaleNorm = ['CompetitionDistance']
-# Preprocessing Steps - Refer to the function above
-trainingDF = preproc_dataset(trainingDF, scaleNorm, removeCols, True)
-removeCols.remove('Customers')
-# Pre-processing the Test Dataset with the same preprocessing steps
-testDF = preproc_dataset(testDF, scaleNorm, removeCols, False)
-# Feature Engineering - Pre - Training
-# Ideas for 'feature enginerring' in Notes.md File within directory
+# Add Feature Engineering Here - Ideas in Notes.md
+# TODO
+X_columns = trainingDF.columns.difference(['Customers',
+                                           'Id',
+                                           'DayOfWeek',
+                                           'Sales'])
+y_columns = ['Sales']
 # Sampling, Setting up Cross Validation - Make X and Y Global (for reuse)
 global X, y
-X = trainingDF[trainingDF.columns - removeCols - ['Sales']]
-y = trainingDF[['Sales']]
-testDF = testDF.sort_index(axis=1).set_index('Id')
-ID_Data = testDF['Id']
-X_test = testDF[testDF.columns - ['Id']]
-print('Size of Training Set: Columns = {}, Rows = {}'). \
+X = trainingDF[X_columns]
+y = trainingDF[y_columns]
+idDF = testDF['Id']
+X_Final = testDF[X_columns.difference(['Sales'])]
+print 'Size of Training Set: Columns = {}, Rows = {}'. \
     format(X.shape[1], X.shape[0])
-print('Size of Test Set: Columns = {}, Rows = {}'). \
-    format(testDF.shape[1], testDF.shape[0])
+print 'Size of Test Set: Columns = {}, Rows = {}'. \
+    format(X_Final.shape[1], X_Final.shape[0])
 # Machine Learning Algorithm #1 - Define ranges of Hyperparameters
-ML1_BO = BayesianOptimization(cross_validation, {'max_depth': (40, 500),
-                                                 'max_features': (1, 12),
+ml1_bo = BayesianOptimization(cross_validation, {'max_features': (1, 12),
                                                  'criterion': (0, 1),
-                                                 'normV': (0, 1),
-                                                 'n_estimators': (10, 200),
-                                                 'scaleV': (0, 1),
+                                                 'normv': (0, 1),
+                                                 'n_estimators': (10, 250),
                                                  'log_y': (0, 1)})
-ML1_BO.explore({'max_depth': [200],
-                'max_features': [12],
-                'criterion': [1],
-                'normV': [1],
-                'n_estimators': [100],
-                'scaleV': [0],
+ml1_bo.explore({'max_features': [3.0],
+                'criterion': [0],
+                'normv': [0],
+                'n_estimators': [50],
                 'log_y': [1]})
 # Machine Learning Algorithm #2 - Define ranges of Hyperparameters
-ML2_BO = BayesianOptimization(cross_validation2, {'max_depth': (40, 500),
+ml2_bo = BayesianOptimization(cross_validation2, {'max_depth': (40, 500),
                                                   'max_features': (1, 12),
                                                   'criterion': (0, 1),
-                                                  'normV': (0, 1),
-                                                  'scaleV': (0, 1),
+                                                  'normv': (0, 1),
                                                   'log_y': (0, 1)})
-ML2_BO.explore({'max_depth': [200],
-                'max_features': [12],
-                'criterion': [1],
-                'normV': [1],
-                'scaleV': [0],
+ml2_bo.explore({'max_depth': [200],
+                'max_features': [3.0],
+                'criterion': [0],
+                'normv': [0],
+                'log_y': [1]})
+# Machine Learning Algorithm #3 - Define ranges of Hyperparameters
+ml3_bo = BayesianOptimization(cross_validation3, {'l_rate': (0.01, 0.15),
+                                                  'n_estimators': (200, 1000),
+                                                  'max_depth': (0, 1),
+                                                  'normv': (0, 1),
+                                                  'log_y': (0, 1)})
+ml3_bo.explore({'l_rate': [0.05],
+                'n_estimators': [800],
+                'max_depth': [5],
+                'normv': [0],
                 'log_y': [1]})
 # Optimisation of Machine Learning Algorithm #1 = RandomForestRegressor
-ML1_BO.maximize(init_points=150, n_iter=1)
+ml1_bo.maximize(init_points=1, n_iter=1)
 # Optimisation of Machine Learning Algorithm #2 = DecisionTreeRegressor
-ML2_BO.maximize(init_points=150, n_iter=1)
+ml2_bo.maximize(init_points=1, n_iter=1)
+# Optimisation of Machine Learning Algorithm #2 = DecisionTreeRegressor
+ml3_bo.maximize(init_points=1, n_iter=1)
 # Feature Engineering - Post - Recommendations
 # Investigate - Feature Importance
 # Evaluate Models - Graphical and Tabular Results - Plot Trial Data
-plot_data(ML1_BO.res['all']['params'][0].keys(),
-          ML1_BO.res['all'], 'RandomForestRegressor')
-plot_data(ML2_BO.res['all']['params'][0].keys(),
-          ML2_BO.res['all'], 'DecisionTreeRegressor')
+plot_data(ml1_bo.res['all']['params'][0].keys(),
+          ml1_bo.res['all'], 'RandomForestRegressor')
+plot_data(ml2_bo.res['all']['params'][0].keys(),
+          ml2_bo.res['all'], 'DecisionTreeRegressor')
+plot_data(ml3_bo.res['all']['params'][0].keys(),
+          ml3_bo.res['all'], 'XgBoost_Regressor')
 # Get the Parameters of the 'Best' Result
-for i, val in enumerate(ML1_BO.res['all']['values']):
-    if val == ML1_BO.res['max']['max_val']:
-        loc1 = i
-for i, val in enumerate(ML2_BO.res['all']['values']):
-    if val == ML2_BO.res['max']['max_val']:
-        loc2 = i
+loc1, loc2, loc3 = get_optimal(ml1_bo, ml2_bo, ml3_bo)
 # Refit and Predict Result from the Testing Set
-output1 = fit_predict(X, y, X_test, ML1_BO.res['all']['params'][loc1], 1)
-output2 = fit_predict(X, y, X_test, ML2_BO.res['all']['params'][loc2], 2)
-# Join with IDs, label and remove unwanted columns
-Submission = pd.DataFrame(data=[np.arange(1, len(output1) + 1),
-                                output1,
-                                output2]).T
-Submission.columns = ['Id', 'ML1', 'ML2']
-# Save output for Submission to Kaggle
-Submission.to_csv('submission_xF.csv', sep=',', index=False)
-# Save Parameters
+output1 = fit_predict(X, y, X_Final, ml1_bo.res['all']['params'][loc1], 1)
+output2 = fit_predict(X, y, X_Final, ml2_bo.res['all']['params'][loc2], 2)
+output3 = fit_predict(X, y, X_Final, ml3_bo.res['all']['params'][loc3], 3)
+# Write Predictions to CSV Files - Machine Learning 1
+with open('ML1.csv', 'wb') as f:
+    f.write("Id,Sales\n")
+    for i, predicted_val in enumerate(output1):
+        f.write("%d,%d\n" % (idDF[i], predicted_val))
+# Write Predictions to CSV Files - Machine Learning 2
+with open('ML2.csv', 'wb') as f:
+    f.write("Id,Sales\n")
+    for i, predicted_val in enumerate(output2):
+        f.write("%d,%d\n" % (idDF[i], predicted_val))
+# Write Predictions to CSV Files - Machine Learning 3
+with open('ML3.csv', 'wb') as f:
+    f.write("Id,Sales\n")
+    for i, predicted_val in enumerate(output3):
+        f.write("%d,%d\n" % (idDF[i], predicted_val))
+# Save Parameters - For Presentation Outcome
 with open('bestResults.json', 'w') as f:
-    json.dump([ML1_BO.res['max'], ML2_BO.res['max']], f, ensure_ascii=False)
+    json.dump([ml1_bo.res['max'],
+               ml2_bo.res['max'],
+               ml3_bo.res['max']], f, ensure_ascii=False)
 # Print Final Statement - Time to Train
 print('Total time to Load, Optimise and Present Details: {} seconds').format(
     time() - startT)

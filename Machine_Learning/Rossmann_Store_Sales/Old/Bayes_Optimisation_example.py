@@ -74,14 +74,20 @@ startT = time()
 X, y = import_data()
 # Defining Parameter Ranges (Stochastic): https://goo.gl/ktblo5
 hypParameters = dict(max_depth=hp.choice('max_depth', range(1, 30)),
-                max_features=hp.choice('max_features', range(1, 5)),
-                criterion=hp.choice('criterion', ["gini", "entropy"]),
-                normalize=hp.choice('normalize', [0, 1]))
+                     max_features=hp.choice('max_features', range(1, 5)),
+                     criterion=hp.choice('criterion', ["gini", "entropy"]),
+                     normalize=hp.choice('normalize', [0, 1]))
 
 trials = Trials()
-best = fmin(results, hypParameters, algo=tpe.suggest, max_evals=50, trials=trials)
+best = fmin(
+    results,
+    hypParameters,
+    algo=tpe.suggest,
+    max_evals=50,
+    trials=trials)
 print 'Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(best,
-                                                                       np.abs(trials.best_trial['result']['loss']),
+                                                                       np.abs(trials.best_trial[
+                                                                              'result']['loss']),
                                                                        np.abs(trials.best_trial['result']['std']))
 
 print('Plotting Parameters by Loss')
@@ -102,7 +108,7 @@ for i, val in enumerate(parameters):
         linewidth=0.01,
         alpha=0.4,
         c=cs,
-        cmap=mpl.colors.ListedColormap(sns.color_palette("hls", 8)))      
+        cmap=mpl.colors.ListedColormap(sns.color_palette("hls", 8)))
     axes[i].set_title(val)
     # axes[i].set_ylim([0.8,1])
 plt.show()
@@ -114,7 +120,7 @@ ys = [np.abs(t['result']['loss']) for t in trials.trials]
 ys = [-t['result']['loss'] for t in trials.trials]
 cs = normalize(ys)
 ax.set_xlim(xs[0] - 10, xs[-1] + 10)
-ax.scatter(xs, ys, c=cs, s=40, 
+ax.scatter(xs, ys, c=cs, s=40,
            linewidth=0.01, alpha=0.75,
            cmap=mpl.colors.ListedColormap(sns.color_palette("hls", 8)))
 ax.set_title('Loss vs Trial Number ', fontsize=18)

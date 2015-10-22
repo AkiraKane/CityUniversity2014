@@ -37,18 +37,21 @@ def acq_max(ac, gp, ymax, restarts, bounds):
     ei_max = 0
 
     for i in range(restarts):
-        #Sample some points at random.
-        x_try = numpy.asarray([numpy.random.uniform(x[0], x[1], size=1) for x in bounds]).T
+        # Sample some points at random.
+        x_try = numpy.asarray([numpy.random.uniform(
+            x[0], x[1], size=1) for x in bounds]).T
 
-        #Find the minimum of minus the acquisition function
-        res = minimize(lambda x: -ac(x, gp=gp, ymax=ymax), x_try, bounds=bounds, method='L-BFGS-B')
+        # Find the minimum of minus the acquisition function
+        res = minimize(lambda x: -ac(x, gp=gp, ymax=ymax),
+                       x_try, bounds=bounds, method='L-BFGS-B')
 
-        #Store it if better than previous minimum(maximum).
+        # Store it if better than previous minimum(maximum).
         if -res.fun >= ei_max:
             x_max = res.x
             ei_max = -res.fun
 
     return x_max
+
 
 def unique_rows(a):
     """
@@ -131,19 +134,23 @@ class BayesianOptimization(object):
         """
 
         # Generate random points
-        l = [numpy.random.uniform(x[0], x[1], size=init_points) for x in self.bounds]
+        l = [numpy.random.uniform(x[0], x[1], size=init_points)
+             for x in self.bounds]
 
-        # Concatenate new random points to possible existing points from self.explore method.
+        # Concatenate new random points to possible existing points from
+        # self.explore method.
         self.init_points += list(map(list, zip(*l)))
 
         # Create empty list to store the new values of the function
         y_init = []
 
-        # Evaluate target function at all initialization points (random + explore)
+        # Evaluate target function at all initialization points (random +
+        # explore)
         for x in self.init_points:
 
             if self.verbose:
-                print('Initializing function at point: ', dict(zip(self.keys, x)), end='')
+                print('Initializing function at point: ',
+                      dict(zip(self.keys, x)), end='')
 
             y_init.append(self.f(**dict(zip(self.keys, x))))
 
@@ -186,7 +193,8 @@ class BayesianOptimization(object):
         if all([e == param_tup_lens[0] for e in param_tup_lens]):
             pass
         else:
-            raise ValueError('The same number of initialization points must be entered for every parameter.')
+            raise ValueError(
+                'The same number of initialization points must be entered for every parameter.')
 
         ################################################
         # Turn into list of lists
@@ -238,7 +246,8 @@ class BayesianOptimization(object):
             # Reset all entries, even if the same.
             self.bounds[row] = self.pbounds[key]
 
-    def maximize(self, init_points=5, restarts=50, n_iter=25, acq='ei', **gp_params):
+    def maximize(self, init_points=5, restarts=50,
+                 n_iter=25, acq='ei', **gp_params):
         """
         Main optimization method.
 
@@ -306,8 +315,10 @@ class BayesianOptimization(object):
             op_start = datetime.now()
 
             # Append most recently generated values to X and Y arrays
-            self.X = numpy.concatenate((self.X, x_max.reshape((1, self.dim))), axis=0)
-            self.Y = numpy.append(self.Y, self.f(**dict(zip(self.keys, x_max))))
+            self.X = numpy.concatenate(
+                (self.X, x_max.reshape((1, self.dim))), axis=0)
+            self.Y = numpy.append(self.Y, self.f(
+                **dict(zip(self.keys, x_max))))
 
             # Updating the GP.
             ur = unique_rows(self.X)
@@ -321,12 +332,20 @@ class BayesianOptimization(object):
             x_max = acq_max(ac, gp, ymax, restarts, self.bounds)
 
             # Print stuff
-            printI.print_info(op_start, i, x_max, ymax, self.X, self.Y, self.keys)
+            printI.print_info(
+                op_start,
+                i,
+                x_max,
+                ymax,
+                self.X,
+                self.Y,
+                self.keys)
 
         # ------------------------------ // ------------------------------ // ------------------------------ #
         # Output dictionary
         self.res = {}
-        self.res['max'] = {'max_val': self.Y.max(), 'max_params': dict(zip(self.keys, self.X[self.Y.argmax()]))}
+        self.res['max'] = {'max_val': self.Y.max(), 'max_params': dict(
+            zip(self.keys, self.X[self.Y.argmax()]))}
         self.res['all'] = {'values': [], 'params': []}
 
         # Fill values
@@ -336,7 +355,8 @@ class BayesianOptimization(object):
 
         # Print a final report if verbose active.
         if self.verbose:
-            tmin, tsec = divmod((datetime.now() - total_time).total_seconds(), 60)
-            print('Optimization finished with maximum: %8f, at position: %8s.' % (self.res['max']['max_val'],\
+            tmin, tsec = divmod(
+                (datetime.now() - total_time).total_seconds(), 60)
+            print('Optimization finished with maximum: %8f, at position: %8s.' % (self.res['max']['max_val'],
                                                                                   self.res['max']['max_params']))
             print('Time taken: %i minutes and %s seconds.' % (tmin, tsec))

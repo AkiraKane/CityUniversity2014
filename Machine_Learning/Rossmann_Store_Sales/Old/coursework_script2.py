@@ -295,15 +295,16 @@ def changeParams(settings):
             "mse", "friedman_mse"][int(
                 settings['criterion'][0])]
     if 'max_depth' in settings:
-        settings['max_depth'] = np.flipud(np.arange(40,500))[int(settings['max_depth'][0])]
+        settings['max_depth'] = np.flipud(np.arange(40, 500))[
+            int(settings['max_depth'][0])]
     if 'max_features' in settings:
         settings['max_features'] = np.flipud(
-            np.arange(1,12))[int(settings['max_features'][0])]
+            np.arange(1, 12))[int(settings['max_features'][0])]
     if 'normalize' in settings:
         settings['normalize'] = [0, 1][int(settings['normalize'][0])]
     if 'n_estimators' in settings:
         settings['n_estimators'] = np.flipud(
-            np.arange(10,200))[int(settings['n_estimators'][0])]
+            np.arange(10, 200))[int(settings['n_estimators'][0])]
     if 'scale' in settings:
         settings['scale'] = [0, 1][int(settings['scale'][0])]
     if 'log_y' in settings:
@@ -341,7 +342,11 @@ binaryCols = list(
     categorCols -
     dateCols)
 print('{} Binary Columns, {} Numerical Columns, {} Date Columns, {} Catgorical Columns'). \
-    format(len(binaryCols), len(numericalCols), len(dateCols), len(categorCols))
+    format(
+    len(binaryCols),
+    len(numericalCols),
+    len(dateCols),
+    len(categorCols))
 # Basic Statistics
 # Missing Data - Table + Chart
 missingData = []
@@ -397,15 +402,15 @@ print('Size of Test Set: Columns = {}, Rows = {}'). \
 hypParameters1 = dict(
     max_depth=hp.choice(
         'max_depth', np.flipud(
-            np.arange(40,500))), max_features=hp.choice(
+            np.arange(40, 500))), max_features=hp.choice(
         'max_features', np.flipud(
-            np.arange(1,12))), criterion=hp.choice(
+            np.arange(1, 12))), criterion=hp.choice(
         'criterion', [
             "mse", "friedman_mse"]), normalize=hp.choice(
         'normalize', [
             0, 1]), n_estimators=hp.choice(
         'n_estimators', np.flipud(
-            np.arange(10,200))), scale=hp.choice(
+            np.arange(10, 200))), scale=hp.choice(
         'scale', [
             0, 1]), log_y=hp.choice(
         'log_y', [
@@ -414,9 +419,9 @@ hypParameters1 = dict(
 hypParameters2 = dict(
     max_depth=hp.choice(
         'max_depth', np.flipud(
-            np.arange(40,500))), max_features=hp.choice(
+            np.arange(40, 500))), max_features=hp.choice(
         'max_features', np.flipud(
-            np.arange(1,12))), criterion=hp.choice(
+            np.arange(1, 12))), criterion=hp.choice(
         'criterion', [
             "mse", "friedman_mse"]), normalize=hp.choice(
         'normalize', [
@@ -436,7 +441,8 @@ bestML1 = fmin(
     max_evals=1000,
     trials=trials1)
 print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML1,
-                                                                       np.abs(trials1.best_trial['result']['loss']),
+                                                                       np.abs(trials1.best_trial[
+                                                                              'result']['loss']),
                                                                        np.abs(trials1.best_trial['result']['std'])))
 # Optimisation of Machine Learning Algorithm #2 = DecisionTreeRegressor
 bestML2 = fmin(
@@ -446,7 +452,8 @@ bestML2 = fmin(
     max_evals=1000,
     trials=trials2)
 print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML2,
-                                                                       np.abs(trials2.best_trial['result']['loss']),
+                                                                       np.abs(trials2.best_trial[
+                                                                              'result']['loss']),
                                                                        np.abs(trials2.best_trial['result']['std'])))
 # Feature Engineering - Post - Recommendations
 # Investigate - Feature Importance
@@ -474,7 +481,7 @@ with open('data.json', 'w') as f:
     bestML2 = changeParams(trials2.best_trial['misc']['vals'])
     bestML1['result'] = np.abs(trials1.best_trial['result']['loss'])
     bestML1['result'] = np.abs(trials2.best_trial['result']['loss'])
-    json.dump([bestML1,bestML2], f, ensure_ascii=False)
+    json.dump([bestML1, bestML2], f, ensure_ascii=False)
 # Print Final Statement - Time to Train
 print('Total time to Load, Optimise and Present Details: {} seconds').format(
     time() - startT)

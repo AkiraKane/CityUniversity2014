@@ -265,7 +265,11 @@ def main():
         categorCols -
         dateCols)
     print('{} Binary Columns, {} Numerical Columns, {} Date Columns, {} Catgorical Columns'). \
-        format(len(binaryCols), len(numericalCols), len(dateCols), len(categorCols))
+        format(
+        len(binaryCols),
+        len(numericalCols),
+        len(dateCols),
+        len(categorCols))
     # Basic Statistics
     # Missing Data - Table + Chart
     missingData = []
@@ -357,7 +361,8 @@ def main():
         max_evals=200,
         trials=trials1)
     print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML1,
-                                                                           np.abs(trials1.best_trial['result']['loss']),
+                                                                           np.abs(trials1.best_trial[
+                                                                                  'result']['loss']),
                                                                            np.abs(trials1.best_trial['result']['std'])))
     # Optimisation of Machine Learning Algorithm #2 = Bayesian Ridge Regression
     bestML2 = fmin(
@@ -367,7 +372,8 @@ def main():
         max_evals=200,
         trials=trials2)
     print('Best Solution (Parameters): {} Loss (Result): {} +/- {}'.format(bestML2,
-                                                                           np.abs(trials2.best_trial['result']['loss']),
+                                                                           np.abs(trials2.best_trial[
+                                                                                  'result']['loss']),
                                                                            np.abs(trials2.best_trial['result']['std'])))
     # Feature Engineering - Post
     # Evaluate Models - Graphical and Tabular Results - Plot Trial Data
