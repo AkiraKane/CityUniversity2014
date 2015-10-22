@@ -40,7 +40,7 @@ sns.set(style="whitegrid")
 
 # Scikit uses Numpy for Random Number Generation, setting a random seed value
 # ensures that the result can be repeated without worry of loosing analysis
-np.random.seed(1989)
+np.random.seed(191989)
 
 
 def get_optimal(ml1_bo, ml2_bo, ml3_bo):
@@ -176,11 +176,6 @@ def cross_validation2(
     # Log the Class Variable
     if int(np.round(log_y)) == 1:
         y_ = y_['Sales'].apply(lambda x: np.log(x + 1))
-    # Machine Learning Criteria
-    if int(np.round(criterion)) == 0:
-        metric = 'mse'
-    else:
-        metric = 'friedman_mse'
     # Convert to Numpy Arrays
     X_ = X_.values
     y_= y_.values.ravel()
@@ -301,7 +296,8 @@ def fit_predict(X, y, X_test, params, model):
     y_ = y
     # Floats to Int Transform
     for k, v in params.iteritems():
-        params[k] = int(np.round(v))
+        if k != 'l_rate':
+            params[k] = int(np.round(v))
     # Normalization Transform
     if 'normv' in params:
         if int(np.round(params['normv'])) == 1:
@@ -312,8 +308,8 @@ def fit_predict(X, y, X_test, params, model):
     # Log y transformation
     if 'log_y' in params:
         if int(np.round(params['log_y'])) == 1:
-            logValues = 1
             y_ = y_['Sales'].apply(lambda x: np.log(x + 1))
+            logY = True
         del params['log_y']
     # Machine Learning Criteria
     if 'criterion' in params:
@@ -342,11 +338,10 @@ def fit_predict(X, y, X_test, params, model):
                                 n_estimators=params['n_estimators'],
                                 learning_rate=params['l_rate']).fit(X_, y_)
     # Return the predicted results
-    if 'log_y' in params:
-        if int(np.round(params['log_y'])) == 1:
-            return np.exp(model.predict(X_test_)) - 1
-        else:
-            return model.predict(X_test_)
+    if logY == True:
+        return np.exp(model.predict(X_test_)) - 1
+    else:
+        return model.predict(X_test_)
 
 
 # Start Stopwatch
@@ -354,6 +349,8 @@ print(datetime.now())
 startT = time()
 # Import the Data
 trainingDF = import_data('train.csv')
+# Apply A Shuffle - to assist with KFold which is ordered
+trainingDF = trainingDF.iloc[np.random.permutation(len(trainingDF))]
 testDF = import_data('test.csv')
 # Identifying Columns by DType - Manual
 numCols = [
@@ -419,16 +416,16 @@ print 'Size of Test Set: Columns = {}, Rows = {}'. \
 ml1_bo = BayesianOptimization(cross_validation, {'max_features': (1, 12),
                                                  'criterion': (0, 1),
                                                  'normv': (0, 1),
-                                                 'n_estimators': (10, 250),
+                                                 'n_estimators': (100, 300),
                                                  'log_y': (0, 1)})
 ml1_bo.explore({'max_features': [3.0],
                 'criterion': [0],
                 'normv': [0],
-                'n_estimators': [50],
+                'n_estimators': [250],
                 'log_y': [1]})
 # Machine Learning Algorithm #2 - Define ranges of Hyperparameters
-ml2_bo = BayesianOptimization(cross_validation2, {'max_depth': (40, 500),
-                                                  'max_features': (1, 12),
+ml2_bo = BayesianOptimization(cross_validation2, {'max_depth': (5, 500),
+                                                  'max_features': (1, 17),
                                                   'criterion': (0, 1),
                                                   'normv': (0, 1),
                                                   'log_y': (0, 1)})
@@ -439,21 +436,21 @@ ml2_bo.explore({'max_depth': [200],
                 'log_y': [1]})
 # Machine Learning Algorithm #3 - Define ranges of Hyperparameters
 ml3_bo = BayesianOptimization(cross_validation3, {'l_rate': (0.01, 0.15),
-                                                  'n_estimators': (200, 1000),
+                                                  'n_estimators': (200, 600),
                                                   'max_depth': (0, 1),
                                                   'normv': (0, 1),
                                                   'log_y': (0, 1)})
-ml3_bo.explore({'l_rate': [0.05],
-                'n_estimators': [800],
+ml3_bo.explore({'l_rate': [0.04],
+                'n_estimators': [600],
                 'max_depth': [5],
                 'normv': [0],
                 'log_y': [1]})
 # Optimisation of Machine Learning Algorithm #1 = RandomForestRegressor
-ml1_bo.maximize(init_points=1, n_iter=1)
+ml1_bo.maximize(init_points=10, n_iter=1)
 # Optimisation of Machine Learning Algorithm #2 = DecisionTreeRegressor
-ml2_bo.maximize(init_points=1, n_iter=1)
+ml2_bo.maximize(init_points=10, n_iter=1)
 # Optimisation of Machine Learning Algorithm #2 = DecisionTreeRegressor
-ml3_bo.maximize(init_points=1, n_iter=1)
+ml3_bo.maximize(init_points=10, n_iter=1)
 # Feature Engineering - Post - Recommendations
 # Investigate - Feature Importance
 # Evaluate Models - Graphical and Tabular Results - Plot Trial Data
@@ -466,9 +463,12 @@ plot_data(ml3_bo.res['all']['params'][0].keys(),
 # Get the Parameters of the 'Best' Result
 loc1, loc2, loc3 = get_optimal(ml1_bo, ml2_bo, ml3_bo)
 # Refit and Predict Result from the Testing Set
-output1 = fit_predict(X, y, X_Final, ml1_bo.res['all']['params'][loc1], 1)
-output2 = fit_predict(X, y, X_Final, ml2_bo.res['all']['params'][loc2], 2)
-output3 = fit_predict(X, y, X_Final, ml3_bo.res['all']['params'][loc3], 3)
+max_ml3 = {'n_estimators': 600.0, 'log_y': 1.0, 'max_depth': 5.0, 'l_rate': 0.040000000000000001, 'normv': 0.0}
+max_ml2 = {'max_features': 3.0, 'log_y': 1.0, 'criterion': 0.0, 'max_depth': 200.0, 'normv': 0.0}
+max_ml1 = {'max_features': 2.1897849917350625, 'n_estimators': 108.01612211934166, 'log_y': 0.53980534381173073, 'criterion': 0.26032666518704972, 'normv': 0.60012625039277268}
+output1 = fit_predict(X, y, X_Final, max_ml1, 1)
+output2 = fit_predict(X, y, X_Final, max_ml2, 2)
+output3 = fit_predict(X, y, X_Final, max_ml3, 3)
 # Write Predictions to CSV Files - Machine Learning 1
 with open('ML1.csv', 'wb') as f:
     f.write("Id,Sales\n")
