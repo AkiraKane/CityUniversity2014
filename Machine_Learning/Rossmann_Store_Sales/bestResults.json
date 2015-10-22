@@ -1,1 +1,0 @@
-[{"max_val": -0.048025225199152553, "max_params": {"max_depth": 297, "n_estimators": 191, "criterion": "mse", "max_features": 3}}, {"max_val": -0.053788297467118898, "max_params": {"max_depth": 357, "criterion": "friedman_mse", "max_features": 7}}]
