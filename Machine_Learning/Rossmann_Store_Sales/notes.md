@@ -64,6 +64,8 @@ You are asked to compare two machine learning algorithms in practice, when appli
     * Each Variables to Predictor
     * Feature importance
     * Principal Component Analysis (PCA)
+3. Feature Selection Example
+    * FYI Enrico - http://blog.datadive.net/selecting-good-features-part-iv-stability-selection-rfe-and-everything-side-by-side/
 
 **Poster**
 
