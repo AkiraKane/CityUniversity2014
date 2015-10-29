@@ -17,7 +17,7 @@ class CNN_model(object):
 
     def __init__(self,
                  batch_size=5,
-                 embedding_dims=100,
+                 embedding_dims=150,
                  nb_filters=50,
                  filter_length=3,
                  hidden_dims=100,
@@ -102,6 +102,7 @@ class CNN_model(object):
         return output
 
 
+
 # Loading Datasets
 #X_train = np.load('./Text_Classification/Models/X_train.npy')
 #y_train = np.load('./Text_Classification/Models/y_train.npy')
@@ -133,3 +134,7 @@ prediction = model.predict(X_test)
 
 # Save the Output to Numpy File for inspection
 np.save('./Output.npy')
+
+# Save Model Weights as pickle file
+model.model.save_weights("model_weights.pkl")
+
