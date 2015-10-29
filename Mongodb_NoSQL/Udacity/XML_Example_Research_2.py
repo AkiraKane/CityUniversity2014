@@ -25,7 +25,7 @@ def get_authors(root):
             "insr": []
         }
         for insr in author:
-            if insr.get('iid') != None:
+            if insr.get('iid') is not None:
                 data['insr'].append(insr.get('iid'))
         authors.append(data)
 

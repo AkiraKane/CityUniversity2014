@@ -34,7 +34,7 @@ c.dtype
 
 a = np.array([1, 2, 3, 4])
 a + 1
-2**a
+2 ** a
 b = np.ones(4) + 1
 a - b
 a * b
@@ -73,7 +73,7 @@ plt.show()
 # has a sqrt function
 d1 = np.random.random_integers(1, 6, 10)
 d2 = np.random.random_integers(1, 6, 10)
-dist = np.sqrt((d1**2 + d2**2))
+dist = np.sqrt((d1 ** 2 + d2 ** 2))
 dist
 
 # Part 2: Pandas

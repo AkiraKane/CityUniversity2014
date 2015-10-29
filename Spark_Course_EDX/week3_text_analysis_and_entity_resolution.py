@@ -824,7 +824,7 @@ avgSimDups = trueDupsRDD.map(
 
 nonDupsRDD = (sims
               .leftOuterJoin(goldStandard)
-              .filter(lambda k_v4: k_v4[1][1] == None))
+              .filter(lambda k_v4: k_v4[1][1] is None))
 
 avgSimNon = nonDupsRDD.map(
     lambda k_v5: k_v5[1][0]).reduce(
