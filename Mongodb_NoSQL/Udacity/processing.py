@@ -43,9 +43,9 @@ FIELDS = {'rdf-schema#label': 'label',
           'rdf-schema#comment': 'description',
           'synonym': 'synonym',
           'name': 'name',
-          'family_label': 'family',    # \
-          'class_label': 'class',  # \
-          'phylum_label': 'phylum',  # \
+          'family_label': 'family',    #
+          'class_label': 'class',  #
+          'phylum_label': 'phylum',  #
           'order_label': 'order',  # classification
           'kingdom_label': 'kingdom',  # /
           'genus_label': 'genus'}  # /

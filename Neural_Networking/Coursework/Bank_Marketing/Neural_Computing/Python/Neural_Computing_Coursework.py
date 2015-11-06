@@ -342,7 +342,7 @@ def tanh(x):
 
 def tanh_deriv(x):
     # Derivative derived from Heskes and Kappen's recommendation.
-    return 1.14393 * (1 - (np.tanh((2 * x) / 3))**2)
+    return 1.14393 * (1 - (np.tanh((2 * x) / 3)) ** 2)
 
 
 def logistic(x):

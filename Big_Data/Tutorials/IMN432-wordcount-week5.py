@@ -190,7 +190,7 @@ if __name__ == "__main__":
         valuesAndPreds = predict_vect_lb.map(lambda p: (
             p.label, Logistic_Regression.predict(p.features)))
         resultsTable[i, 6] = valuesAndPreds.map(lambda v_p1: (
-            v_p1[0] - v_p1[1])**2).reduce(lambda x, y: x + y) / valuesAndPreds.count()
+            v_p1[0] - v_p1[1]) ** 2).reduce(lambda x, y: x + y) / valuesAndPreds.count()
 
     finish_time = time()
 
