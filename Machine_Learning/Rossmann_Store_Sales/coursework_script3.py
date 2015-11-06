@@ -24,13 +24,13 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import normalize
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.tree import DecisionTreeRegressor
+from sklearn.linear_model import BayesianRidge
 import seaborn as sns
 from sklearn.cross_validation import KFold
+from sklearn.metrics import mean_absolute_error
 
 from sklearn.preprocessing import LabelEncoder
 
-import xgboost as xgb
 from bayes_opt import BayesianOptimization
 
 
@@ -43,18 +43,55 @@ sns.set(style="whitegrid")
 np.random.seed(191989)
 
 
-def get_optimal(ml1_bo, ml2_bo, ml3_bo):
-    loc1, loc2, loc3 = None, None, None
+def feature_engineering(dataframe, showtTResults=False):
+    # Investigte the Relationship between Means between on-off School Holiday
+    MedianSalesSchoolHoliday = dataframe.pivot_table(index='Store', 
+                                                    columns=['Month', 
+                                                    'SchoolHoliday'], 
+                                                    values='Sales', 
+                                                    aggfunc=np.median)
+    # The t statistic to test whether the means are different
+    from scipy.stats import ttest_ind
+    # Paired t-test
+    if showtTResults:
+        for i in np.arange(2013,2016,1):
+            temp = MedianSalesSchoolHoliday[i].dropna()
+            # P-Values H0: (mew)1 = (mew)2, Ha: (mew)1 != (mew)2
+            ttest_ind(a=temp[0], b=temp[1])[1]
+    # Since the Means are not significantly different at 0.05 significance
+    # Paramenters will not be created and used in the model
+    MedianSalesPromo = dataframe.pivot_table(index='Store', 
+                                                    columns=['Month', 
+                                                    'Promo'], 
+                                                    values='Sales', 
+                                                    aggfunc=np.median)
+    # The median has been used since the data is positively skewed 
+    # Paired t-test
+    if showtTResults:
+        for i in np.arange(1,13,1):
+            temp = MedianSalesPromo[i].dropna()
+            # P-Values H0: (mew)1 = (mew)2, Ha: (mew)1 != (mew)2
+            ttest_ind(a=temp[0], b=temp[1])[1]
+    # Stack to Make Merging Simple
+    MedianSalesPromo = MedianSalesPromo.stack()
+    MedianSalesSchoolHoliday = MedianSalesSchoolHoliday.stack()
+    # Update Column Names    
+    MedianSalesPromo.columns = ["_".join([str(val),"MedSalesPromo"]) 
+                                    for val in MedianSalesPromo.columns]
+    MedianSalesSchoolHoliday.columns = ["_".join([str(val),"MedSalesSchoolHoliday"]) 
+                                    for val in MedianSalesSchoolHoliday.columns]
+    return MedianSalesPromo, MedianSalesSchoolHoliday
+    
+
+def get_optimal(ml1_bo, ml2_bo):
+    loc1, loc2 = None, None
     for i, val in enumerate(ml1_bo.res['all']['values']):
         if val == ml1_bo.res['max']['max_val']:
             loc1 = i
     for i, val in enumerate(ml2_bo.res['all']['values']):
         if val == ml2_bo.res['max']['max_val']:
             loc2 = i
-    for i, val in enumerate(ml3_bo.res['all']['values']):
-        if val == ml3_bo.res['max']['max_val']:
-            loc3 = i
-    return loc1, loc2, loc3
+    return loc1, loc2
 
 
 def RMSPE(labels, predictions):
@@ -113,6 +150,7 @@ def import_data(name):
 
 def cross_validation(
         max_features,
+        max_depth,
         criterion,
         normv,
         n_estimators,
@@ -144,23 +182,26 @@ def cross_validation(
     for train, test in KFolds:
         model = RandomForestRegressor(
                                 max_features=1 / max_features,
+                                max_depth = max_depth,
                                 random_state=191989,
                                 n_estimators=int(n_estimators),
                                 n_jobs=-1,
                                 criterion=metric)
         model.fit(X=X_[train], y=y_[train])
         # Scoring criteria = RMSPE
-        data.append(RMSPE(y_[test], model.predict(X_[test])))
+        data.append(mean_absolute_error(y_[test], model.predict(X_[test])))
     # Save Data as a Array
     data = np.array(data)
     return -data.mean()
 
 
 def cross_validation2(
-        max_depth,
-        max_features,
-        criterion,
+        n_iter,
+        tol,
+        fit_intercept,
         normv,
+        alpha_1,
+        alpha_2,
         log_y):
     """ Run the model and return the 'score', where 'score' in this case
     is model 'RMSPE'
@@ -169,10 +210,6 @@ def cross_validation2(
     # Get Data for Testing
     X_ = X
     y_ = y
-    # Normalization
-    if int(np.round(normv)) == 1:
-        for col in scaleNorm:
-            X_[col] = normalize(X_[col].values).T
     # Log the Class Variable
     if int(np.round(log_y)) == 1:
         y_ = y_['Sales'].apply(lambda x: np.log(x + 1))
@@ -183,49 +220,15 @@ def cross_validation2(
     KFolds = KFold(X.shape[0], 5, random_state=191989)
     data = []
     for train, test in KFolds:
-        model = DecisionTreeRegressor(
-                                max_depth=int(np.round(max_depth)),
-                                max_features=1 / max_features)
-        model.fit(X_[train], y_[train])
+        model = BayesianRidge(n_iter = int(n_iter),
+                              fit_intercept = int(np.round(fit_intercept)),
+                              tol = tol,
+                              alpha_1 = alpha_1,
+                              alpha_2 = alpha_2,
+                              normalize = int(np.round(normv))
+        )
         # Scoring criteria = RMSPE
-        data.append(RMSPE(model.predict(X_[test]), y_[test]))
-    # Save Data as a Array
-    data = np.array(data)
-    return -data.mean()
-
-
-def cross_validation3(
-        l_rate,
-        n_estimators,
-        max_depth,
-        normv,
-        log_y):
-    """ Run the model and return the 'score', where 'score' in this case
-    is model 'RMSPE'
-    :rtype : Float
-    """
-    # Get Data for Testing
-    X_ = X
-    y_ = y
-    # Normalization
-    if int(np.round(normv)) == 1:
-        for col in scaleNorm:
-            X_[col] = normalize(X_[col].values).T
-    # Log the Class Variable
-    if int(np.round(log_y)) == 1:
-        y_ = y_['Sales'].apply(lambda x: np.log(x + 1))
-    # Convert to Numpy Arrays
-    X_ = X_.values
-    y_= y_.values.ravel()
-    # Using k-fold Cross Validation(5 folds)
-    KFolds = KFold(X.shape[0], 5, random_state=191989)
-    data = []
-    for train, test in KFolds:
-        gbm = xgb.XGBRegressor(max_depth=int(max_depth),
-                                n_estimators=int(n_estimators),
-                                learning_rate=l_rate).fit(X_[train], y_[train])
-        # Scoring criteria = RMSPE
-        data.append(RMSPE(y_[test], gbm.predict(X_[test])))
+        data.append(mean_absolute_error(model.predict(X_[test]), y_[test]))
     # Save Data as a Array
     data = np.array(data)
     return -data.mean()
@@ -331,12 +334,8 @@ def fit_predict(X, y, X_test, params, model):
         for column, importance in pairs:
             print " ", column, importance
     elif model == 2:
-        model = DecisionTreeRegressor(**params)
+        model = BayesianRidge(**params)
         model.fit(X_, y_)
-    else:
-        model = xgb.XGBRegressor(max_depth=params['max_depth'],
-                                n_estimators=params['n_estimators'],
-                                learning_rate=params['l_rate']).fit(X_, y_)
     # Return the predicted results
     if logY == True:
         return np.exp(model.predict(X_test_)) - 1
@@ -349,8 +348,6 @@ print(datetime.now())
 startT = time()
 # Import the Data
 trainingDF = import_data('train.csv')
-# Apply A Shuffle - to assist with KFold which is ordered
-trainingDF = trainingDF.iloc[np.random.permutation(len(trainingDF))]
 testDF = import_data('test.csv')
 # Identifying Columns by DType - Manual
 numCols = [
@@ -375,7 +372,8 @@ dtCols = [
     'Year']
 binCols = trainingDF.columns.difference(
     numCols).difference(catCols).difference(dtCols)
-print('{} Total Columns, {} Binary Columns, {} Numerical Columns, {} Date Columns, {} Categorical Columns'). \
+print('{} Total Columns, {} Binary Columns, {} Numerical Columns, \
+{} Date Columns, {} Categorical Columns'). \
     format(len(trainingDF.columns), len(binCols),
            len(numCols), len(dtCols), len(catCols))
 # Basic Statistics
@@ -402,55 +400,77 @@ X_columns = trainingDF.columns.difference(['Customers',
                                            'DayOfWeek',
                                            'Sales'])
 y_columns = ['Sales']
+# Add the Engineered Features
+MedSalesPro, MedSalesSchHol = feature_engineering(trainingDF, 
+                                                           showtTResults=False)
 # Sampling, Setting up Cross Validation - Make X and Y Global (for reuse)
 global X, y
 X = trainingDF[X_columns]
 y = trainingDF[y_columns]
+# Append Engineer Features
+X = pd.merge(X, MedSalesPro, 
+             how='left', 
+             right_index=True, 
+             left_on=['Store','Promo'])
+X = pd.merge(X, MedSalesSchHol, 
+             how='left', 
+             right_index=True, 
+             left_on=['Store','SchoolHoliday'])
+# If there is a missing value due to the Merge, replace with the Mean value
+X = X.apply(lambda x: x.fillna(x.mean()),axis=0)
 idDF = testDF['Id']
 X_Final = testDF[X_columns.difference(['Sales'])]
+X_Final = pd.merge(X_Final, 
+                   MedSalesPro, 
+                   how='left', 
+                   right_index=True, 
+                   left_on=['Store','Promo'])
+X_Final = pd.merge(X_Final, 
+                   MedSalesSchHol, 
+                   how='left', 
+                   right_index=True, 
+                   left_on=['Store','SchoolHoliday'])
+# If there is a missing value due to the Merge, replace with the Mean value
+X_Final = X_Final.apply(lambda x: x.fillna(x.mean()),axis=0)
 print 'Size of Training Set: Columns = {}, Rows = {}'. \
     format(X.shape[1], X.shape[0])
 print 'Size of Test Set: Columns = {}, Rows = {}'. \
     format(X_Final.shape[1], X_Final.shape[0])
+##############################################################################
+# Bayesian Optimisation - 30 Iterations for Each Algorithm
+##############################################################################
 # Machine Learning Algorithm #1 - Define ranges of Hyperparameters
 ml1_bo = BayesianOptimization(cross_validation, {'max_features': (1, 12),
                                                  'criterion': (0, 1),
                                                  'normv': (0, 1),
+                                                 'max_depth': (1, 40),
                                                  'n_estimators': (100, 300),
                                                  'log_y': (0, 1)})
 ml1_bo.explore({'max_features': [3.0],
                 'criterion': [0],
                 'normv': [0],
-                'n_estimators': [250],
+                'max_depth': [15],
+                'n_estimators': [50],
                 'log_y': [1]})
 # Machine Learning Algorithm #2 - Define ranges of Hyperparameters
-ml2_bo = BayesianOptimization(cross_validation2, {'max_depth': (5, 500),
-                                                  'max_features': (1, 17),
-                                                  'criterion': (0, 1),
+ml2_bo = BayesianOptimization(cross_validation2, {'n_iter': (10, 500),
+                                                  'tol': (0, 1e-2),
+                                                  'fit_intercept': (0, 1),
                                                   'normv': (0, 1),
+                                                  'alpha_1': (0, 1e-2),
+                                                  'alpha_2': (0, 1e-2),
                                                   'log_y': (0, 1)})
-ml2_bo.explore({'max_depth': [200],
-                'max_features': [3.0],
-                'criterion': [0],
+ml2_bo.explore({'n_iter': [350],
+                'tol': 1e-3,
+                'fit_intercept': [0],
                 'normv': [0],
-                'log_y': [1]})
-# Machine Learning Algorithm #3 - Define ranges of Hyperparameters
-ml3_bo = BayesianOptimization(cross_validation3, {'l_rate': (0.01, 0.15),
-                                                  'n_estimators': (200, 600),
-                                                  'max_depth': (0, 1),
-                                                  'normv': (0, 1),
-                                                  'log_y': (0, 1)})
-ml3_bo.explore({'l_rate': [0.04],
-                'n_estimators': [600],
-                'max_depth': [5],
-                'normv': [0],
-                'log_y': [1]})
+                'alpha_1': [1e-6],
+                'alpha_2': [1e-6],
+                'log_y': [0]})
 # Optimisation of Machine Learning Algorithm #1 = RandomForestRegressor
-ml1_bo.maximize(init_points=10, n_iter=1)
+ml1_bo.maximize(init_points=100, n_iter=1)
 # Optimisation of Machine Learning Algorithm #2 = DecisionTreeRegressor
-ml2_bo.maximize(init_points=10, n_iter=1)
-# Optimisation of Machine Learning Algorithm #2 = DecisionTreeRegressor
-ml3_bo.maximize(init_points=10, n_iter=1)
+ml2_bo.maximize(init_points=100, n_iter=1)
 # Feature Engineering - Post - Recommendations
 # Investigate - Feature Importance
 # Evaluate Models - Graphical and Tabular Results - Plot Trial Data
@@ -458,17 +478,13 @@ plot_data(ml1_bo.res['all']['params'][0].keys(),
           ml1_bo.res['all'], 'RandomForestRegressor')
 plot_data(ml2_bo.res['all']['params'][0].keys(),
           ml2_bo.res['all'], 'DecisionTreeRegressor')
-plot_data(ml3_bo.res['all']['params'][0].keys(),
-          ml3_bo.res['all'], 'XgBoost_Regressor')
 # Get the Parameters of the 'Best' Result
-loc1, loc2, loc3 = get_optimal(ml1_bo, ml2_bo, ml3_bo)
+loc1, loc2, loc3 = get_optimal(ml1_bo, ml2_bo)
 # Refit and Predict Result from the Testing Set
-max_ml3 = {'n_estimators': 600.0, 'log_y': 1.0, 'max_depth': 5.0, 'l_rate': 0.040000000000000001, 'normv': 0.0}
 max_ml2 = {'max_features': 3.0, 'log_y': 1.0, 'criterion': 0.0, 'max_depth': 200.0, 'normv': 0.0}
 max_ml1 = {'max_features': 2.1897849917350625, 'n_estimators': 108.01612211934166, 'log_y': 0.53980534381173073, 'criterion': 0.26032666518704972, 'normv': 0.60012625039277268}
 output1 = fit_predict(X, y, X_Final, max_ml1, 1)
 output2 = fit_predict(X, y, X_Final, max_ml2, 2)
-output3 = fit_predict(X, y, X_Final, max_ml3, 3)
 # Write Predictions to CSV Files - Machine Learning 1
 with open('ML1.csv', 'wb') as f:
     f.write("Id,Sales\n")
@@ -479,16 +495,17 @@ with open('ML2.csv', 'wb') as f:
     f.write("Id,Sales\n")
     for i, predicted_val in enumerate(output2):
         f.write("%d,%d\n" % (idDF[i], predicted_val))
-# Write Predictions to CSV Files - Machine Learning 3
-with open('ML3.csv', 'wb') as f:
-    f.write("Id,Sales\n")
-    for i, predicted_val in enumerate(output3):
-        f.write("%d,%d\n" % (idDF[i], predicted_val))
 # Save Parameters - For Presentation Outcome
 with open('bestResults.json', 'w') as f:
     json.dump([ml1_bo.res['max'],
-               ml2_bo.res['max'],
-               ml3_bo.res['max']], f, ensure_ascii=False)
+               ml2_bo.res['max']
+               ], f, ensure_ascii=False)
+# Save Parameters - For Presentation Outcome
+with open('allResults.json', 'w') as f:
+    json.dump([ml1_bo.res['all'],
+               ml2_bo.res['all']
+               ], f, ensure_ascii=False)
+##############################################################################
 # Print Final Statement - Time to Train
 print('Total time to Load, Optimise and Present Details: {} seconds').format(
     time() - startT)
