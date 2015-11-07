@@ -227,6 +227,7 @@ def cross_validation2(
                               alpha_2 = alpha_2,
                               normalize = int(np.round(normv))
         )
+        model.fit(X_[train], y_[train])
         # Scoring criteria = RMSPE
         data.append(mean_absolute_error(model.predict(X_[test]), y_[test]))
     # Save Data as a Array
@@ -297,10 +298,6 @@ def fit_predict(X, y, X_test, params, model):
     X_ = X
     X_test_ = X_test
     y_ = y
-    # Floats to Int Transform
-    for k, v in params.iteritems():
-        if k != 'l_rate':
-            params[k] = int(np.round(v))
     # Normalization Transform
     if 'normv' in params:
         if int(np.round(params['normv'])) == 1:
@@ -333,6 +330,17 @@ def fit_predict(X, y, X_test, params, model):
         pairs.sort(key=lambda x: -x[1])
         for column, importance in pairs:
             print " ", column, importance
+        importances = model.feature_importances_
+        std = np.std([tree.feature_importances_ for tree in model.estimators_],axis=0)
+        indices = np.argsort(importances)[::-1]
+        plt.figure()
+        plt.title("Feature importances")
+        plt.bar(range(X_.shape[1]), importances[indices],
+               color="r", yerr=std[indices], align="center")
+        plt.xticks(range(X_.shape[1]), indices)
+        plt.xlim([-1, X_.shape[1]])
+        plt.savefig(model + ' Feature importances.png', bbox_inches='tight')
+        plt.close()
     elif model == 2:
         model = BayesianRidge(**params)
         model.fit(X_, y_)
@@ -437,52 +445,57 @@ print 'Size of Training Set: Columns = {}, Rows = {}'. \
 print 'Size of Test Set: Columns = {}, Rows = {}'. \
     format(X_Final.shape[1], X_Final.shape[0])
 ##############################################################################
-# Bayesian Optimisation - 30 Iterations for Each Algorithm
+# Bayesian Optimisation - 50 Iterations for Each Algorithm
 ##############################################################################
 # Machine Learning Algorithm #1 - Define ranges of Hyperparameters
-ml1_bo = BayesianOptimization(cross_validation, {'max_features': (1, 12),
+ml1_bo = BayesianOptimization(cross_validation, {'max_features': (1, 20),
                                                  'criterion': (0, 1),
-                                                 'normv': (0, 1),
+                                                 'normv': (1, 1),
                                                  'max_depth': (1, 40),
                                                  'n_estimators': (100, 300),
-                                                 'log_y': (0, 1)})
+                                                 'log_y': (1, 1)})
 ml1_bo.explore({'max_features': [3.0],
                 'criterion': [0],
-                'normv': [0],
+                'normv': [1],
                 'max_depth': [15],
                 'n_estimators': [50],
                 'log_y': [1]})
 # Machine Learning Algorithm #2 - Define ranges of Hyperparameters
 ml2_bo = BayesianOptimization(cross_validation2, {'n_iter': (10, 500),
                                                   'tol': (0, 1e-2),
-                                                  'fit_intercept': (0, 1),
-                                                  'normv': (0, 1),
+                                                  'fit_intercept': (1, 1),
+                                                  'normv': (1, 1),
                                                   'alpha_1': (0, 1e-2),
                                                   'alpha_2': (0, 1e-2),
-                                                  'log_y': (0, 1)})
+                                                  'log_y': (1, 1)})
 ml2_bo.explore({'n_iter': [350],
-                'tol': 1e-3,
-                'fit_intercept': [0],
-                'normv': [0],
+                'tol': [1e-3],
+                'fit_intercept': [1],
+                'normv': [1],
                 'alpha_1': [1e-6],
                 'alpha_2': [1e-6],
-                'log_y': [0]})
+                'log_y': [1]})
 # Optimisation of Machine Learning Algorithm #1 = RandomForestRegressor
-ml1_bo.maximize(init_points=100, n_iter=1)
+ml1_bo.maximize(init_points=50, n_iter=1)
 # Optimisation of Machine Learning Algorithm #2 = DecisionTreeRegressor
-ml2_bo.maximize(init_points=100, n_iter=1)
+ml2_bo.maximize(init_points=50, n_iter=1)
 # Feature Engineering - Post - Recommendations
 # Investigate - Feature Importance
 # Evaluate Models - Graphical and Tabular Results - Plot Trial Data
 plot_data(ml1_bo.res['all']['params'][0].keys(),
-          ml1_bo.res['all'], 'RandomForestRegressor')
+          ml1_bo.res['all'], 'Random_Forest_Regressor')
 plot_data(ml2_bo.res['all']['params'][0].keys(),
-          ml2_bo.res['all'], 'DecisionTreeRegressor')
+          ml2_bo.res['all'], 'Bayesian_Ridge_Regression')
 # Get the Parameters of the 'Best' Result
-loc1, loc2, loc3 = get_optimal(ml1_bo, ml2_bo)
+loc1, loc2 = get_optimal(ml1_bo, ml2_bo)
 # Refit and Predict Result from the Testing Set
-max_ml2 = {'max_features': 3.0, 'log_y': 1.0, 'criterion': 0.0, 'max_depth': 200.0, 'normv': 0.0}
-max_ml1 = {'max_features': 2.1897849917350625, 'n_estimators': 108.01612211934166, 'log_y': 0.53980534381173073, 'criterion': 0.26032666518704972, 'normv': 0.60012625039277268}
+max_ml1 = ml1_bo.res['max']['max_params']
+max_ml2 = ml2_bo.res['max']['max_params']
+# Add Normv and Log y
+for item in ['normv','log_y']:
+    max_ml1[item] = 1
+    max_ml2[item] = 1
+# Train a model with the Optimal Results, Generate Prediction of Test Dataset
 output1 = fit_predict(X, y, X_Final, max_ml1, 1)
 output2 = fit_predict(X, y, X_Final, max_ml2, 2)
 # Write Predictions to CSV Files - Machine Learning 1
