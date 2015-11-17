@@ -1,0 +1,9 @@
+#!/bin/bash
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+exec curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"; 
+exec python Script/installation_python.py;
+exec sudo python get-pip.py
+
+

@@ -1,0 +1,1 @@
+[{"max_val": -0.079985949172949655, "max_params": {"n_estimators": 211, "criterion": "mse", "max_features": 3, "max_depth": 26}, "total_time": 12143.25, "mean_time": 48.573}, {"max_val": -0.17336229977392348, "max_params": {"n_iter": 500, "fit_intercept": 1, "alpha_2": 0, "tol": 0, "alpha_1": 0}, "total_time": 789.4317, "mean_time": 3.157727}]

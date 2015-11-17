@@ -67,13 +67,51 @@ img {
 <p>On completing this coursework you should be able to: 1. Specify a Machine Learning (ML) solution to a data analysis problem; 2. Adjust the ML model parameters and explain how ML seeks to solve the problem; 3. Apply, compare and contrast, and critically evaluate two ML models.</p>
 <p>Apply, compare and contrast two ML solutions: adjust the ML model parameters (e.g. using Matlab) and explain how ML seeks to solve the problem.</p>
 <p><em>General Guidelines</em></p>
-<p>The idea with this coursework is to give you some experience carrying out and presenting a piece of research in machine learning. What we expect to see is a task that you describe clearly, relate to existing work, implement and test on a dataset using two ML models. To do this you will need to write or change code, run it on some data, make some figures, read a few background papers, collect some references, compare and contrast results, and create a poster describing your task, the algorithm(s) you used and the results you’ve obtained. As a rough rule of thumb, spend about a week’s worth of work (spread out over a longer time to allow the computers to do some work in the interim!), and about three days preparing the poster and rehearsing your presentation.</p>
+<p>The idea with this coursework is to give you some experience carrying out and presenting a piece of research in machine learning. What we expect to see is a task that you describe clearly, relate to existing work, implement and test on a dataset using two ML models. To do this you will need to write or change code, run it on some data, make some figures, read a few background papers, collect some references, compare and contrast results, and create a poster describing your task, the algorithm(s) you used and the results you???ve obtained. As a rough rule of thumb, spend about a week???s worth of work (spread out over a longer time to allow the computers to do some work in the interim!), and about three days preparing the poster and rehearsing your presentation.</p>
 <p><em>Specific Requirements</em></p>
-<p>You are asked to compare two machine learning algorithms in practice, when applied to some data. You may also propose a new algorithm, in which case you still should compare it to one other approach. Select the data and algorithm(s) wisely! Your poster should include at least two figures which graphically illustrate quantitative aspects of your results, such as training/testing error curves, learned parameters, algorithm outputs, etc. It should also include at least 5 references to research papers or book chapters.</p>
+<p>You are asked to compare two machine learning algorithms in practice, when applied to some data. You may also propose a new algorithm, in which case you still should compare it to one other approach. Select the data and algorithm(s) wisely! Your poster <strong>should include</strong> at <strong>least two figures which graphically illustrate quantitative</strong> aspects of your results, <strong>such as training/testing error curves, learned parameters, algorithm outputs</strong>, etc. It should also include <strong>at least 5 references</strong> to research papers or book chapters.</p>
 <p><strong>Code</strong></p>
-<p><em>Marking</em>: 1. syntactic correctness (5%) 2. organization and clarity of comments (10%) 3. appropriate use and sophistication of methods (10%).</p>
-<p><em>Possible Datasets</em> * <a href="https://www.kaggle.com/c/rossmann-store-sales" title="Competition">Rossman Store Sales</a> - <a href="https://www.kaggle.com" title="Kaggle">Kaggle</a> Competition</p>
-<p><em>Coding Steps</em> * Import data * Basic Statistics about the data * Missing data (<a href="http://pandas.pydata.org/">Pandas</a>) * Column Statistics (<a href="http://pandas.pydata.org/">Pandas</a>) * Plotting Pertinent Variables (<a href="http://stanford.edu/~mwaskom/software/seaborn/">Seaborn</a>) * Basic Statistics * Preprocessing * Removing Data based on previous step * <a href="http://scikit-learn.org/stable/modules/classes.html#module-sklearn.cross_validation">Cross-validation</a> * Machine Learning Processing * <a href="http://scikit-learn.org/stable/supervised_learning.html#supervised-learning" title="supervised learning models">Possible Models</a> * Optimisation/Model Selection * <a href="https://github.com/fmfn/BayesianOptimization">Bayes Optimization</a> - Preferred * <a href="http://scikit-learn.org/stable/modules/classes.html#module-sklearn.grid_search">Random/Grid Search</a> -Second Choice * PCA / Feature Engineering - After Optimization * Results Metrics * <a href="http://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics">Typical Metrics</a> * Graphical Representation (<a href="http://stanford.edu/~mwaskom/software/seaborn/">Seaborn</a>)</p>
+<p><em>Marking</em>:</p>
+<ol style="list-style-type: decimal">
+<li>syntactic correctness (5%)</li>
+<li>organization and clarity of comments (10%)</li>
+<li>appropriate use and sophistication of methods (10%).</li>
+</ol>
+<p><em>Possible Datasets</em></p>
+<ul>
+<li><a href="https://www.kaggle.com/c/rossmann-store-sales" title="Competition">Rossman Store Sales</a> - <a href="https://www.kaggle.com" title="Kaggle">Kaggle</a> Competition</li>
+</ul>
+<p><em>Coding Steps</em></p>
+<ul>
+<li>Import data</li>
+<li>Basic Statistics about the data
+<ul>
+<li>Missing data (<a href="http://pandas.pydata.org/">Pandas</a>)</li>
+<li>Column Statistics (<a href="http://pandas.pydata.org/">Pandas</a>)</li>
+<li>Plotting Pertinent Variables (<a href="http://stanford.edu/~mwaskom/software/seaborn/">Seaborn</a>)</li>
+<li>Basic Statistics</li>
+</ul></li>
+<li>Preprocessing
+<ul>
+<li>Removing Data based on previous step</li>
+<li><a href="http://scikit-learn.org/stable/modules/classes.html#module-sklearn.cross_validation">Cross-validation</a></li>
+</ul></li>
+<li>Machine Learning Processing
+<ul>
+<li><a href="http://scikit-learn.org/stable/supervised_learning.html#supervised-learning" title="supervised learning models">Possible Models</a></li>
+<li>Optimisation/Model Selection
+<ul>
+<li><a href="https://github.com/fmfn/BayesianOptimization">Bayes Optimization</a> - Preferred</li>
+<li><a href="http://scikit-learn.org/stable/modules/classes.html#module-sklearn.grid_search">Random/Grid Search</a> -Second Choice</li>
+<li>PCA / Feature Engineering - After Optimization</li>
+</ul></li>
+</ul></li>
+<li>Results Metrics
+<ul>
+<li><a href="http://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics">Typical Metrics</a></li>
+<li>Graphical Representation (<a href="http://stanford.edu/~mwaskom/software/seaborn/">Seaborn</a>)</li>
+</ul></li>
+</ul>
 <p><em>Feature Engineering Ideas</em></p>
 <ol style="list-style-type: decimal">
 <li>Features Created
@@ -84,7 +122,6 @@ img {
 <li>Mean On/Off School Holiday &amp; Ratio to Store (<em>t-statistic</em> validation)</li>
 <li>Mean On/Off State Holiday &amp; Ratio to Store (<em>t-statistic</em> validation)</li>
 <li>Mean On/Off Weekend &amp; Ratio for Store (<em>t-statistic</em> validation)</li>
-<li>Log Sales</li>
 </ul></li>
 <li>Relationships Explored
 <ul>
@@ -118,10 +155,10 @@ img {
 </ul>
 <p><em>References</em></p>
 <ol style="list-style-type: decimal">
-<li>Snoek, J., Larochelle, H., Adams, R.P., 2012. Practical Bayesian optimization of machine learning algorithms, in: Advances in Neural Information Processing Systems. pp. 2951–2959.</li>
+<li>Snoek, J., Larochelle, H., Adams, R.P., 2012. Practical Bayesian optimization of machine learning algorithms, in: Advances in Neural Information Processing Systems. pp. 2951???2959.</li>
 <li>Nonlinear Regression Analysis and Its Applications - <a href="http://onlinelibrary.wiley.com/book/10.1002/9780470316757" class="uri">http://onlinelibrary.wiley.com/book/10.1002/9780470316757</a></li>
 <li>Rasmussen, C.E., 2006. Gaussian processes for machine learning. MIT Press.</li>
-<li>Sun, Z.-L., Choi, T.-M., Au, K.-F., Yu, Y., 2008. Sales forecasting using extreme learning machine with applications in fashion retailing. Decision Support Systems 46, 411 – 419. <a href="doi:http://dx.doi.org/10.1016/j.dss.2008.07.009" class="uri">doi:http://dx.doi.org/10.1016/j.dss.2008.07.009</a></li>
+<li>Sun, Z.-L., Choi, T.-M., Au, K.-F., Yu, Y., 2008. Sales forecasting using extreme learning machine with applications in fashion retailing. Decision Support Systems 46, 411 ??? 419. <a href="doi:http://dx.doi.org/10.1016/j.dss.2008.07.009" class="uri">doi:http://dx.doi.org/10.1016/j.dss.2008.07.009</a></li>
 </ol>
 </div>
 

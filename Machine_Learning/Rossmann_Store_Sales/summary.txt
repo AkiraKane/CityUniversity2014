@@ -1,0 +1,107 @@
+Reduced Document
+
+--- Motivation (2.5%) DO NOT INCLUDE ON POSTER ---
+
+Predictive nalytics can be argued as of the most alluring and effective methods of forecasting the future given past observations for all businesses and organisations. To quote Barton and Court (2012) [7], “Advanced analytics is likely to become a decisive competitive asset in many industries and a core element in companies' efforts to improve performance.” Machine style solutions offer far more robust methods for this type of analysis, as they are able to take in account many variables (high dimensionality) with an accuracy that can far exceed the capability of any human, even one with specialist domain knowledge of the particular area.
+
+--- Description (2.5%) DO NOT INCLUDE ON POSTER ---
+
+The aim of this analysis is to explore, compare and contrast two Machine Learning algorithms for the purpose of forecasting (supervised - regression) the daily sales of 1,115 stores across Europe for the Rossmann Drug Stores. The intention is to provide evidence that once particular algorithm is more effective that other methods for the purpose of this task.
+
+--- initial analysis of the data set including basic statistics (10%) DO NOT INCLUDE ON POSTER ---
+
+Noticable patterns include:
+1. Substantial increases Sales when on promotion
+2. Locality of nearest Competitor does not significantly impact Sales
+3. Sales tend to trend upwards as Christmas approaches
+4. Promotions only occur during weekdays - negigible impact on weekend sales
+5. School Holidays do not impact sales exclusively, when combined with Promotions there is a noticable increases in Sales
+6. Low correlation between the number of clients and amount of Sales 
+
+--- brief summary of the two ML models with their pros and cons (10%) DO NOT INCLUDE ON POSTER ---
+
+Random Forests:
+
+Summary: An ensemble method for both classification and regression type problems, the enemble is built up by training many decision trees that when typically averaged can produce very good results.
+
+Pros: 1. The method for estimating missing data and maintains accuracy when a large proportion of the data are missing is effective 2. As positive features, it handles large set of input variables without variable deletion and thus without information loss, moreover gives estimates of what variables are important in the regression. 
+
+Cons: 1. The error rate depends on the correlation between any two trees in the forest, since increasing the correlation increases the forest error rate 2. Overfitting of the data is a concern when the number of tree gets large
+
+Bayesian Ridge Regression (BRR):
+
+Summary: This methods is within the family of OLS methods and can be thought of as a variation of the Ridge Regression algorithm. Ridge Regression attempts to find many unbiased estimators and averaging these to find the potentital estimators. By extension the BRR makes use of Bayes Inferance in order to embed priors into the model for the purporse of determining the esitmators.
+
+Pros: 1. Embedding of prior knowledge, if the distribution can be found then if follows that i can also be learnt. 2. Parameters are iteratively updated
+
+Cons: 1. From Bishop 2006 [12], “assumption that the true distribution from which the data are generated is contained within the set of models under consideration” 2. Inferance of the model parameters is difficult 
+
+--- Hypothesis (5%) DO NOT INCLUDE ON POSTER ---
+
+	Does a computationally more expensive (Random Forest) Machine Learning algorithm offer a better trade-off in terms of time to optimise and performance than linear least squares algorithm (Ridge Regression) for the task of forecasting Sales for a entire Companies stores?
+	
+--- Description of choice of training and evaluation methodology (5%)
+
+The high level overview of the processes for comparing the two machine learning algorithms can be written as followed.
+
+- Import of the dataset
+- Transformations, Pre-processing and cleansing of the dataset
+- Partioning of the dataset; Train and Test
+- Setup Experimentation: Finding Hyper-parameter bounds
+- Setup of the Training Evauation Phase:
+    - Hyper-param Optimisation Method: Bayesian
+    - 50 Trials per Model
+    - 5 Fold Cross-Validation
+    - Evaluation Criteria: Mean-Squared Error - selection based on Willmott et al, 2005 [8]
+- Interpert, analyse and evaluate Training Results
+- Re-train models with Optimal Parameters
+- Obtain predictions and evaulate
+
+Bayesian Optimisation:
+
+- This method works in probabilistic manner by exploring the search space of a set of hyper-parameters, the method strives to find and exploit areas with a low mean and high variance. The optimal possible set of parameters are iteratively chosen throughout the search spaceis chosen by their respective expected probability of improvement. Arguments for the BO were justified in the conclusion of Snoek et al 2012 [6], "Bayesian optimization finds better hyperparameters significantly faster".
+
+--- Choice of parameters and experimental results (10%) DO NOT INCLUDE ON POSTER ---
+
+Prior to running the full experiment an exploratory analysis was undertaken to aid with determining the best hyper-parameters to work with. The output of this analysis can be seen in the chart. There were a number of HP that were experimented with; Normalisation and Scaling of the datasets, logarithm of the target value and also the hyperparameters of each respective model.
+
+Chart 1 - (1 in 7 Graphic)
+
+Experimental results:
+- Model loss is lower in the Ensemble model in contrast to the BRR method where the models loss was consistantly the same inrespective of the HP configuration
+- There are varying HP combinations resulting in similiar performance value in the Random Forest method and consistant in the BRR.
+
+Algorithm	Time to Train	Model Loss	N. Trees / Iter.
+Random Forest	48.5 s	0.0799	211
+Baysian Ridge Regression	3.15 s	0.1733   
+
+--- analysis and critical evaluation of results (25%) DO NOT INCLUDE ON POSTER ---
+
+- The model complexity of a ensemble method far exceeds the learning capability and performance of a single BRR model, this can be observed in the both the AUC and Error Charts (Chart X1 and X2)
+- Comments on the BO Technique - the majority of the estimated points are concentrated on the lower level of the both models Loss axis, meaning that for the majority of the trials the model the hyper-parameter selection were worthwhile
+
+--- Lessons Learned
+
+- Ensemble methods from the analysis from this analysis deal well with a misture of categorical and numerical features
+- Hyper-parameter tuning is difficult in a multidimensional enviroment to determine if the number of trials was sufficient and also if the optimal solution has be found
+
+--- Future Work
+
+- The underlying and pertinent property of the data is of a time series nature. Therefore addressing time series analysis techniques; for instance Trends, Seasonality and also more advanced properties namely the impact and lag properties of Sales
+- Exploring the use of Ensemble methods, changing of combination rules (voting based method used)
+- Combine a variety of different Machine Learning models together in one ensemble
+
+--- References
+
+[6] - Snoek, J., Larochelle, H., Adams, R.P., 2012. Practical Bayesian optimization of machine learning algorithms, in: Advances in Neural Information Processing Systems. pp. 2951–2959.
+
+[7] - Barton, D., and Court, D. 2012. “Making Advanced Analytics Work for You.” Harvard Business Review 90:79–83.
+
+[8] - Willmott, C.J., Matsuura, K., 2005. Advantages of the mean absolute error (MAE) over the root mean square error (RMSE) in assessing average model performance. Climate research 30, 79.
+
+[9] - L. Breiman. Random forests. Machine Learning, 45:5–32, 2001.
+
+[12] - Bishop, C.M., 2009. Pattern recognition and machine learning, Corr. at 8. print. ed, Information science and statistics. Springer, New York, NY.
+
+
+
