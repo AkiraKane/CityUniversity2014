@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-__author__ = "Daniel Dixet"
+__author__ = "Daniel Dixey"
 __credits__ = ["Daniel Dixey", "Enrico Lopedoto"]
 __license__ = "The MIT License (MIT)"
 __version__ = "1.0.1"
