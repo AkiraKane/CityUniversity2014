@@ -1,7 +1,10 @@
 #!/usr/bin/python
 
 # Created: 11/10/2015
+# Complete: 20/11/2015
 # Dan Dixey
+
+# Purpose: Convert the JSON results into CSV format for Generating Graphs
 
 import json
 import pandas as pd
@@ -26,15 +29,17 @@ randomForest_results = []
 bayesRidge_results = []
 
 for i in range(50):
-    randomForest_results.append([abs(randomForest_values[i])] + randomForest_parameters[i].values())
-    bayesRidge_results.append([abs(bayesRidge_values[i])] + bayesRidge_parameters[i].values())
+    randomForest_results.append(
+        [abs(randomForest_values[i])] + randomForest_parameters[i].values())
+    bayesRidge_results.append(
+        [abs(bayesRidge_values[i])] + bayesRidge_parameters[i].values())
 
 # Column Names
 bayesCol = [u'Error'] + bayesRidge_parameters[0].keys()
 rfCol = [u'Error'] + randomForest_parameters[0].keys()
 
 # Save Data to CSV
-pd.DataFrame(randomForest_results, columns=rfCol).to_csv('randomForest_testing_results.csv', 
-                                                         sep = ',')
-pd.DataFrame(bayesRidge_results, columns=bayesCol).to_csv('k_nearest_testing_results.csv', 
-                                                         sep = ',')
+pd.DataFrame(randomForest_results, columns=rfCol).to_csv('randomForest_testing_results.csv',
+                                                         sep=',')
+pd.DataFrame(bayesRidge_results, columns=bayesCol).to_csv('k_nearest_testing_results.csv',
+                                                          sep=',')

@@ -1,14 +1,40 @@
 #!/usr/bin/python
 
-# Created: 11/10/2015
-# Last Modified: 11/11/2015
-# Dan Dixey
-# Machine Learning Coursework
+__author__ = "Daniel Dixet"
+__credits__ = ["Daniel Dixey", "Enrico Lopedoto"]
+__license__ = "The MIT License (MIT)"
+__version__ = "1.0.1"
+__maintainer__ = "Daniel Dixey"
+__email__ = "daniel.dixey@city.ac.uk"
+__status__ = "Submission_Script"
+__modified__ = "20/11/2015"
 
+
+Intro = """
+Machine Learning Coursework
+
+This scripts processing steps are:
+
+- Importing of the dataset, deal with missing vals and produce summaries
+- Transformations, Pre-processing and cleansing of the dataset
+- Partioning of the dataset; Train and Test
+- Setup Experimentation: Finding Hyper-parameter bounds
+- Setup of the Training Evauation Phase:
+    - Hyper-param Optimisation Method: Bayesian Optimisation
+    - 75 Trials per Model
+    - 5 Fold Cross-Validation
+    - Evaluation Criteria: Mean-Squared Error - selection based on Willmott et al, 2005 [8]
+- Generate Charts, Save Hyper-parameter Results and Optimal Results
+- Re-train models with Optimal Parameters - On the Test Set
+- Obtain predictions and evaulate
+
+"""
+
+# References
 # Bayes Optimisation Reference Paper: http://goo.gl/PCvRTV
 # Bayes Optimisation Module: https://goo.gl/Miyb4B
 # Applied Use of Bayes Optimisation: http://bit.ly/1aRpyYE
-# Scoring Parameter: http://goo.gl/khqrqO
+# Scoring Parameters: http://goo.gl/khqrqO
 # Scoring: http://arxiv.org/pdf/1209.5111v1.pdf
 
 from time import time
@@ -44,47 +70,55 @@ np.random.seed(191989)
 
 
 def feature_engineering(dataframe, showtTResults=False):
+    """
+    Function adds additional columns that have been engineered from the
+    dataset
+    rType : Pandas Dataframe
+    """
     # Investigte the Relationship between Means between on-off School Holiday
-    MedianSalesSchoolHoliday = dataframe.pivot_table(index="Store", 
-                                                    columns=["Month", 
-                                                    "SchoolHoliday"], 
-                                                    values="Sales", 
-                                                    aggfunc=np.median)
+    MedianSalesSchoolHoliday = dataframe.pivot_table(index="Store",
+                                                     columns=["Month",
+                                                              "SchoolHoliday"],
+                                                     values="Sales",
+                                                     aggfunc=np.median)
     # The t statistic to test whether the means are different
     from scipy.stats import ttest_ind
     # Paired t-test
     if showtTResults:
-        for i in np.arange(2013,2016,1):
+        for i in np.arange(2013, 2016, 1):
             temp = MedianSalesSchoolHoliday[i].dropna()
             # P-Values H0: (mew)1 = (mew)2, Ha: (mew)1 != (mew)2
-            ttest_ind(a=temp[0], b=temp[1])[1]
+            print(ttest_ind(a=temp[0], b=temp[1])[1])
     # Since the Means are not significantly different at 0.05 significance
     # Paramenters will not be created and used in the model
-    MedianSalesPromo = dataframe.pivot_table(index="Store", 
-                                                    columns=["Month", 
-                                                    "Promo"], 
-                                                    values="Sales", 
-                                                    aggfunc=np.median)
-    # The median has been used since the data is positively skewed 
+    MedianSalesPromo = dataframe.pivot_table(index="Store",
+                                             columns=["Month",
+                                                      "Promo"],
+                                             values="Sales",
+                                             aggfunc=np.median)
+    # The median has been used since the data is positively skewed
     # Paired t-test
     if showtTResults:
-        for i in np.arange(1,13,1):
+        for i in np.arange(1, 13, 1):
             temp = MedianSalesPromo[i].dropna()
             # P-Values H0: (mew)1 = (mew)2, Ha: (mew)1 != (mew)2
-            ttest_ind(a=temp[0], b=temp[1])[1]
+            print(ttest_ind(a=temp[0], b=temp[1])[1])
     # Stack to Make Merging Simple
     MedianSalesPromo = MedianSalesPromo.stack()
     MedianSalesSchoolHoliday = MedianSalesSchoolHoliday.stack()
-    # Update Column Names    
-    MedianSalesPromo.columns = ["_".join([str(val),"MedSalesPromo"]) 
-                                    for val in MedianSalesPromo.columns]
-    MedianSalesSchoolHoliday.columns = ["_".join([str(val),"MedSalesSchoolHoliday"]) 
-                                    for val in MedianSalesSchoolHoliday.columns]
+    # Update Column Names
+    MedianSalesPromo.columns = ["_".join([str(val), "MedSalesPromo"])
+                                for val in MedianSalesPromo.columns]
+    MedianSalesSchoolHoliday.columns = ["_".join([str(val), "MedSalesSchoolHoliday"])
+                                        for val in MedianSalesSchoolHoliday.columns]
     return MedianSalesPromo, MedianSalesSchoolHoliday
-    
+
 
 def get_optimal(ml1_bo, ml2_bo):
-    # Extracting the Optimal Results from the 
+    """
+    Extracting and finding of the Optimal Results from the Results
+    rType : Int, Int
+    """
     loc1, loc2 = None, None
     for i, val in enumerate(ml1_bo.res["all"]["values"]):
         if val == ml1_bo.res["max"]["max_val"]:
@@ -157,7 +191,7 @@ def cross_validation(
         n_estimators,
         log_y):
     """ Run the model and return the "score", where "score" in this case
-    is model "RMSPE"
+    is model "MSE"
     :rtype : Float
     """
     # Get Data for Testing
@@ -182,16 +216,16 @@ def cross_validation(
     data = []
     for train, test in KFolds:
         model = RandomForestRegressor(
-                                max_features=1 / max_features,
-                                max_depth = max_depth,
-                                random_state=191989,
-                                n_estimators=int(n_estimators),
-                                n_jobs=-1,
-                                criterion=metric)
+            max_features=1 / max_features,
+            max_depth=max_depth,
+            random_state=191989,
+            n_estimators=int(n_estimators),
+            n_jobs=-1,
+            criterion=metric)
         model.fit(X=X_[train], y=y_[train])
         # Scoring criteria = MSE
         data.append(mean_absolute_error(y_[test], model.predict(X_[test])))
-        del model # Ensure no residual information is retained in model var
+        del model  # Ensure no residual information is retained in model var
     # Save Data as a Array
     data = np.array(data)
     return -data.mean()
@@ -203,7 +237,7 @@ def cross_validation2(
         normv,
         log_y):
     """ Run the model and return the "score", where "score" in this case
-    is model "RMSPE"
+    is model "MSE"
     :rtype : Float
     """
     # Get Data for Testing
@@ -218,7 +252,7 @@ def cross_validation2(
             X_[col] = normalize(X_[col].values).T
     # Convert to Numpy Arrays
     X_ = X_.values
-    y_= y_.values.ravel()
+    y_ = y_.values.ravel()
     # Using k-fold Cross Validation(5 folds)
     KFolds = KFold(X.shape[0], 2, random_state=191989)
     data = []
@@ -229,7 +263,7 @@ def cross_validation2(
         model.fit(X_[train], y_[train])
         # Scoring criteria = MSE
         data.append(mean_absolute_error(model.predict(X_[test]), y_[test]))
-        del model # Ensure no residual information is retained in model var
+        del model  # Ensure no residual information is retained in model var
     # Save Data as a Array
     data = np.array(data)
     return -data.mean()
@@ -237,6 +271,8 @@ def cross_validation2(
 
 def process_dates(dt):
     """
+    Extract features from the Date Column
+    Day No., Weekend Flag, Day, Month and Year
     :param dt: Datetime
     :return: Various Metrics Derived from the input Date
     """
@@ -251,6 +287,10 @@ def process_dates(dt):
 
 
 def plot_data(parameters, results, name):
+    """
+    Plotting Function - Trials v Error, Parameter by Error
+    rType : Null
+    """
     # First Plot
     print("Plotting each Parameter by Cost Function")
     cols = len(parameters)
@@ -292,7 +332,7 @@ def plot_data(parameters, results, name):
 
 def fit_predict(X, y, X_test, params, model):
     """
-    # Get Final Predictions using the Best Result from the Bayesian Optimisation
+    Get Final Predictions using the Best Result from the Bayesian Optimisation
     :rtype : Numpy Array
     """
     X_ = X
@@ -322,6 +362,15 @@ def fit_predict(X, y, X_test, params, model):
     X_test_ = X_test_.values
     y_ = y_.values.ravel()
     if model == 1:
+        # Make Parameters Machine Readable
+        for k, v in max_ml1.items():
+            if isinstance(v, np.float64):
+                max_ml1[k] = int(v)
+            elif isinstance(v, str):
+                max_ml1[k] = 'mse'
+            else:
+                pass
+        # Create Model
         model = RandomForestRegressor(**params)
         model.fit(X_, y_)
         # Feature Importance
@@ -331,12 +380,13 @@ def fit_predict(X, y, X_test, params, model):
         for column, importance in pairs:
             print " ", column, importance
         importances = model.feature_importances_
-        std = np.std([tree.feature_importances_ for tree in model.estimators_],axis=0)
+        std = np.std(
+            [tree.feature_importances_ for tree in model.estimators_], axis=0)
         indices = np.argsort(importances)[::-1]
         plt.figure()
         plt.title("Feature importances")
         plt.bar(range(X_.shape[1]), importances[indices],
-               color="r", yerr=std[indices], align="center")
+                color="r", yerr=std[indices], align="center")
         plt.xticks(range(X_.shape[1]), indices)
         plt.xlim([-1, X_.shape[1]])
         plt.savefig(model + " Feature importances.png", bbox_inches="tight")
@@ -353,21 +403,20 @@ def fit_predict(X, y, X_test, params, model):
 
 ##############################################################################
 # Start of Script
+print(Intro)
 print(datetime.now())
+# Record the Time to Process the Whole Script
 startT = time()
 
 
 ##############################################################################
 # Import the Data
-
 trainingDF = import_data("/Data/train.csv")
 testDF = import_data("/Data/test.csv")
 
 
 ##############################################################################
 # Summary and Basic Metrics
-
-# Identifying Columns by DType - Manual
 numCols = [
     "Sales",
     "Customers",
@@ -421,49 +470,46 @@ y_columns = ["Sales"]
 
 
 ##############################################################################
-# Feature Engineering
-
-# Add the Engineered Features
-MedSalesPro, MedSalesSchHol = feature_engineering(trainingDF, 
+# Feature Engineering - Setup for Testing
+MedSalesPro, MedSalesSchHol = feature_engineering(trainingDF,
                                                   showtTResults=False)
 # Sampling, Setting up Cross Validation - Make X and Y Global (for reuse)
 global X, y
 X = trainingDF[X_columns]
 y = trainingDF[y_columns]
 # Append Engineer Features
-X = pd.merge(X, MedSalesPro, 
-             how="left", 
-             right_index=True, 
-             left_on=["Store","Promo"])
-X = pd.merge(X, MedSalesSchHol, 
-             how="left", 
-             right_index=True, 
-             left_on=["Store","SchoolHoliday"])
+X = pd.merge(X, MedSalesPro,
+             how="left",
+             right_index=True,
+             left_on=["Store", "Promo"])
+X = pd.merge(X, MedSalesSchHol,
+             how="left",
+             right_index=True,
+             left_on=["Store", "SchoolHoliday"])
 # If there is a missing value due to the Merge, replace with the Mean value
-X = X.apply(lambda x: x.fillna(x.mean()),axis=0)
+X = X.apply(lambda x: x.fillna(x.mean()), axis=0)
 idDF = testDF["Id"]
 X_Final = testDF[X_columns.difference(["Sales"])]
-X_Final = pd.merge(X_Final, 
-                   MedSalesPro, 
-                   how="left", 
-                   right_index=True, 
-                   left_on=["Store","Promo"])
-X_Final = pd.merge(X_Final, 
-                   MedSalesSchHol, 
-                   how="left", 
-                   right_index=True, 
-                   left_on=["Store","SchoolHoliday"])
+X_Final = pd.merge(X_Final,
+                   MedSalesPro,
+                   how="left",
+                   right_index=True,
+                   left_on=["Store", "Promo"])
+X_Final = pd.merge(X_Final,
+                   MedSalesSchHol,
+                   how="left",
+                   right_index=True,
+                   left_on=["Store", "SchoolHoliday"])
 # If there is a missing value due to the Merge, replace with the Mean value
-X_Final = X_Final.apply(lambda x: x.fillna(x.mean()),axis=0)
+X_Final = X_Final.apply(lambda x: x.fillna(x.mean()), axis=0)
 print("Size of Training Set: Columns = {}, Rows = {}"). \
     format(X.shape[1], X.shape[0])
 print("Size of Test Set: Columns = {}, Rows = {}"). \
     format(X_Final.shape[1], X_Final.shape[0])
-    
-    
-##############################################################################
-# Bayesian Optimisation - 100 Iterations for Each Algorithm
 
+
+##############################################################################
+# Bayesian Optimisation - 75 Iterations for Each Algorithm
 # Machine Learning Algorithm #1 - Define ranges of Hyperparameters
 ml1_bo = BayesianOptimization(cross_validation, {"max_features": (1, 20),
                                                  "criterion": (0, 1),
@@ -485,10 +531,10 @@ ml2_bo = BayesianOptimization(cross_validation2, {"n_neighbors": (2, 20),
 ml2_bo.explore({"n_neighbors": [5],
                 "leaf_size": [20],
                 "normv": [1],
-                "log_y": [1]})       
+                "log_y": [1]})
 # Optimisation of Machine Learning Algorithm #1 = RandomForestRegressor
 ml1_bo.maximize(init_points=75, n_iter=1)
-# Optimisation of Machine Learning Algorithm #2 = KNeighborsRegresso
+# Optimisation of Machine Learning Algorithm #2 = KNeighborsRegressor
 ml2_bo.maximize(init_points=75, n_iter=1)
 
 
@@ -506,7 +552,7 @@ loc1, loc2 = get_optimal(ml1_bo, ml2_bo)
 max_ml1 = ml1_bo.res["max"]["max_params"]
 max_ml2 = ml2_bo.res["max"]["max_params"]
 # Add Normv and Log y
-for item in ["normv","log_y"]:
+for item in ["normv", "log_y"]:
     max_ml1[item] = 1
     max_ml2[item] = 1
 # Train a model with the Optimal Results, Generate Prediction of Test Dataset
