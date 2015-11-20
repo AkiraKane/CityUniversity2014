@@ -34,7 +34,7 @@ bayesCol = [u'Error'] + bayesRidge_parameters[0].keys()
 rfCol = [u'Error'] + randomForest_parameters[0].keys()
 
 # Save Data to CSV
-pd.DataFrame(randomForest_results, columns=rfCol).to_csv('randomForest_results.csv', 
+pd.DataFrame(randomForest_results, columns=rfCol).to_csv('randomForest_testing_results.csv', 
                                                          sep = ',')
-pd.DataFrame(bayesRidge_results, columns=bayesCol).to_csv('bayesRidge_results.csv', 
+pd.DataFrame(bayesRidge_results, columns=bayesCol).to_csv('k_nearest_testing_results.csv', 
                                                          sep = ',')

@@ -176,7 +176,7 @@ def cross_validation(
     else:
         metric = "friedman_mse"
     # Using k-fold Cross Validation(5 folds)
-    KFolds = KFold(X.shape[0], 5, random_state=191989)
+    KFolds = KFold(X.shape[0], 2, random_state=191989)
     X_ = X_.values
     y_ = y_.values.ravel()
     data = []
@@ -220,7 +220,7 @@ def cross_validation2(
     X_ = X_.values
     y_= y_.values.ravel()
     # Using k-fold Cross Validation(5 folds)
-    KFolds = KFold(X.shape[0], 5, random_state=191989)
+    KFolds = KFold(X.shape[0], 2, random_state=191989)
     data = []
     for train, test in KFolds:
         model = KNeighborsRegressor(n_neighbors=int(n_neighbors),
@@ -490,6 +490,8 @@ ml2_bo.explore({"n_neighbors": [5],
 ml1_bo.maximize(init_points=75, n_iter=1)
 # Optimisation of Machine Learning Algorithm #2 = KNeighborsRegresso
 ml2_bo.maximize(init_points=75, n_iter=1)
+
+
 ##############################################################################
 # Results and Analysis
 
@@ -497,7 +499,7 @@ ml2_bo.maximize(init_points=75, n_iter=1)
 plot_data(ml1_bo.res["all"]["params"][0].keys(),
           ml1_bo.res["all"], "Random_Forest_Regressor")
 plot_data(ml2_bo.res["all"]["params"][0].keys(),
-          ml2_bo.res["all"], "Bayesian_Ridge_Regression")
+          ml2_bo.res["all"], "K_Neighbour_Regression")
 # Get the Parameters of the "Best" Result
 loc1, loc2 = get_optimal(ml1_bo, ml2_bo)
 # Refit and Predict Result from the Testing Set
