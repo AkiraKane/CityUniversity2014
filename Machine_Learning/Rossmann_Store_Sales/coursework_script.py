@@ -3,11 +3,11 @@
 __author__ = "Daniel Dixey"
 __credits__ = ["Daniel Dixey", "Enrico Lopedoto"]
 __license__ = "The MIT License (MIT)"
-__version__ = "1.0.1"
+__version__ = "1.3"
 __maintainer__ = "Daniel Dixey"
 __email__ = "daniel.dixey@city.ac.uk"
-__status__ = "Submission_Script"
-__modified__ = "20/11/2015"
+__status__ = "Final_Submission_Script"
+__modified__ = "18/11/2015"
 
 
 Intro = """
@@ -210,7 +210,7 @@ def cross_validation(
     else:
         metric = "friedman_mse"
     # Using k-fold Cross Validation(5 folds)
-    KFolds = KFold(X.shape[0], 2, random_state=191989)
+    KFolds = KFold(X.shape[0], 5, random_state=191989)
     X_ = X_.values
     y_ = y_.values.ravel()
     data = []
@@ -254,7 +254,7 @@ def cross_validation2(
     X_ = X_.values
     y_ = y_.values.ravel()
     # Using k-fold Cross Validation(5 folds)
-    KFolds = KFold(X.shape[0], 2, random_state=191989)
+    KFolds = KFold(X.shape[0], 5, random_state=191989)
     data = []
     for train, test in KFolds:
         model = KNeighborsRegressor(n_neighbors=int(n_neighbors),
