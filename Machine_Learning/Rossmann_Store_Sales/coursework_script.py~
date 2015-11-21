@@ -28,6 +28,10 @@ This scripts processing steps are:
 - Re-train models with Optimal Parameters - On the Test Set
 - Obtain predictions and evaulate
 
+This script will train, plot graphs, and prepare data for submission to Kaggle
+
+If you are testing change the number of trials to a low number (1-2) on lines 540 and 542 it will run quickly. Training with the current setting takes approximately 6-8 hours depending on your machine specification.
+
 """
 
 # References
